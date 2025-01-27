@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --color-spotty-green-500: #1DB954;
+  --color-spotty-black: #191414;
+  --color-spotty-white: #F1F1F1;
+  --color-spotty-blue-500: #00A8E8;
+  --color-spotty-red-500: #E63946;
+}
