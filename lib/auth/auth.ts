@@ -32,6 +32,8 @@ export const authOptions: AuthConfig = {
         await UserController.createUser({
           email: profile!.email!,
           name: (profile as SpotifyProfile).display_name!,
+          image: (profile as SpotifyProfile).images![0]?.url,
+          spotifyUserId: (profile as SpotifyProfile).id!,
         });
       }
       return true;
@@ -44,6 +46,8 @@ export const authOptions: AuthConfig = {
       token = {
         ...token,
         id: existingUser?.id,
+        image: existingUser?.image,
+        spotifyUserId: existingUser?.spotifyUserId,
       };
       return token;
     },
@@ -55,6 +59,8 @@ export const authOptions: AuthConfig = {
           id: token.id,
           email: token.email,
           name: token.name,
+          image: token.image,
+          spotifyUserId: token.spotifyUserId,
         } as Session["user"],
       };
       return session;

@@ -1,8 +1,10 @@
 export type BaseUser = {
-  id: string;
+  spotifyUserId: string;
   email: string;
   nickname: string;
   name: string;
+  image?: string;
+  bio?: string;
 };
 
 export type User = BaseUser & {
