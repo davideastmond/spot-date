@@ -3,7 +3,7 @@ export type BaseUser = {
   email: string;
   nickname: string;
   name: string;
-  image?: string;
+  image?: string | null;
   bio?: string;
 };
 
