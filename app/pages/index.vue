@@ -60,7 +60,7 @@
     </div>
     <div class="mt-16 mb-16">
       <div>
-        <p class="largeHeroTitle text-center">Join a unique, user-centric community</p>
+        <p class="largeHeroTitle text-center">Join a unique community that loves music</p>
         <p class="heroSubtitle text-gray-400 text-center">We're here to help you find the right music, and the right
           person</p>
       </div>
