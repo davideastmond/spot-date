@@ -6,4 +6,35 @@
   --color-spotty-white: #F1F1F1;
   --color-spotty-blue-500: #00A8E8;
   --color-spotty-red-500: #E63946;
+
+  --color-spotty-cotton-candy: #f2b5c3;
+
+  --color-spotty-purple: #ff6933;
+  --font-display: "Geologica", serif;
+}
+
+body {
+  background-color: var(--color-spotty-black);
+  color: var(--color-spotty-white);
+  font-family: var(--font-display);
+}
+
+.extraLargeHeroTitle {
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.largeHeroTitle {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.mediumHeroTitle {
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  font-weight: 200;
 }

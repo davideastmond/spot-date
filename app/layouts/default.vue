@@ -4,5 +4,6 @@
     <main class="p-2 lg:flex-grow">
       <slot />
     </main>
+    <Footer />
   </div>
 </template>

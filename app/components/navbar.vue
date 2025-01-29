@@ -4,6 +4,9 @@
       <button type="button" class="hover:cursor-pointer lg:invisible" @click="toggleNavMenu">
         <Icon name="mdi:hamburger-menu" style="color: white" />
       </button>
+      <div>
+        <NuxtImg src="/images/common/spot-date-text-logo.png" alt="spot-date-logo" height="100px" />
+      </div>
       <nav class="navbar">
         <ul>
           <li v-if="status === 'unauthenticated'">
@@ -25,7 +28,7 @@
             </button>
           </li>
         </ul>
-       
+
         <div v-if="navMenuOpen" v-click-outside="toggleNavMenu"
           class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize">
           <ul>
