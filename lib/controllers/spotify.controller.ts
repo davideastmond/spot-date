@@ -7,13 +7,20 @@ type SpotifyAccessTokenAPIResponse = {
 };
 
 export const SpotifyController = {
-  getNewReleases: async (): Promise<SpotifyLatestAlbumAPIResponse> => {
+  getNewReleases: async ({
+    limit,
+  }: {
+    limit?: number;
+  }): Promise<SpotifyLatestAlbumAPIResponse> => {
     const { access_token } = await requestAccessToken();
-    const res = await fetch("https://api.spotify.com/v1/browse/new-releases", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+    const res = await fetch(
+      `https://api.spotify.com/v1/browse/new-releases?limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       return res.json();
