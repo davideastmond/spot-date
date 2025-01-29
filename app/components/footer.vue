@@ -32,3 +32,9 @@
     </div>
   </footer>
 </template>
+
+<style scoped>
+p {
+  margin-bottom: 8px;
+}
+</style>

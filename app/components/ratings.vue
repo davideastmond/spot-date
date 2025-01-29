@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-18 flex justify-center bg-spotty-purple py-8">
-    <div class="flex justify-around gap-x-6 flex-col lg:flex-row">
+  <div class="mt-18 flex justify-center bg-spotty-burnt py-8">
+    <div class="flex justify-around gap-x-6 flex-col lg:flex-row gap-y-4">
       <div>
         <div class="flex flex-col items-center">
           <div class="w-[80px] rounded-full overflow-hidden">
