@@ -10,13 +10,24 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  modules: ["@hebilicious/authjs-nuxt", "@nuxt/icon"],
+  modules: [
+    "@hebilicious/authjs-nuxt",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxt/fonts",
+  ],
+  fonts: {
+    experimental: {
+      processCSSVariables: true,
+    },
+  },
   icon: {
     provider: "iconify",
     serverBundle: {
       collections: ["mdi"],
     },
   },
+  image: {},
   dir: {
     pages: "app/pages",
     layouts: "app/layouts",
