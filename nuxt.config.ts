@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     },
     public: {
       authJs: {
-        baseUrl: "http://localhost:3000",
+        baseUrl: process.env.AUTH_BASE_URL,
         verifyClientOnEveryRequest: true,
       },
     },
