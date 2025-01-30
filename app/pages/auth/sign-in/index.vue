@@ -3,8 +3,8 @@
     <div class="mt-20 mb-20 pb-4 lg:rounded-md bg-spotty-deep-brown lg:shadow-xl lg:w-[500px]">
       <NuxtImg src="/images/signin/leaf-shape.svg" class="relative" />
       <div class="flex justify-center">
-        <NuxtImg src="/images/common/spot-date-text-logo.png" alt="spot-date-logo" height="200px"
-          class="relative top-[-200px]" />
+        <NuxtImg src="/images/common/spot-date-text-logo.png" alt="spot-date-logo"
+          class="relative top-[-200px] h-[220px]" />
       </div>
       <div class="w-full relative flex justify-end bottom-[100px]">
         <NuxtImg src="/images/signin/leaf-shape-lg.svg" class="leaf-transform mr-[-90px]" />
