@@ -15,17 +15,19 @@
             </NuxtLink>
           </li>
           <li v-if="status === 'authenticated'">
-            <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
-              <div class="flex items-center gap-2 invisible lg:visible">
-                <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
-                  <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
+            <NuxtLink to="/profile">
+              <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
+                <div class="flex items-center gap-2 invisible lg:visible">
+                  <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
+                    <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
+                  </div>
+                  <div v-else>
+                    <Icon name="mdi:account-circle" style="color: white" />
+                  </div>
+                  <p class="text-spotty-white">{{ session?.user?.name }}</p>
                 </div>
-                <div v-else>
-                  <Icon name="mdi:account-circle" style="color: white" />
-                </div>
-                <p class="text-spotty-white">{{ session?.user?.name }}</p>
-              </div>
-            </button>
+              </button>
+            </NuxtLink>
           </li>
         </ul>
 
@@ -38,18 +40,19 @@
               </button>
             </li>
             <li v-if="status === 'authenticated'">
-              <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full flex justify-center">
-                <div class="flex items-center gap-2">
-                  <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
-                    <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
+              <NuxtLink to="/profile">
+                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full flex justify-center">
+                  <div class="flex items-center gap-2">
+                    <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
+                      <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
+                    </div>
+                    <div v-else>
+                      <Icon name="mdi:account-circle" style="color: #0b0909" />
+                    </div>
+                    <p class="text-black">{{ session?.user?.name }}</p>
                   </div>
-                  <div v-else>
-                    <Icon name="mdi:account-circle" style="color: white" />
-                  </div>
-                  <p class="text-black">{{ session?.user?.name }}</p>
-                </div>
-              </button>
-
+                </button>
+              </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
               <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full" @click="handleSignOut">
