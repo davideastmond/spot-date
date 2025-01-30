@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="mt-16">
-      <p class="extraLargeHeroTitle text-center">Connecting through Music</p>
+      <p class="extraLargeTitle text-center">Connecting through Music</p>
     </div>
     <div class="mt-4">
       <div class="flex justify-center">
-        <p class="mediumHeroTitle">Use with Spotify</p>
+        <p class="mediumTitle">Use with Spotify</p>
         <Icon name="mdi:spotify" size="44" class="ml-4" />
       </div>
     </div>
@@ -30,9 +30,9 @@
         <NuxtImg src="/images/landing-page/fake-spotify.jpg" alt="hero-image"
           class="rounded-lg w-[400px] self-center lg:w-[600px] glassy" />
         <div class="self-center">
-          <p class="largeHeroTitle ml-4 self-center mt-12 lg:mt-[0] text-center">Cool people, with the most sizzlin'
+          <p class="largeTitle ml-4 self-center mt-12 lg:mt-[0] text-center">Cool people, with the most sizzlin'
             playlists</p>
-          <p class="heroSubtitle  text-gray-400 text-center self-center">Trending artists are a click away.</p>
+          <p class="subtitle  text-gray-400 text-center self-center">Trending artists are a click away.</p>
         </div>
       </div>
     </div>
@@ -40,9 +40,9 @@
     <Ratings />
     <div class="mt-16 mb-16">
       <div class="flex justify-center flex-col lg:flex-row">
-        <p class="largeHeroTitle text-center">Spot Date and Chat</p>
+        <p class="largeTitle text-center">Spot Date and Chat</p>
       </div>
-      <p class="heroSubtitle text-gray-400 text-center">Be on track to connect with like musical minds.</p>
+      <p class="subtitle text-gray-400 text-center">Be on track to connect with like musical minds.</p>
       <div class="flex justify-center mt-16">
         <div class="impactCircle bg-spotty-blue-500 rounded-full flex items-center glassy">
           <NuxtImg src="/images/landing-page/connection-couple.png" alt="couple-connection" />
@@ -62,8 +62,8 @@
     </div>
     <div class="mt-16 mb-16">
       <div>
-        <p class="largeHeroTitle text-center">Join a unique community of people who <em>love</em> music</p>
-        <p class="heroSubtitle text-gray-400 text-center">We're here to help you find the right music, and the right
+        <p class="largeTitle text-center">Join a unique community of people who <em>love</em> music</p>
+        <p class="subtitle text-gray-400 text-center">We're here to help you find the right music, and the right
           person.</p>
       </div>
     </div>
