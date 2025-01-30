@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   dir: {
     pages: "app/pages",
     layouts: "app/layouts",
+    middleware: "app/middleware",
   },
   alias: {
     "~/types": fileURLToPath(new URL("./types", import.meta.url)),

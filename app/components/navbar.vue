@@ -10,9 +10,9 @@
       <nav class="navbar">
         <ul>
           <li v-if="status === 'unauthenticated'">
-            <button @click="signIn" type="button" class="hover:cursor-pointer hover:opacity-50 ">
-              <p class="text-spotty-white">Sign In</p>
-            </button>
+            <NuxtLink to="/auth/sign-in">
+              Sign In
+            </NuxtLink>
           </li>
           <li v-if="status === 'authenticated'">
             <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
@@ -52,7 +52,7 @@
 
             </li>
             <li v-if="status === 'authenticated'">
-              <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full" @click="() => signOut()">
+              <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full" @click="handleSignOut">
                 <p class="text-spotty-black">Sign Out</p>
               </button>
             </li>
@@ -67,6 +67,10 @@
 const { signIn, status, session, signOut } = useAuth()
 const navMenuOpen = ref(false);
 
+const handleSignOut = async () => {
+  toggleNavMenu();
+  await signOut();
+};
 const toggleNavMenu = () => {
   navMenuOpen.value = !navMenuOpen.value;
 };

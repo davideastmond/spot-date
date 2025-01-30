@@ -16,6 +16,9 @@ export const authOptions: AuthConfig = {
       clientSecret: runtimeConfig.spotify.clientSecret,
     }),
   ],
+  pages: {
+    signIn: "/auth/sign-in",
+  },
   callbacks: {
     async signIn({ account, profile }) {
       if (!account) {
