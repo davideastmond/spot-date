@@ -1,7 +1,7 @@
-import type { AuthConfig, Session } from "@auth/core";
 import SpotifyProvider, {
   type SpotifyProfile,
 } from "@auth/core/providers/spotify";
+import type { AuthConfig, Session } from "@auth/core/types";
 import { UserController } from "../controllers/user.controller";
 const runtimeConfig = useRuntimeConfig();
 
