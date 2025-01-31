@@ -22,7 +22,6 @@ const { getNewAlbumReleases } = useSpotify();
 const albumData = ref<SpotifyAlbumItem[]>([]);
 onMounted(async () => {
   const apiResponse = await getNewAlbumReleases({ limit: 4 });
-
   albumData.value = apiResponse.albums.items;
 });
 </script>
