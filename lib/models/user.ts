@@ -10,3 +10,5 @@ export type BaseUser = {
 export type User = BaseUser & {
   id: string;
 };
+
+export type UpdatableUser = Pick<User, "nickname" | "bio">;
