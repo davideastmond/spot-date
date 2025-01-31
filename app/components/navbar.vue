@@ -15,7 +15,7 @@
             </NuxtLink>
           </li>
           <li v-if="status === 'authenticated'">
-            <NuxtLink to="/profile">
+           
               <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
                 <div class="flex items-center gap-2 invisible lg:visible">
                   <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
@@ -27,7 +27,7 @@
                   <p class="text-spotty-white">{{ session?.user?.name }}</p>
                 </div>
               </button>
-            </NuxtLink>
+           
           </li>
         </ul>
 
