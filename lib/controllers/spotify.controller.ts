@@ -1,4 +1,5 @@
-import type { SpotifyLatestAlbumAPIResponse } from "../types/spotify/spotify-api";
+import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/album/spotify-album.types";
+import type { SpotifyUserAPIResponse } from "~/lib/types/spotify/user/spotify-user.types";
 
 type SpotifyAccessTokenAPIResponse = {
   access_token: string;
@@ -26,6 +27,19 @@ export const SpotifyController = {
       return res.json();
     }
     throw new Error("Failed to fetch new releases");
+  },
+  getUserCurrentUserInfo: async (): Promise<SpotifyUserAPIResponse> => {
+    const { access_token } = await requestAccessToken();
+    const res = await fetch("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (res.ok) {
+      return res.json();
+    }
+    throw new Error("Failed to fetch user info");
   },
 };
 
