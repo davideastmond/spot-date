@@ -1,4 +1,4 @@
-import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/spotify-api";
+import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/album/spotify-album.types";
 
 export function useSpotify() {
   async function getNewAlbumReleases({ limit }: { limit?: number }) {
@@ -8,7 +8,12 @@ export function useSpotify() {
     return res;
   }
 
+  async function getCurrentSpotifyUser() {
+    const res = await $fetch(`/api/spotify/user/me`);
+    return res;
+  }
   return {
     getNewAlbumReleases,
+    getCurrentSpotifyUser,
   };
 }
