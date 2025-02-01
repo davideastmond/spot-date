@@ -1,3 +1,27 @@
+# Spot Date
+
+## Live deploy
+
+-TBD
+
+## About
+
+A social media app that connects users via common musical tastes.
+
+## Tech Stack
+
+- Nuxt with VueJs and Typescript
+- AuthJS
+- Firebase Firestore
+
+## External APIs
+
+- Spotify Web API
+
+## Development environment setup
+
+### Environment variables
+
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
