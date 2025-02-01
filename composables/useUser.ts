@@ -3,7 +3,7 @@ import type { User } from "~/lib/models/user";
 export function useUser() {
   async function getUserById(userId: string): Promise<Partial<User>> {
     const res = await $fetch<{ status: number; user: Partial<User> }>(
-      `/api/users/${userId}`
+      `/api/user/${userId}`
     );
     return res.user;
   }
@@ -15,7 +15,7 @@ export function useUser() {
     field: "bio" | "nickname";
     data: string;
   }): Promise<void> {
-    const res = await $fetch<Partial<User>>(`/api/users/me`, {
+    const res = await $fetch<Partial<User>>(`/api/user/me`, {
       method: "PUT",
       body: { field, data },
     });
