@@ -5,7 +5,9 @@
         <Icon name="mdi:hamburger-menu" style="color: white" />
       </button>
       <div>
-        <NuxtImg src="/images/common/spot-date-text-logo.png" alt="spot-date-logo" height="100px" />
+        <NuxtLink to="/">
+          <NuxtImg src="/images/common/spot-date-text-logo.png" alt="spot-date-logo" height="100px" />
+        </NuxtLink>
       </div>
       <nav class="navbar">
         <ul>
@@ -15,19 +17,19 @@
             </NuxtLink>
           </li>
           <li v-if="status === 'authenticated'">
-           
-              <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
-                <div class="flex items-center gap-2 invisible lg:visible">
-                  <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
-                    <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
-                  </div>
-                  <div v-else>
-                    <Icon name="mdi:account-circle" style="color: white" />
-                  </div>
-                  <p class="text-spotty-white">{{ session?.user?.name }}</p>
+
+            <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
+              <div class="flex items-center gap-2 invisible lg:visible">
+                <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
+                  <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
                 </div>
-              </button>
-           
+                <div v-else>
+                  <Icon name="mdi:account-circle" style="color: white" />
+                </div>
+                <p class="text-spotty-white">{{ session?.user?.name }}</p>
+              </div>
+            </button>
+
           </li>
         </ul>
 
