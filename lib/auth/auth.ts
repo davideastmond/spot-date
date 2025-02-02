@@ -1,10 +1,12 @@
-import type { AuthConfig, Session } from "@auth/core";
 import SpotifyProvider, {
   type SpotifyProfile,
 } from "@auth/core/providers/spotify";
+import type { AuthConfig, Session } from "@auth/core/types";
 import { UserController } from "../controllers/user.controller";
 const runtimeConfig = useRuntimeConfig();
 
+const scopes =
+  "user-read-private playlist-read-private user-follow-read user-top-read user-library-read user-read-email";
 export const authOptions: AuthConfig = {
   secret: runtimeConfig.authJs.secret,
   session: {
@@ -14,8 +16,12 @@ export const authOptions: AuthConfig = {
     SpotifyProvider({
       clientId: runtimeConfig.spotify.clientId,
       clientSecret: runtimeConfig.spotify.clientSecret,
+      authorization: `https://accounts.spotify.com/authorize?scope=${scopes}`,
     }),
   ],
+  pages: {
+    signIn: "/auth/sign-in",
+  },
   callbacks: {
     async signIn({ account, profile }) {
       if (!account) {
@@ -27,12 +33,11 @@ export const authOptions: AuthConfig = {
       }
 
       const existingUser = await UserController.getUserByEmail(profile!.email!);
-
       if (!existingUser) {
         await UserController.createUser({
-          email: profile!.email!,
+          email: profile?.email!,
           name: (profile as SpotifyProfile).display_name!,
-          image: (profile as SpotifyProfile).images![0]?.url,
+          image: (profile as SpotifyProfile).images[0]?.url || null,
           spotifyUserId: (profile as SpotifyProfile).id!,
         });
       }
@@ -46,7 +51,7 @@ export const authOptions: AuthConfig = {
       token = {
         ...token,
         id: existingUser?.id,
-        image: existingUser?.image,
+        image: existingUser?.image || null,
         spotifyUserId: existingUser?.spotifyUserId,
       };
       return token;
@@ -59,7 +64,7 @@ export const authOptions: AuthConfig = {
           id: token.id,
           email: token.email,
           name: token.name,
-          image: token.image,
+          image: token.image || null,
           spotifyUserId: token.spotifyUserId,
         } as Session["user"],
       };
