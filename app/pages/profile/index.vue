@@ -7,7 +7,7 @@
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg">
       <h1 class="mediumTitle text-center">Profile</h1>
       <div class="flex flex-row items-center gap-4 justify-center">
-        <div>
+        <div class="rounded-full overflow-hidden w-[100px] h-[100px]">
           <NuxtImg v-if="session?.user?.image" :src="session.user.image" />
           <Icon v-else name="mdi:account-circle" size="100px" />
         </div>
@@ -78,6 +78,7 @@ import type { User } from '~/lib/models/user';
 
 const { session } = useAuth();
 const { getUserById, updateUserDetails } = useUser();
+const { getCurrentSpotifyUser } = useSpotify();
 
 const user = ref<Partial<User> | null>(null);
 
@@ -89,6 +90,7 @@ const bio = ref('');
 
 onMounted(async () => {
   await fetchUserDetails();
+  await fetchSpotifyUserInfo();
 });
 
 
@@ -98,6 +100,12 @@ async function fetchUserDetails() {
     nickname.value = user.value.nickname || '';
     bio.value = user.value.bio || '';
   }
+}
+
+async function fetchSpotifyUserInfo() {
+  // Fetch the user's Spotify information
+  const data = await getCurrentSpotifyUser();
+  console.info("107", data);
 }
 
 function openModal(context: 'nickname' | 'bio') {
