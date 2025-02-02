@@ -15,12 +15,15 @@ export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, "userId");
   if (userId === "me") {
     try {
-      const apiResponse = await SpotifyController.getUserCurrentUserInfo();
+      const apiResponse = await SpotifyController.getUserById(
+        session.user.spotifyUserId
+      );
       return {
         status: "ok",
         data: apiResponse,
       };
     } catch (error) {
+      console.error((error as Error).message);
       setResponseStatus(event, 500);
       return {
         error: `External API error`,

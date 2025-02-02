@@ -14,6 +14,7 @@ export const SpotifyController = {
     limit?: number;
   }): Promise<SpotifyLatestAlbumAPIResponse> => {
     const { access_token } = await requestAccessToken();
+
     const res = await fetch(
       `https://api.spotify.com/v1/browse/new-releases?limit=${limit}`,
       {
@@ -28,13 +29,19 @@ export const SpotifyController = {
     }
     throw new Error("Failed to fetch new releases");
   },
-  getUserCurrentUserInfo: async (): Promise<SpotifyUserAPIResponse> => {
+  getUserById: async (
+    spotifyUserId: string
+  ): Promise<SpotifyUserAPIResponse> => {
     const { access_token } = await requestAccessToken();
-    const res = await fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+
+    const res = await fetch(
+      `https://api.spotify.com/v1/users/${spotifyUserId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       return res.json();
