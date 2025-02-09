@@ -27,7 +27,9 @@ export default defineNuxtConfig({
       collections: ["mdi"],
     },
   },
-  image: {},
+  image: {
+    inject: true,
+  },
   dir: {
     pages: "app/pages",
     layouts: "app/layouts",
