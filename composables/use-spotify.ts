@@ -12,8 +12,14 @@ export function useSpotify() {
     const res = await $fetch(`/api/spotify/user/me`);
     return res;
   }
+
+  async function getCurrentUserPlaylists() {
+    const res = await $fetch("/api/spotify/user/me/playlists");
+    return res;
+  }
   return {
     getNewAlbumReleases,
     getCurrentSpotifyUser,
+    getCurrentUserPlaylists,
   };
 }
