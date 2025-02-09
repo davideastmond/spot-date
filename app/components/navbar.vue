@@ -57,6 +57,13 @@
               </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
+              <NuxtLink to="/playlists">
+                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
+                  <p class="text-spotty-black">My Playlists</p>
+                </button>
+              </NuxtLink>
+            </li>
+            <li v-if="status === 'authenticated'">
               <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full" @click="handleSignOut">
                 <p class="text-spotty-black">Sign Out</p>
               </button>

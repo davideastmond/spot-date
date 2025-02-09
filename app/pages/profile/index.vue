@@ -90,7 +90,6 @@ const bio = ref('');
 
 onMounted(async () => {
   await fetchUserDetails();
-  await fetchSpotifyUserInfo();
 });
 
 
@@ -100,12 +99,6 @@ async function fetchUserDetails() {
     nickname.value = user.value.nickname || '';
     bio.value = user.value.bio || '';
   }
-}
-
-async function fetchSpotifyUserInfo() {
-  // Fetch the user's Spotify information
-  const data = await getCurrentSpotifyUser();
-  console.info("107", data);
 }
 
 function openModal(context: 'nickname' | 'bio') {
