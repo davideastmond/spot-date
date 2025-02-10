@@ -110,6 +110,22 @@ export const SpotifyController = {
 
     return res.json();
   },
+  getTracksByPlaylistId: async (email: string, playlistId: string) => {
+    const jwt = await JwtController.getJwtByUserEmail(email);
+    if (!jwt) {
+      return null;
+    }
+    const { access_token } = await getSpotifyRefreshToken(jwt);
+    const res = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.json();
+  },
 };
 
 const requestClientCredentialsAccessToken =
@@ -137,7 +153,7 @@ export async function getSpotifyRefreshToken(jwtReference: JwtData) {
     console.info("114 getSpotifyRefreshToken: token has not expired");
     return jwtReference;
   }
-  console.info("--> 117 token apparently is expired, fetching a new one");
+
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
@@ -152,10 +168,12 @@ export async function getSpotifyRefreshToken(jwtReference: JwtData) {
     }),
   });
 
-  if (!response.ok)
-    throw new Error(`Failed to refresh token: ${response.statusText}`);
   const data = await response.json();
-  console.warn("getSpotifyRefreshToken=======>", data);
+
+  if (!response.ok) {
+    console.log(data);
+    throw new Error("Failed to refresh token");
+  }
   return data as {
     access_token: string;
     expires_in: number;

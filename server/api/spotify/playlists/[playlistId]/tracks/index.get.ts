@@ -4,35 +4,30 @@ import { SpotifyController } from "~/lib/controllers/spotify.controller";
 
 export default defineEventHandler(async (event) => {
   const session = await getServerSession(event, authOptions);
-  const userId = getRouterParam(event, "userId");
-
   if (!session || !session.user) {
     setResponseStatus(event, 401);
     return {
-      statusCode: 401,
       error: "Unauthorized",
+      statusCode: 401,
     };
   }
 
-  if (userId !== "me") {
-    setResponseStatus(event, 400);
-    return {
-      statusCode: 400,
-      error: "Bad Request. (userId)",
-    };
-  }
+  const playlistId = getRouterParam(event, "playlistId");
+
   try {
-    const data = await SpotifyController.getSpotifyPlaylistsMe(
-      session.user.email!
+    const apiResponse = await SpotifyController.getTracksByPlaylistId(
+      session.user.email as string,
+      playlistId!
     );
     return {
-      ...data,
+      status: "ok",
+      ...apiResponse,
     };
   } catch (error) {
     setResponseStatus(event, 500);
     return {
+      error: `External API error`,
       statusCode: 500,
-      error: "External API error",
     };
   }
 });
