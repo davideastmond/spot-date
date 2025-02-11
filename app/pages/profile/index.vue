@@ -78,7 +78,6 @@ import type { User } from '~/lib/models/user';
 
 const { session } = useAuth();
 const { getUserById, updateUserDetails } = useUser();
-const { getCurrentSpotifyUser } = useSpotify();
 
 const user = ref<Partial<User> | null>(null);
 
