@@ -11,12 +11,12 @@
     </div>
   </div>
   <div class="flex" v-if="isError">
-    <p>There was an error loading your playlists. Try to </p>
-    <NuxtLink to="/auth/sign-in">Sign in</NuxtLink>
+    <p>There was an error loading your playlists. Try to</p>{" "}
+    <NuxtLink class="text-spotty-green-500" to="/auth/sign-in">Sign in</NuxtLink>
   </div>
   <!-- Popup modal -->
   <div class="fixed bg-gray-800/50 w-full h-full top-0 z-10 left-0" v-if="modalOpen">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full lg:w-[50%] lg:ml-[30vw] mt-[36px]">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full lg:w-[50%] lg:ml-[30vw] mt-[44px]">
       <div class="flex justify-between items-center">
         <h4 class="text-lg font-semibold">Track List</h4>
         <button @click="modalOpen = false" class="hover:cursor-pointer">
@@ -64,9 +64,14 @@ async function handlePlaylistClicked(playlistId: string) {
   selectedPlayListId.value = playlistId;
 
   // Get the playlist details
-  const res = await getTracksByPlaylistId(playlistId);
-  trackItems.value = res.items;
-  modalOpen.value = true;
+  try {
+    const res = await getTracksByPlaylistId(playlistId);
+    trackItems.value = res.items;
+    modalOpen.value = true;
+
+  } catch (error) {
+    isError.value = true;
+  }
 }
 
 function renderTrackList(trackItems: SpotifyTrackItem[], totalCount: number = 12): AbbreviatedTrackItem[] {

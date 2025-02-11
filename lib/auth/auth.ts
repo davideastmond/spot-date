@@ -107,7 +107,6 @@ export const authOptions: AuthConfig = {
             newTokenData.refresh_token || jwtReference.refresh_token,
         };
         await JwtController.updateData(jwtReference.id, tokenDataToUpdate);
-        console.info("110 ==> writing new token data to db", tokenDataToUpdate);
         return {
           ...token,
         };
