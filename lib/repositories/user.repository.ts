@@ -1,5 +1,5 @@
 import useFirebaseAdmin from "~/lib/db/firebase";
-import type { BaseUser, User } from "~/lib/models/user";
+import type { BaseUser, UpdatableUser, User } from "~/lib/models/user";
 
 /**
  * User Repository
@@ -28,5 +28,9 @@ export const UserRepository = {
   query$: () => {
     const { db } = useFirebaseAdmin();
     return db.collection("users");
+  },
+  update$: async (id: string, data: Partial<UpdatableUser>): Promise<void> => {
+    const { db } = useFirebaseAdmin();
+    await db.collection("users").doc(id).update(data);
   },
 };

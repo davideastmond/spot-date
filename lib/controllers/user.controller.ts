@@ -30,6 +30,13 @@ export const UserController = {
     if (users.empty) {
       return null;
     }
-    return users.docs[0].data() as User;
+    return { ...(users.docs[0].data() as User), id: users.docs[0].id };
+  },
+  updateBio: async (id: string, bio: string) => {
+    // return UserRepository.update$(id, { bio });
+    return UserRepository.update$(id, { bio });
+  },
+  updateNickname: async (id: string, nickname: string) => {
+    return UserRepository.update$(id, { nickname });
   },
 };

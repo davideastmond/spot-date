@@ -27,10 +27,13 @@ export default defineNuxtConfig({
       collections: ["mdi"],
     },
   },
-  image: {},
+  image: {
+    inject: true,
+  },
   dir: {
     pages: "app/pages",
     layouts: "app/layouts",
+    middleware: "app/middleware",
   },
   alias: {
     "~/types": fileURLToPath(new URL("./types", import.meta.url)),
@@ -48,7 +51,7 @@ export default defineNuxtConfig({
     },
     public: {
       authJs: {
-        baseUrl: "http://localhost:3000",
+        baseUrl: process.env.AUTH_BASE_URL,
         verifyClientOnEveryRequest: true,
       },
     },
