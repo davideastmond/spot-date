@@ -16,7 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import type { SpotifyAlbumItem } from '~/lib/types/spotify/spotify-api';
+import type { SpotifyAlbumItem } from '~/lib/types/spotify/album/spotify-album.types';
+
+
 
 const { getNewAlbumReleases } = useSpotify();
 const albumData = ref<SpotifyAlbumItem[]>([]);

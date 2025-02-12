@@ -1,11 +1,16 @@
 <template>
   <div class="bg-spotty-green-500 h-[36px] lg:h-[44px] w-full">
-    <div class="flex justify-between items-center h-full px-2 lg:px-4">
-      <button type="button" class="hover:cursor-pointer lg:invisible" @click="toggleNavMenu">
+    <div class="flex justify-around items-center h-full px-2 lg:px-4">
+      <button type="button" class="hover:cursor-pointer lg:hidden" @click="toggleNavMenu">
         <Icon name="mdi:hamburger-menu" style="color: white" />
       </button>
+      <!-- Search bar -->
       <div>
-        <NuxtLink to="/">
+        <input type="text" placeholder="Search"
+          class="bg-spotty-white text-spotty-deep-brown w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]" />
+      </div>
+      <div class="hidden lg:block">
+        <NuxtLink :to="status === 'authenticated' ? '/home' : '/'">
           <NuxtImg src="/images/common/spot-date-text-logo.png" alt="spot-date-logo" height="100px" />
         </NuxtLink>
       </div>
@@ -20,8 +25,8 @@
 
             <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
               <div class="flex items-center gap-2 invisible lg:visible">
-                <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
-                  <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
+                <div v-if="session?.user?.image" class="h-[32px] min-w-[32px] rounded-full overflow-hidden ">
+                  <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image" alt="authenticated-user-avatar" />
                 </div>
                 <div v-else>
                   <Icon name="mdi:account-circle" style="color: white" />
@@ -45,8 +50,9 @@
               <NuxtLink to="/profile">
                 <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full flex justify-center">
                   <div class="flex items-center gap-2">
-                    <div v-if="session?.user?.image" class="h-[32px] w-[32px] rounded-full overflow-hidden ">
-                      <NuxtImg :src="session.user.image" alt="authenticated-user-avatar" />
+                    <div v-if="session?.user?.image" class="h-[32px] min-w-[32px] rounded-full overflow-hidden ">
+                      <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image"
+                        alt="authenticated-user-avatar" />
                     </div>
                     <div v-else>
                       <Icon name="mdi:account-circle" style="color: #0b0909" />

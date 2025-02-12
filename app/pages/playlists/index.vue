@@ -10,9 +10,9 @@
       </div>
     </div>
   </div>
-  <div class="flex" v-if="isError">
-    <p>There was an error loading your playlists. Try to</p>{" "}
-    <NuxtLink class="text-spotty-green-500" to="/auth/sign-in">Sign in</NuxtLink>
+  <div class="flex pl-4" v-if="isError">
+    <p>There was an error loading your playlists. Try to</p>
+    <NuxtLink class="text-spotty-green-500 ml-2 hover:underline" to="/auth/sign-in">Sign in</NuxtLink>
   </div>
   <!-- Popup modal -->
   <div class="fixed bg-gray-800/50 w-full h-full top-0 z-10 left-0" v-if="modalOpen">
