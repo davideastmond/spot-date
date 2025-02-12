@@ -3,7 +3,6 @@ import SpotifyProvider, {
 } from "@auth/core/providers/spotify";
 import type { AuthConfig, Session } from "@auth/core/types";
 import { JwtController } from "../controllers/jwt.controller";
-import { getSpotifyRefreshToken } from "../controllers/spotify.controller";
 import { UserController } from "../controllers/user.controller";
 const runtimeConfig = useRuntimeConfig();
 
@@ -74,11 +73,12 @@ export const authOptions: AuthConfig = {
       if (!token.email) throw new Error("No email in token");
 
       const existingUser = await UserController.getUserByEmail(token.email);
+      /*
       const jwtReference = await JwtController.getJwtByUserEmail(token.email);
 
       if (!jwtReference)
         throw new Error("No jwt reference found - user should sign in again");
-
+      */
       token = {
         ...token,
         id: existingUser?.id,
@@ -86,16 +86,16 @@ export const authOptions: AuthConfig = {
         spotifyUserId: existingUser?.spotifyUserId,
       };
 
+      return token;
+      /*
       if (Date.now() < (jwtReference.expires_at as number) * 1000) {
         // First time auhtorization
         console.info("T91 ===>the token has not expired");
         return token;
       }
+        */
 
-      console.log(
-        "--> 96 auth.ts is it expired?",
-        Date.now() < (jwtReference.expires_at as number) * 1000
-      );
+      /*
       // Try to refresh the token
       try {
         const newTokenData = await getSpotifyRefreshToken(jwtReference);
@@ -115,6 +115,7 @@ export const authOptions: AuthConfig = {
         console.error("Failed to refresh token", (error as Error).message);
         throw new Error("Failed to refresh token");
       }
+        */
     },
 
     async session({ token, session }) {
