@@ -39,7 +39,7 @@
         </ul>
 
         <div v-if="navMenuOpen" v-click-outside="toggleNavMenu"
-          class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize">
+          class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize z-100">
           <ul>
             <li v-if="status === 'unauthenticated'">
               <button @click="signIn" type="button" class="hover:cursor-pointer hover:opacity-50">
@@ -63,9 +63,23 @@
               </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
+              <NuxtLink to="/home">
+                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
+                  <p class="text-spotty-black">Feed</p>
+                </button>
+              </NuxtLink>
+            </li>
+            <li v-if="status === 'authenticated'">
               <NuxtLink to="/playlists">
                 <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
                   <p class="text-spotty-black">My Playlists</p>
+                </button>
+              </NuxtLink>
+            </li>
+            <li v-if="status === 'authenticated'">
+              <NuxtLink to="/home/me">
+                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
+                  <p class="text-spotty-black">My Page</p>
                 </button>
               </NuxtLink>
             </li>

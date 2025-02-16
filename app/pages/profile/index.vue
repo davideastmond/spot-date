@@ -7,8 +7,8 @@
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg">
       <h1 class="mediumTitle text-center">Profile</h1>
       <div class="flex flex-row items-center gap-4 justify-center">
-        <div class="rounded-full overflow-hidden w-[100px] h-[100px]">
-          <NuxtImg v-if="session?.user?.image" :src="session.user.image" />
+        <div class="rounded-full overflow-hidden w-[100px] !h-[100px]">
+          <NuxtImg v-if="session?.user?.image" :src="session.user.image" class="w-[100px] !h-[100px]" />
           <Icon v-else name="mdi:account-circle" size="100px" />
         </div>
         <div>
