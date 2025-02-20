@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   icon: {
     provider: "iconify",
     serverBundle: {
-      collections: ["mdi"],
+      collections: ["mdi", "material-symbols-light"],
     },
   },
   image: {
