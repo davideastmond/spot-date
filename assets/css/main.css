@@ -6,6 +6,7 @@
 
   --color-spotty-black: #191414;
   --color-smoke-grey: #1c1e21;
+  --color-smoke-grey-light: #3f444a;
 
   --color-spotty-deep-brown: #0b0909;
   --color-spotty-white: #F1F1F1;
@@ -46,4 +47,10 @@ body {
 .subtitle {
   font-size: 1.5rem;
   font-weight: 100;
+}
+
+button {
+  &:hover {
+    cursor: pointer;
+  }
 }
