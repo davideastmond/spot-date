@@ -20,14 +20,10 @@ export default defineEventHandler(async (event) => {
     return { status: "error", message: "Bad Request: `userId` is required" };
   }
 
-  // This will need to be updated when we expand to getting posts from other users
-  if (userId !== "me") {
-    setResponseStatus(event, 401);
-    return { status: "error", message: "Unauthorized" };
-  }
+  const userIdToRetrieve = userId === "me" ? session.user.id : userId;
 
   const posts = await UserPostController.getPostsByUserId({
-    userId: session.user.id,
+    userId: userIdToRetrieve,
   });
   return { status: "ok", posts };
 });
