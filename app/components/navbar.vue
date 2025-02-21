@@ -7,7 +7,8 @@
       <!-- Search bar -->
       <div>
         <input type="text" placeholder="Search"
-          class="bg-spotty-white text-spotty-deep-brown w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]" />
+          class="bg-spotty-white text-spotty-deep-brown w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]"
+          v-on:keyup="handleInitiateSearch" v-model="searchQuery" />
       </div>
       <div class="hidden lg:block">
         <NuxtLink :to="status === 'authenticated' ? '/home' : '/'">
@@ -98,6 +99,7 @@
 <script setup lang="ts">
 const { signIn, status, session, signOut } = useAuth()
 const navMenuOpen = ref(false);
+const searchQuery = ref('');
 
 const handleSignOut = async () => {
   toggleNavMenu();
@@ -106,6 +108,17 @@ const handleSignOut = async () => {
 const toggleNavMenu = () => {
   navMenuOpen.value = !navMenuOpen.value;
 };
+
+async function handleInitiateSearch(event: KeyboardEvent) {
+  if (event.key === 'Enter' && searchQuery.value.length > 2) {
+    await navigateTo({
+      path: '/search/top',
+      query: {
+        q: searchQuery.value
+      }
+    })
+  }
+}
 </script>
 
 <style scoped>
