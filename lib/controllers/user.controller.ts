@@ -40,4 +40,32 @@ export const UserController = {
   updateNickname: async (id: string, nickname: string) => {
     return userRepository.update$(id, { nickname });
   },
+  followUser: async (userId: string, followUserId: string) => {
+    const userContext = await UserController.getUserById(userId);
+    if (!userContext) throw new Error("User not found");
+
+    const following = userContext.following || [];
+    if (following.includes(followUserId)) {
+      throw new Error("User already in the follow list for this user");
+    }
+
+    following.push(followUserId);
+    return userRepository.update$(userId, {
+      following,
+    });
+  },
+  unfollowUser: async (userId: string, unfollowUserId: string) => {
+    const userContext = await UserController.getUserById(userId);
+    if (!userContext) throw new Error("User not found");
+
+    const following = userContext.following || [];
+    if (!following.includes(unfollowUserId)) {
+      throw new Error("User not in the follow list for this user");
+    }
+
+    const newFollowing = following.filter((id) => id !== unfollowUserId);
+    return userRepository.update$(userId, {
+      following: newFollowing,
+    });
+  },
 };
