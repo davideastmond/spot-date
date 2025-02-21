@@ -13,7 +13,7 @@
         <p class="font-thin">{{ bio }}</p>
       </div>
     </div>
-    <div>
+    <div v-if="!isOwnProfile">
       <!-- Follow and unfollow buttons -->
       <div v-if="!isFollowing" class="flex justify-end mt-4">
         <button @click="handleFollowButtonClicked">
@@ -37,9 +37,10 @@ type PublicProfileProps = {
   isFollowing?: boolean;
   onFollow?: () => void;
   onUnfollow?: () => void;
+  isOwnProfile?: boolean;
 }
 import { getAvatarSize } from '~/lib/definitions/avatar-size/get-avatar-size';
-const { avatarUrl, name, nickname, bio, isFollowing, onFollow, onUnfollow } = defineProps<PublicProfileProps>();
+const { avatarUrl, name, nickname, bio, isFollowing, onFollow, onUnfollow, isOwnProfile } = defineProps<PublicProfileProps>();
 
 function handleFollowButtonClicked() {
   if (isFollowing) {
