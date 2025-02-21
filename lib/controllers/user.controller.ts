@@ -40,6 +40,9 @@ export const UserController = {
   updateNickname: async (id: string, nickname: string) => {
     return userRepository.update$(id, { nickname });
   },
+  updateImage: async (id: string, imageUrl: string) => {
+    return userRepository.update$(id, { image: imageUrl });
+  },
   followUser: async (userId: string, followUserId: string) => {
     const userContext = await UserController.getUserById(userId);
     if (!userContext) throw new Error("User not found");
