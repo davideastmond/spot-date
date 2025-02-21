@@ -5,7 +5,7 @@
       <Avatar :avatarUrl="session?.user?.image" size="lg">
         <Icon name="mdi:account-circle" style="color: #f6f4f4" />
       </Avatar>
-      <input type="text" v-model="postText" :placeholder="`What's on your mind, ${session?.user?.name}?`"
+      <input type="text" v-model="postText" :placeholder="placeholder"
         class="rounded-lg h-[36px] p-2 w-full bg-smoke-grey focus:outline-none" />
     </div>
     <div class="mt-4">
@@ -27,25 +27,19 @@
 
 type PostingWidgetProps = {
   onPostCreated?: () => void;
+  placeholder: string;
 }
-const { onPostCreated } = defineProps<PostingWidgetProps>();
+const { onPostCreated, placeholder } = defineProps<PostingWidgetProps>();
 
 const { session } = useAuth();
-const { createPost } = useUser();
 
 const postText = ref('');
 const isBusy = ref(false);
 async function handleCreateUserPost() {
   if (postText.value.trim().length === 0) return;
-  try {
-    isBusy.value = true;
-    await createPost({ text: postText.value });
-    postText.value = '';
-    onPostCreated?.();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    isBusy.value = false;
-  }
+
+  postText.value = '';
+  onPostCreated?.();
 }
+
 </script>

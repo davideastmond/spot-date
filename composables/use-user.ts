@@ -1,5 +1,5 @@
 import type { User } from "~/lib/models/user";
-import type { UserPost, UserPostContent } from "~/lib/models/user-post";
+import type { UserPost } from "~/lib/models/user-post";
 
 export function useUser() {
   async function getUserById(userId: string): Promise<Partial<User>> {
@@ -20,17 +20,6 @@ export function useUser() {
       method: "PUT",
       body: { field, data },
     });
-  }
-
-  async function createPost({ text, multimedia }: UserPostContent) {
-    const res = await $fetch<{ status: string; id: string }>(
-      `/api/user/me/posts`,
-      {
-        method: "POST",
-        body: { content: { text, multimedia } },
-      }
-    );
-    return res.id;
   }
 
   async function getMyPosts({
@@ -89,7 +78,6 @@ export function useUser() {
   return {
     getUserById,
     updateUserDetails,
-    createPost,
     getMyPosts,
     getPostsByUserId,
     getMyFollowers,
