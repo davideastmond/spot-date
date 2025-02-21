@@ -15,3 +15,12 @@ export type User = BaseUser & {
 };
 
 export type UpdatableUser = Pick<User, "nickname" | "bio">;
+
+// This type just removes sensitive information from the user object
+export type SecureUser = Omit<User, "email" | "spotifyUserId">;
+
+// This type is for security when sending data over to Angolia API
+export type SecureThirdPartyUser = Pick<
+  SecureUser,
+  "nickname" | "name" | "image"
+> & { objectID: string; userId: string };
