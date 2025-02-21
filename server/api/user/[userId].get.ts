@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
           statusCode: 404,
         };
       }
-      const { id, spotifyUserId, bio, nickname } = user;
+      const { id, spotifyUserId, bio, nickname, image, name } = user;
       return {
         status: "ok",
         user: {
@@ -43,6 +43,8 @@ export default defineEventHandler(async (event) => {
           spotifyUserId,
           bio,
           nickname,
+          image,
+          name,
         },
       };
     }
@@ -55,14 +57,15 @@ export default defineEventHandler(async (event) => {
         statusCode: 404,
       };
     }
-    const { id, spotifyUserId, bio, nickname } = user;
+    const { id, bio, nickname, image, name } = user;
     return {
       status: "ok",
       user: {
         id,
-        spotifyUserId,
         bio,
         nickname,
+        image,
+        name,
       },
     };
   } catch (error) {
