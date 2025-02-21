@@ -26,12 +26,9 @@
 
             <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
               <div class="flex items-center gap-2 invisible lg:visible">
-                <div v-if="session?.user?.image" class="h-[32px] min-w-[32px] rounded-full overflow-hidden ">
-                  <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image" alt="authenticated-user-avatar" />
-                </div>
-                <div v-else>
-                  <Icon name="mdi:account-circle" style="color: white" />
-                </div>
+                <Avatar :avatar-url="session?.user?.image" size="md">
+                  <Icon name="mdi:account-circle" style="color: white" size="32px" />
+                </Avatar>
                 <p class="text-spotty-white">{{ session?.user?.name }}</p>
               </div>
             </button>
