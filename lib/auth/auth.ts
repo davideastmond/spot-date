@@ -33,14 +33,23 @@ export const authOptions: AuthConfig = {
         return false;
       }
 
-      const existingUser = await UserController.getUserByEmail(profile!.email!);
+      let existingUser = await UserController.getUserByEmail(profile!.email!);
       if (!existingUser) {
-        await UserController.createUser({
+        existingUser = await UserController.createUser({
           email: profile?.email!,
           name: (profile as SpotifyProfile).display_name!,
           image: (profile as SpotifyProfile).images[0]?.url || null,
           spotifyUserId: (profile as SpotifyProfile).id!,
         });
+      }
+
+      const spotifyProfile = profile as SpotifyProfile;
+      // Check if the spotifyProfile has an image
+      if (spotifyProfile.images && spotifyProfile.images.length > 0) {
+        if (spotifyProfile.images[0].url !== existingUser.image) {
+          const imageUrl: string | null = spotifyProfile.images[0].url;
+          await UserController.updateImage(existingUser.id as string, imageUrl);
+        }
       }
 
       // Check for user jwt info
@@ -69,16 +78,11 @@ export const authOptions: AuthConfig = {
 
       return true;
     },
-    async jwt({ token, account }) {
+    async jwt({ token }) {
       if (!token.email) throw new Error("No email in token");
 
       const existingUser = await UserController.getUserByEmail(token.email);
-      /*
-      const jwtReference = await JwtController.getJwtByUserEmail(token.email);
 
-      if (!jwtReference)
-        throw new Error("No jwt reference found - user should sign in again");
-      */
       token = {
         ...token,
         id: existingUser?.id,
@@ -87,35 +91,6 @@ export const authOptions: AuthConfig = {
       };
 
       return token;
-      /*
-      if (Date.now() < (jwtReference.expires_at as number) * 1000) {
-        // First time auhtorization
-        console.info("T91 ===>the token has not expired");
-        return token;
-      }
-        */
-
-      /*
-      // Try to refresh the token
-      try {
-        const newTokenData = await getSpotifyRefreshToken(jwtReference);
-
-        const tokenDataToUpdate = {
-          access_token: newTokenData.access_token || jwtReference.access_token,
-          expires_in: newTokenData.expires_in || jwtReference.expires_in,
-          refresh_token:
-            newTokenData.refresh_token || jwtReference.refresh_token,
-        };
-        await JwtController.updateData(jwtReference.id, tokenDataToUpdate);
-        return {
-          ...token,
-        };
-      } catch (error) {
-        console.error(error);
-        console.error("Failed to refresh token", (error as Error).message);
-        throw new Error("Failed to refresh token");
-      }
-        */
     },
 
     async session({ token, session }) {
