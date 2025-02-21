@@ -12,17 +12,6 @@ export default defineEventHandler(async (event) => {
     return { status: "error", message: "Unauthorized" };
   }
 
-  const userId = getRouterParam(event, "userId");
-  if (!userId) {
-    setResponseStatus(event, 400);
-    return { status: "error", message: "Bad Request: `userId` is required" };
-  }
-
-  if (userId !== "me") {
-    setResponseStatus(event, 401);
-    return { status: "error", message: "Unauthorized" };
-  }
-
   const requestBody = await readBody<NewPostAPIRequest>(event);
 
   // Validate the request body
@@ -42,10 +31,14 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  const { content } = requestBody;
+  const { content, targetId } = requestBody;
+
+  const isOwnWall = targetId === session.user.id;
+  console.info("isOwnWall:", isOwnWall);
   try {
     const newPost = await UserPostController.createPost({
       posterId: session.user.id,
+      targetId,
       content,
     });
     return {
@@ -54,6 +47,7 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     setResponseStatus(event, 500);
+    console.log((error as Error).message);
     return {
       error: "Internal Server Error",
       statusCode: 500,

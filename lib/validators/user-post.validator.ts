@@ -10,6 +10,7 @@ const multimediaContent = object({
 });
 
 export const userPostValidator = object({
+  targetId: string(),
   content: object({
     text: string().min(1).max(2000),
     multimedia: multimediaContent.array().optional(),

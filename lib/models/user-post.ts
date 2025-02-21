@@ -2,6 +2,7 @@ import type { UserPostReactionWithId } from "./user-post-reaction";
 
 export type UserPost = {
   posterId: string;
+  targetId: string;
   id: string;
   content: UserPostContent;
   parentPostId?: string;
