@@ -19,8 +19,16 @@
         <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
           <Reactionpanel :post-id="id" v-on:reactionClicked="handleReactionClicked" />
         </div>
-        <button class="min-w-[200px] hover:cursor-pointer" v-on:mouseover="togglePanelVisible()"
-          @click="togglePanelVisible()">React</button>
+        <div>
+          <button class="min-w-[200px] hover:cursor-pointer flex gap-x-2" v-on:mouseover="togglePanelVisible()"
+            @click="togglePanelVisible()">
+            <Icon name="material-symbols-light:thumb-up-outline" width="24" height="24"></Icon>
+            <p class="self-center">
+              React
+            </p>
+          </button>
+
+        </div>
       </div>
       <div>
         <button class="min-w-[200px] hover:cursor-pointer">Comment</button>
@@ -50,6 +58,10 @@ type UserPostProps = {
 - TBD: multi media content
 */
 const { avatarUrl, userName, postDate, textContent, id } = defineProps<UserPostProps>();
+const { getUserById } = useUser();
+
+const reationsUserDict = ref<Record<string, { name: string | null, nickname: string | null }>>({});
+
 
 function togglePanelVisible() {
   reactionPanelVisible.value = !reactionPanelVisible.value;
