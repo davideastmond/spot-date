@@ -54,6 +54,9 @@ export default defineNuxtConfig({
         baseUrl: process.env.AUTH_BASE_URL,
         verifyClientOnEveryRequest: true,
       },
+      firebase: {
+        config: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      },
     },
   },
   components: {
