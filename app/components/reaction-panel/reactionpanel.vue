@@ -3,27 +3,27 @@
     <div class="flex gap-4">
       <div>
         <button type="button" :name="REACTION.like" @click="handleReactionClicked"
-          class="hover:cursor-pointer hover:bg-slate-100/20 rounded-md text-lg">👍🏿</button>
+          class="hover:bg-slate-100/20 rounded-md text-lg">👍🏿</button>
       </div>
       <div>
         <button type="button" :name="REACTION.love" @click="handleReactionClicked"
-          class="hover:cursor-pointer hover:bg-slate-100/20 rounded-md text-lg">💗</button>
+          class="hover:bg-slate-100/20 rounded-md text-lg">💗</button>
       </div>
       <div>
         <button type="button" :name="REACTION.laugh" @click="handleReactionClicked"
-          class="hover:cursor-pointer hover:bg-slate-100/20 rounded-md text-lg">🤣</button>
+          class="hover:bg-slate-100/20 rounded-md text-lg">🤣</button>
       </div>
       <div>
         <button type="button" :name="REACTION.wow" @click="handleReactionClicked"
-          class="hover:cursor-pointer hover:bg-slate-100/20 rounded-md text-lg">😲</button>
+          class="hover:bg-slate-100/20 rounded-md text-lg">😲</button>
       </div>
       <div>
         <button type="button" :name="REACTION.music" @click="handleReactionClicked"
-          class="hover:cursor-pointer hover:bg-slate-100/20 rounded-md text-lg">🎶</button>
+          class="hover:bg-slate-100/20 rounded-md text-lg">🎶</button>
       </div>
       <div>
         <button type="button" :name="REACTION.jam" @click="handleReactionClicked"
-          class="hover:cursor-pointer hover:bg-slate-100/20 rounded-md text-lg">🎧</button>
+          class="hover:bg-slate-100/20 rounded-md text-lg">🎧</button>
       </div>
     </div>
   </div>

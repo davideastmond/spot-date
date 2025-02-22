@@ -1,7 +1,7 @@
 <template>
   <div class="bg-spotty-green-500 h-[36px] lg:h-[44px] w-full">
     <div class="flex justify-around items-center h-full px-2 lg:px-4">
-      <button type="button" class="hover:cursor-pointer lg:hidden" @click="toggleNavMenu">
+      <button type="button" class="lg:hidden" @click="toggleNavMenu">
         <Icon name="mdi:hamburger-menu" style="color: white" />
       </button>
       <!-- Search bar -->
@@ -24,7 +24,7 @@
           </li>
           <li v-if="status === 'authenticated'">
 
-            <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2" @click="toggleNavMenu">
+            <button type="button" class="hover:opacity-50 py-2" @click="toggleNavMenu">
               <div class="flex items-center gap-2 invisible lg:visible">
                 <Avatar :avatar-url="session?.user?.image" size="md">
                   <Icon name="mdi:account-circle" style="color: white" size="32px" />
@@ -40,13 +40,13 @@
           class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize z-100">
           <ul>
             <li v-if="status === 'unauthenticated'">
-              <button @click="signIn" type="button" class="hover:cursor-pointer hover:opacity-50">
+              <button @click="signIn" type="button" class="hover:opacity-50">
                 <p class="text-black">Sign In</p>
               </button>
             </li>
             <li v-if="status === 'authenticated'">
               <NuxtLink to="/profile">
-                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full flex justify-center">
+                <button type="button" class="hover:opacity-50 py-2 w-full flex justify-center">
                   <div class="flex items-center gap-2">
                     <div v-if="session?.user?.image" class="h-[32px] min-w-[32px] rounded-full overflow-hidden ">
                       <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image"
@@ -62,27 +62,27 @@
             </li>
             <li v-if="status === 'authenticated'">
               <NuxtLink to="/home">
-                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
+                <button type="button" class="hover:opacity-50 py-2 w-full">
                   <p class="text-spotty-black">Feed</p>
                 </button>
               </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
               <NuxtLink to="/playlists">
-                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
+                <button type="button" class="hover:opacity-50 py-2 w-full">
                   <p class="text-spotty-black">My Playlists</p>
                 </button>
               </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
               <NuxtLink to="/home/me">
-                <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full">
+                <button type="button" class="hover:opacity-50 py-2 w-full">
                   <p class="text-spotty-black">My Page</p>
                 </button>
               </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
-              <button type="button" class="hover:cursor-pointer hover:opacity-50 py-2 w-full" @click="handleSignOut">
+              <button type="button" class="hover:opacity-50 py-2 w-full" @click="handleSignOut">
                 <p class="text-spotty-black">Sign Out</p>
               </button>
             </li>

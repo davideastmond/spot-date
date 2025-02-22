@@ -10,8 +10,7 @@
         <NuxtImg src="/images/signin/leaf-shape-lg.svg" class="leaf-transform mr-[-90px]" />
       </div>
       <div class="flex justify-center">
-        <button class=" bg-spotty-black rounded-md p-2 mt-4 hover:cursor-pointer hover:bg-spotty-blue-500 px-8"
-          @click="handleSignIn">
+        <button class=" bg-spotty-black rounded-md p-2 mt-4 hover:bg-spotty-blue-500 px-8" @click="handleSignIn">
           <div class="flex items-center gap-2">
             <NuxtImg src="/images/common/spotify-logo-color.svg" alt="spotify-logo" height="100px" />
             <p class="hover:drop-shadow-lg">Continue with Spotify</p>

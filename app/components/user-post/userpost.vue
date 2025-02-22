@@ -20,7 +20,7 @@
           <Reactionpanel :post-id="id" v-on:reactionClicked="handleReactionClicked" />
         </div>
         <div>
-          <button class="min-w-[200px] hover:cursor-pointer flex gap-x-2" v-on:mouseover="togglePanelVisible()"
+          <button class="min-w-[200px] flex gap-x-2" v-on:mouseover="togglePanelVisible()"
             @click="togglePanelVisible()">
             <Icon name="material-symbols-light:thumb-up-outline" width="24" height="24"></Icon>
             <p class="self-center">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div>
-        <button class="min-w-[200px] hover:cursor-pointer">Comment</button>
+        <button class="min-w-[200px]">Comment</button>
       </div>
     </div>
   </div>

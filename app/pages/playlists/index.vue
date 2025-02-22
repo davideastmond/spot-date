@@ -3,7 +3,7 @@
     <h1 class="mediumTitle text-center">My Playlists</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
       <div v-if="playListItems.length > 0" v-for="playlist in playListItems" :key="playlist.id">
-        <button class="hover:cursor-pointer hover:opacity-50" @click="handlePlaylistClicked(playlist.id)">
+        <button class=" hover:opacity-50" @click="handlePlaylistClicked(playlist.id)">
           <NuxtImg :src="playlist.images[0].url" :alt="playlist.name" class="rounded-md" />
           <p>{{ playlist.name }}</p>
         </button>
@@ -19,7 +19,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full lg:w-[50%] lg:ml-[30vw] mt-[44px]">
       <div class="flex justify-between items-center">
         <h4 class="text-lg font-semibold">Track List</h4>
-        <button @click="modalOpen = false" class="hover:cursor-pointer">
+        <button @click="modalOpen = false">
           <Icon name="mdi:close" size="24px" />
         </button>
       </div>
