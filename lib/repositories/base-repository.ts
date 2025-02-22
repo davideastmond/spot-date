@@ -1,4 +1,4 @@
-import useFirebaseAdmin from "~/lib/db/firebase";
+import useFirebaseAdmin from "~/lib/firebase/firebase";
 export abstract class BaseRepository {
   protected db: FirebaseFirestore.Firestore;
   protected collectionName: string;
