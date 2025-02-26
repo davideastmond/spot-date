@@ -1,3 +1,4 @@
+import { Filter } from "firebase-admin/firestore";
 import type { UserPost } from "../models/user-post";
 import type { UserPostReactionWithId } from "../models/user-post-reaction";
 import { userPostsRepository } from "../repositories/user-posts.repository";
@@ -29,7 +30,12 @@ export const UserPostController = {
   }): Promise<Partial<UserPost>[]> => {
     const posts = await userPostsRepository
       .query$()
-      .where("posterId", "==", userId)
+      .where(
+        Filter.or(
+          Filter.where("posterId", "==", userId),
+          Filter.where("targetId", "==", userId)
+        )
+      )
       .get();
     return posts.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   },
@@ -65,5 +71,20 @@ export const UserPostController = {
     }
 
     return userPostsRepository.update$(postId, { reactions: updatedReactions });
+  },
+  getPostsByTargetId: async ({
+    targetId,
+    limit,
+    skip,
+  }: {
+    targetId: string;
+    limit?: number;
+    skip?: number;
+  }): Promise<Partial<UserPost>[]> => {
+    const posts = await userPostsRepository
+      .query$()
+      .where("targetId", "==", targetId)
+      .get();
+    return posts.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   },
 };
