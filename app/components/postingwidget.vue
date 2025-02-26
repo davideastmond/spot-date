@@ -26,7 +26,7 @@
 <script setup lang="ts">
 
 type PostingWidgetProps = {
-  onPostCreated?: () => void;
+  onPostCreated?: (postData: string) => void;
   placeholder: string;
 }
 const { onPostCreated, placeholder } = defineProps<PostingWidgetProps>();
@@ -38,8 +38,8 @@ const isBusy = ref(false);
 async function handleCreateUserPost() {
   if (postText.value.trim().length === 0) return;
 
+  onPostCreated?.(postText.value);
   postText.value = '';
-  onPostCreated?.();
 }
 
 </script>

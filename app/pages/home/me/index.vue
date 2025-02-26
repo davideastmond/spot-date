@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <div class="flex justify-center flex-col gap-x-8 mt-10">
-      <Postingwidget :on-post-created="handlePostCreated" />
-    </div>
-    <div class="flex flex-col gap-y-4 my-10">
-      <!-- Render posts here, figure out how to do scroll rendering -->
-      <Userpost v-for="post in posts" :key="post.id" :post="post" :avatarUrl="session!.user!.image!"
-        :userName="session!.user!.name!" :text-content="post.content.text" :id="post.id"
-        :post-date="unixToDateString(post.createdAt)" />
-    </div>
-  </div>
+  <Feedheader v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated" />
 </template>
 
 <script setup lang="ts">
-import { Userpost } from '#components';
+import Feedheader from '~/app/components/feedheader/feedheader.vue';
 import type { UserPost } from '~/lib/models/user-post';
-const { session } = useAuth();
-const { unixToDateString } = useDate()
+
 const posts = ref<UserPost[]>([]);
+
 const { getMyPosts } = useUser();
+const { createPost } = usePost();
+const { session } = useAuth();
 
 onMounted(async () => {
   // Fetch user's own posts'
   await fetchPosts({})
 });
 
-const handlePostCreated = async () => {
+const handlePostCreated = async (data: string) => {
+  // Post needs to be created here
+  await createPost({
+    text: data,
+    multimedia: [],
+    targetId: session.value?.user?.id!
+  })
   await fetchPosts({});
 };
 

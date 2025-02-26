@@ -1,0 +1,108 @@
+<template>
+  <!-- This could be someone else's feed, or the session user's own feed. -->
+  <div class="flex lg:ml-[10%] lg:mr-[10%] lg:justify-evenly flex-col lg:flex-row gap-x-10 gap-y-10 mt-4">
+    <div v-if="userContext">
+      <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
+        :name="userContext!.name!" :is-following="isFollowing" v-on:follow="handleFollow" v-on:unfollow="handleUnFollow"
+        :is-own-profile="isOwnFeed" />
+    </div>
+    <div>
+      <div>
+        <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
+      </div>
+      <div class="my-4" v-for="post in userPosts" :key="post.id">
+        <Userpost :avatar-url="avatarDict[post.posterId]?.image!" :user-name="avatarDict[post.posterId]?.nickname!"
+          :text-content="post.content.text" :id="post.id" :reactions="post.reactions" />
+      </div>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import type { User } from '~/lib/models/user';
+import type { UserPost } from '~/lib/models/user-post';
+
+// We need to fetch the user context from the search parameter and load the user
+// We also need to fetch the context user's feed
+const { getUserById, getPostsByUserId, getMyFollowers, followUser, unfollowUser, getAvatarDict } = useUser();
+const userContext = ref<Partial<User> | null>(null);
+const userPosts = ref<UserPost[]>([]);
+const followers = ref<Partial<User>[]>([]);
+
+const avatarDict = ref<Record<string, { image: string, name: string, nickname: string }>>({});
+const route = useRoute();
+
+const reationsUserDict = ref<Record<string, { name: string | null, nickname: string | null }>>({});
+
+const isFollowing = computed(() => followers.value.some(follower => follower.id === userContext.value?.id));
+const isOwnFeed = computed(() => userContext.value?.id === session.value?.user?.id);
+
+const { session } = useAuth();
+
+onMounted(async () => {
+  const user = await getUserById(route.query.user as string);
+  userContext.value = user;
+
+  await refreshPosts();
+  const myFollowers = await getMyFollowers();
+  followers.value = myFollowers;
+
+  await getReactionUserDict();
+})
+
+async function refreshPosts() {
+  // Fetch user's posts (not their feed)
+  const posts = await getPostsByUserId({ userId: route.query.user as string });
+  userPosts.value = posts;
+
+  // Fetch avatars for all users in the posts
+  const userIds = posts.map(post => post.posterId);
+  avatarDict.value = await getAvatarDict(userIds);
+
+  console.log(avatarDict.value);
+}
+
+async function handleFollow() {
+  await followUser(userContext.value!.id!);
+  followers.value = await getMyFollowers();
+}
+
+async function handleUnFollow() {
+  await unfollowUser(userContext.value!.id!);
+  followers.value = await getMyFollowers();
+}
+
+async function getReactionUserDict() {
+  for await (const post of userPosts.value) {
+    if (!post.reactions) {
+      continue;
+    }
+
+    for await (const reaction of post.reactions) {
+      if (reaction.posterId) {
+        if (!reationsUserDict.value[reaction.posterId]) {
+          const user = await getUserById(reaction.posterId);
+          reationsUserDict.value[reaction.posterId] = { name: user.name || null, nickname: user.nickname || null };
+        }
+      }
+    }
+
+  }
+}
+
+function getPostingPlaceholderText(): string {
+  if (isOwnFeed.value) {
+    return "What's on your mind?";
+  }
+  return `Write something to ${userContext.value?.nickname}`;
+}
+
+async function handleCreateNewPost(postText: string) {
+  const { createPost } = usePost();
+  if (isOwnFeed.value) {
+    await createPost({ text: postText, multimedia: [], targetId: session.value!.user!.id });
+  } else {
+    await createPost({ text: postText, multimedia: [], targetId: route.query.user as string });
+  }
+  await refreshPosts();
+}
+</script>

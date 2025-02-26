@@ -3,7 +3,9 @@
   <div class="bg-smoke-grey p-4 rounded-md">
     <header>
       <div class="flex gap-2">
-        <Avatar :avatarUrl="avatarUrl" size="lg" />
+        <Avatar :avatarUrl="avatarUrl" size="lg">
+          <Icon name="mdi:account-circle" style="color: white" size="32px" />
+        </Avatar>
         <div>
           <p>{{ userName }}</p>
           <p class="font-thin text-sm">{{ postDate }}</p>
@@ -43,12 +45,13 @@ import Reactionpanel from '../reaction-panel/reactionpanel.vue';
 const { reactToPost } = usePost();
 const reactionPanelVisible = ref(false);
 type UserPostProps = {
-  avatarUrl: string;
+  avatarUrl?: string | null;
   userName: string;
   postDate?: string;
   textContent: string;
   id: string;
 }
+
 /* As props we need
 - user avatar
 - user name
@@ -58,10 +61,6 @@ type UserPostProps = {
 - TBD: multi media content
 */
 const { avatarUrl, userName, postDate, textContent, id } = defineProps<UserPostProps>();
-const { getUserById } = useUser();
-
-const reationsUserDict = ref<Record<string, { name: string | null, nickname: string | null }>>({});
-
 
 function togglePanelVisible() {
   reactionPanelVisible.value = !reactionPanelVisible.value;
