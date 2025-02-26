@@ -75,13 +75,48 @@ export function useUser() {
     });
   }
 
+  async function getFeedByUserId(userId: string): Promise<UserPost[]> {
+    // Gets the posts of a user by their ID
+    const res = await $fetch<{ status: number; posts: UserPost[] }>(
+      `/api/user/${userId}/feed`
+    );
+    return res.posts;
+  }
+
+  async function getAvatarDict(
+    userIds: string[]
+  ): Promise<
+    Record<string, { image: string; name: string; nickname: string }>
+  > {
+    const res = await Promise.allSettled(
+      userIds.map((userId) => getUserById(userId))
+    );
+    const avatarDict: Record<
+      string,
+      { image: string; name: string; nickname: string }
+    > = {};
+
+    res.forEach((result, index) => {
+      if (result.status === "fulfilled") {
+        avatarDict[userIds[index]] = {
+          image: result.value.image!,
+          name: result.value.name!,
+          nickname: result.value.nickname!,
+        };
+      }
+    });
+    return avatarDict;
+  }
+
   return {
-    getUserById,
-    updateUserDetails,
+    followUser,
+    getAvatarDict,
+    getFeedByUserId,
+    getMyFollowers,
     getMyPosts,
     getPostsByUserId,
-    getMyFollowers,
-    followUser,
+    getUserById,
     unfollowUser,
+    updateUserDetails,
   };
 }
