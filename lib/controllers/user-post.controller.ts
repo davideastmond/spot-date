@@ -54,18 +54,35 @@ export const UserPostController = {
       throw new Error("Post not found");
     }
 
+    // Check if the user has already reacted to the post. If it is the same reaction, remove it and return.
+    // If the user has reacted with a different reaction, update the reaction.
+
+    const { reactions } = foundPost;
+
+    if (reactions && reactions.length) {
+      if (
+        reactions.some((r) => r.posterId === userId && r.reaction === reaction)
+      ) {
+        return userPostsRepository.update$(postId, {
+          reactions: reactions.filter((r) => r.posterId !== userId),
+        });
+      }
+    }
+
     const newReaction: UserPostReactionWithId = {
       posterId: userId,
       reaction,
       parentPostId: postId,
       id: crypto.randomUUID(),
     };
-    const { reactions } = foundPost;
 
     let updatedReactions = [];
 
     if (reactions && reactions.length) {
-      updatedReactions = [...reactions, newReaction];
+      updatedReactions = [
+        ...reactions.filter((r) => r.posterId !== userId),
+        newReaction,
+      ];
     } else {
       updatedReactions = [newReaction];
     }
@@ -86,5 +103,15 @@ export const UserPostController = {
       .where("targetId", "==", targetId)
       .get();
     return posts.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  },
+  filterDuplicates: (posts: Partial<UserPost>[]): Partial<UserPost>[] => {
+    const postIds = new Set<string>();
+    return posts.filter((post) => {
+      if (postIds.has(post.id!)) {
+        return false;
+      }
+      postIds.add(post.id!);
+      return true;
+    });
   },
 };
