@@ -3,34 +3,25 @@
   <div class="bg-smoke-grey p-4 rounded-md">
     <header>
       <div class="flex gap-2">
-        <Avatar :avatarUrl="avatarUrl" size="lg">
+        <Avatar :avatarUrl="avatarDict[post.posterId!].image" size="lg">
           <Icon name="mdi:account-circle" style="color: white" size="32px" />
         </Avatar>
         <div>
-          <p>{{ userName }}</p>
-          <p class="font-thin text-sm">{{ postDate }}</p>
+          <p>{{ avatarDict[post.posterId!].name }}</p>
+          <p class="font-thin text-sm">{{ unixToDateString(post.createdAt) }}</p>
         </div>
       </div>
     </header>
     <div class="mt-4">
-      <p>{{ textContent }}</p>
+      <p>{{ post.content?.text }}</p>
     </div>
     <div class="flex justify-between mt-4 border-t p-2">
       <!-- Reaction and comment section -->
       <div>
         <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
-          <Reactionpanel :post-id="id" v-on:reactionClicked="handleReactionClicked" />
+          <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" />
         </div>
-        <div>
-          <button class="min-w-[200px] flex gap-x-2" v-on:mouseover="togglePanelVisible()"
-            @click="togglePanelVisible()">
-            <Icon name="material-symbols-light:thumb-up-outline" width="24" height="24"></Icon>
-            <p class="self-center">
-              React
-            </p>
-          </button>
-
-        </div>
+        <Reactionbutton :onButtonClicked="togglePanelVisible" :reaction="getUserReaction()" />
       </div>
       <div>
         <button class="min-w-[200px]">Comment</button>
@@ -39,28 +30,24 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { UserPost } from '~/lib/models/user-post';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
 import Reactionpanel from '../reaction-panel/reactionpanel.vue';
-
+const { unixToDateString } = useDate();
 const { reactToPost } = usePost();
 const reactionPanelVisible = ref(false);
+
 type UserPostProps = {
-  avatarUrl?: string | null;
-  userName: string;
-  postDate?: string;
-  textContent: string;
-  id: string;
+  avatarDict: Record<string, { image: string | null | undefined, name: string, nickname: string }>;
+  post: Partial<UserPost>;
+  onReactionClicked?: (postId: string, reaction: Reaction) => void;
 }
 
 /* As props we need
-- user avatar
-- user name
-- date-time ago
-- text content
-
 - TBD: multi media content
 */
-const { avatarUrl, userName, postDate, textContent, id } = defineProps<UserPostProps>();
+const { post, onReactionClicked } = defineProps<UserPostProps>();
+const { session } = useAuth();
 
 function togglePanelVisible() {
   reactionPanelVisible.value = !reactionPanelVisible.value;
@@ -75,9 +62,14 @@ function togglePanelIfVisible() {
 async function handleReactionClicked(reaction: Reaction) {
   togglePanelIfVisible();
   try {
-    await reactToPost(id, reaction);
+    await reactToPost(post.id as string, reaction);
+    onReactionClicked?.(post.id as string, reaction);
   } catch (error) {
     console.error((error as Error).message);
   }
+}
+
+function getUserReaction(): Reaction | null {
+  return post.reactions?.find(reaction => reaction.posterId === session.value?.user?.id)?.reaction || null;
 }
 </script>

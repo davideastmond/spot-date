@@ -5,28 +5,28 @@
     </div>
     <div class="flex flex-col gap-y-4 my-10" v-if="posts.length > 0 && avatarDict">
       <!-- Render posts here, figure out how to do scroll rendering -->
-      <Userpost v-for="post in posts" :key="post.id" :post="post" :avatarUrl="avatarDict[post?.posterId]?.image"
-        :userName="avatarDict[post?.posterId]?.name" :text-content="post.content.text" :id="post.id"
-        :post-date="unixToDateString(post.createdAt)" />
+      <Userpost v-for="post in posts" :key="post.id" :post="post" :avatar-dict="avatarDict"
+        v-on:reaction-clicked="handleReactionClicked" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import type { UserPost } from '~/lib/models/user-post';
-const { onPostCreated, posts } = defineProps<{
+import type { Reaction } from '~/lib/types/user-posts/reaction';
+const { onPostCreated, posts, onReactionClicked } = defineProps<{
   onPostCreated: (data: string) => void;
   posts: UserPost[];
+  onReactionClicked?: (postId: string, reaction: Reaction) => void;
 }>();
 const avatarDict = ref<Record<string, { image: string | null | undefined, name: string, nickname: string }> | null>(null);
-const { unixToDateString } = useDate();
 const { getAvatarDict } = useUser();
-
 
 onMounted(async () => {
   const userIds = Array.from(new Set(posts.map(post => post?.posterId)))
   const res = await getAvatarDict(userIds);
   avatarDict.value = res;
 });
-
-
+function handleReactionClicked(postId: string, reaction: Reaction) {
+  onReactionClicked?.(postId, reaction);
+}
 </script>
