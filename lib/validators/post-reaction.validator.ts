@@ -6,9 +6,6 @@ const values = Object.keys(REACTION).map(
 );
 export const postReactionValidator = z.object({
   reaction: z.custom((value) => {
-    if (!values.includes(value)) {
-      throw new Error("Invalid reaction");
-    }
-    return true;
+    return values.includes(value);
   }),
 });
