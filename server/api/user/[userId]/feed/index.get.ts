@@ -43,11 +43,13 @@ export default defineEventHandler(async (event) => {
       targetId: userId,
     });
     const usersOwnPosts = await UserPostController.getPostsByUserId({ userId });
-    const allPosts = [
+
+    const allPosts = UserPostController.filterDuplicates([
       ...postsByPeopleUserFollows,
       ...postsForUser,
       ...usersOwnPosts,
-    ].sort((a, b) => a.createdAt! - b.createdAt!);
+    ]).sort((a, b) => a.createdAt! - b.createdAt!);
+
     return {
       status: "OK",
       posts: allPosts,
