@@ -19,7 +19,8 @@
       <!-- Reaction and comment section -->
       <div>
         <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
-          <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" />
+          <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked"
+            :reaction="getUserReaction()" />
         </div>
         <Reactionbutton :onButtonClicked="togglePanelVisible" :reaction="getUserReaction()" />
       </div>

@@ -3,27 +3,27 @@
     <div class="flex gap-4">
       <div>
         <button type="button" :name="REACTION.like" @click="handleReactionClicked"
-          class="hover:bg-slate-100/20 rounded-md text-lg">👍🏿</button>
+          :class="getClassByReaction(REACTION.like)">👍🏿</button>
       </div>
       <div>
         <button type="button" :name="REACTION.love" @click="handleReactionClicked"
-          class="hover:bg-slate-100/20 rounded-md text-lg">💗</button>
+          :class="getClassByReaction(REACTION.love)">💗</button>
       </div>
       <div>
         <button type="button" :name="REACTION.laugh" @click="handleReactionClicked"
-          class="hover:bg-slate-100/20 rounded-md text-lg">🤣</button>
+          :class="getClassByReaction(REACTION.laugh)">🤣</button>
       </div>
       <div>
         <button type="button" :name="REACTION.wow" @click="handleReactionClicked"
-          class="hover:bg-slate-100/20 rounded-md text-lg">😲</button>
+          :class="getClassByReaction(REACTION.wow)">😲</button>
       </div>
       <div>
         <button type="button" :name="REACTION.music" @click="handleReactionClicked"
-          class="hover:bg-slate-100/20 rounded-md text-lg">🎶</button>
+          :class="getClassByReaction(REACTION.music)">🎶</button>
       </div>
       <div>
         <button type="button" :name="REACTION.jam" @click="handleReactionClicked"
-          class="hover:bg-slate-100/20 rounded-md text-lg">🎧</button>
+          :class="getClassByReaction(REACTION.jam)">🎧</button>
       </div>
     </div>
   </div>
@@ -33,13 +33,18 @@ import { REACTION, type Reaction } from '~/lib/types/user-posts/reaction';
 
 type ReactionPanelProps = {
   onReactionClicked: (reaction: Reaction) => void;
+  reaction?: Reaction | null
 }
-const { onReactionClicked } = defineProps<ReactionPanelProps>();
+const { onReactionClicked, reaction } = defineProps<ReactionPanelProps>();
 
 function handleReactionClicked(payload: MouseEvent) {
   if (!payload) return;
 
   const { name } = payload.target as HTMLButtonElement;
   onReactionClicked(name as Reaction);
+}
+
+function getClassByReaction(inputReaction: Reaction) {
+  return inputReaction === reaction ? ' hover:bg-slate-100/20 rounded-md text-lg bg-slate-200/20 ' : ' hover:border-slate-200/20 hover:border-b-2 ';
 }
 </script>
