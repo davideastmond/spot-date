@@ -8,5 +8,3 @@ export const REACTION = {
 };
 
 export type Reaction = (typeof REACTION)[keyof typeof REACTION];
-
-const n: Reaction = "like"; // OK
