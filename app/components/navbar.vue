@@ -68,13 +68,6 @@
               </NuxtLink>
             </li>
             <li v-if="status === 'authenticated'">
-              <NuxtLink to="/playlists">
-                <button type="button" class="hover:opacity-50 py-2 w-full">
-                  <p class="text-spotty-black">My Playlists</p>
-                </button>
-              </NuxtLink>
-            </li>
-            <li v-if="status === 'authenticated'">
               <NuxtLink to="/home/me">
                 <button type="button" class="hover:opacity-50 py-2 w-full">
                   <p class="text-spotty-black">My Page</p>
