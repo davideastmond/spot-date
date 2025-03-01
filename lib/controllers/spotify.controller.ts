@@ -126,6 +126,32 @@ export const SpotifyController = {
     );
     return res.json();
   },
+  performSearchQuery: async (email: string, query: string) => {
+    if (query.length < 3) return;
+
+    const jwt = await JwtController.getJwtByUserEmail(email);
+    if (!jwt) {
+      return null;
+    }
+
+    const searchParams = new URLSearchParams();
+    searchParams.append("q", query);
+    searchParams.append("type", "track,album,artist,playlist");
+
+    const baseUrl = "https://api.spotify.com/v1/search";
+    const endPointUrl = baseUrl.concat("?", searchParams.toString());
+
+    const results = await fetch(endPointUrl, {
+      headers: {
+        Authorization: `Bearer ${jwt.access_token}`,
+      },
+    });
+
+    if (!results.ok) {
+      throw new Error("Failed to fetch search results");
+    }
+    return results.json();
+  },
 };
 
 const requestClientCredentialsAccessToken =
