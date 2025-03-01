@@ -136,7 +136,7 @@ async function handleInitiateSearch(event: KeyboardEvent) {
 @media only screen and (min-width: 1024px) {
   .largeScreenResponsiveSize {
     width: 200px;
-    left: calc(100vw - 200px);
+    left: calc(100vw - 300px);
   }
 }
 </style>
