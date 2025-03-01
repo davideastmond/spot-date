@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   icon: {
     provider: "iconify",
     serverBundle: {
-      collections: ["mdi"],
+      collections: ["mdi", "material-symbols-light"],
     },
   },
   image: {
@@ -54,6 +54,9 @@ export default defineNuxtConfig({
         baseUrl: process.env.AUTH_BASE_URL,
         verifyClientOnEveryRequest: true,
       },
+      firebase: {
+        config: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      },
     },
   },
   components: {
@@ -61,6 +64,7 @@ export default defineNuxtConfig({
       {
         path: "app/components",
         global: true,
+        pathPrefix: false,
       },
       "app/components",
     ],

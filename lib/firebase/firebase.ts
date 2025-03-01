@@ -14,7 +14,6 @@ const useFirebaseAdmin = () => {
   const db = getFirestore(fireStoreApp);
 
   return {
-    firebaseApp: fireStoreApp,
     db,
   };
 };

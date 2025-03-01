@@ -1,9 +1,9 @@
 import type { JwtData } from "../models/jwt";
-import { JwtRepository } from "../repositories/jwt.repository";
+import { jwtRepository } from "../repositories/jwt.repository";
 
 export const JwtController = {
   getJwtByUserEmail: async (email: string): Promise<JwtData | null> => {
-    const jwt = await JwtRepository.query$().where("email", "==", email).get();
+    const jwt = await jwtRepository.query$().where("email", "==", email).get();
     if (jwt.empty) {
       return null;
     }
@@ -11,20 +11,21 @@ export const JwtController = {
   },
   createData: async (data: Partial<JwtData>): Promise<JwtData> => {
     // There should only be one entry per email.
-    const entry = await JwtRepository.query$()
+    const entry = await jwtRepository
+      .query$()
       .where("email", "==", data.email)
       .get();
     if (!entry.empty) {
       throw new Error("Entry with this e-mail address already exists.");
     }
-    const id = await JwtRepository.create$(data);
-    const jwtInfo = await JwtRepository.getById$(id);
+    const id = await jwtRepository.create$(data);
+    const jwtInfo = await jwtRepository.getById$<JwtData>(id);
     return {
       ...jwtInfo,
       id,
     } as JwtData;
   },
   updateData: async (id: string, data: Partial<JwtData>): Promise<void> => {
-    return JwtRepository.update$(id, data);
+    return jwtRepository.update$(id, data);
   },
 };

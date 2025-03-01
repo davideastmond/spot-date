@@ -3,23 +3,23 @@
     <h1 class="mediumTitle text-center">My Playlists</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
       <div v-if="playListItems.length > 0" v-for="playlist in playListItems" :key="playlist.id">
-        <button class="hover:cursor-pointer hover:opacity-50" @click="handlePlaylistClicked(playlist.id)">
+        <button class=" hover:opacity-50" @click="handlePlaylistClicked(playlist.id)">
           <NuxtImg :src="playlist.images[0].url" :alt="playlist.name" class="rounded-md" />
           <p>{{ playlist.name }}</p>
         </button>
       </div>
     </div>
   </div>
-  <div class="flex" v-if="isError">
-    <p>There was an error loading your playlists. Try to</p>{" "}
-    <NuxtLink class="text-spotty-green-500" to="/auth/sign-in">Sign in</NuxtLink>
+  <div class="flex pl-4" v-if="isError">
+    <p>There was an error loading your playlists. Try to</p>
+    <NuxtLink class="text-spotty-green-500 ml-2 hover:underline" to="/auth/sign-in">Sign in</NuxtLink>
   </div>
   <!-- Popup modal -->
   <div class="fixed bg-gray-800/50 w-full h-full top-0 z-10 left-0" v-if="modalOpen">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full lg:w-[50%] lg:ml-[30vw] mt-[44px]">
       <div class="flex justify-between items-center">
         <h4 class="text-lg font-semibold">Track List</h4>
-        <button @click="modalOpen = false" class="hover:cursor-pointer">
+        <button @click="modalOpen = false">
           <Icon name="mdi:close" size="24px" />
         </button>
       </div>

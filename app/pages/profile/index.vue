@@ -7,8 +7,8 @@
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg">
       <h1 class="mediumTitle text-center">Profile</h1>
       <div class="flex flex-row items-center gap-4 justify-center">
-        <div class="rounded-full overflow-hidden w-[100px] h-[100px]">
-          <NuxtImg v-if="session?.user?.image" :src="session.user.image" />
+        <div class="rounded-full overflow-hidden w-[100px] !h-[100px]">
+          <NuxtImg v-if="session?.user?.image" :src="session.user.image" class="w-[100px] !h-[100px]" />
           <Icon v-else name="mdi:account-circle" size="100px" />
         </div>
         <div>
@@ -23,7 +23,7 @@
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg mt-16">
       <h1 class="mediumTitle text-center">Personalize</h1>
       <div class="flex justify-center mt-4">
-        <button class="hover:cursor-pointer" @click="openModal('nickname')">
+        <button @click="openModal('nickname')">
           <!-- This has the user's nickname. Click the button opens a modal edit -->
           <div class="flex gap-4">
             <p
@@ -35,7 +35,7 @@
         </button>
       </div>
       <div class="flex justify-center mt-4">
-        <button class="hover:cursor-pointer" @click="openModal('bio')">
+        <button @click="openModal('bio')">
           <!-- This has the user's bio. Click the button opens a modal edit -->
           <div class="flex gap-4">
             <p
@@ -66,7 +66,7 @@
       </div>
       <div class="mt-6 flex justify-end">
         <button
-          class="bg-spotty-green-500 text-white font-semibold text-sm rounded-lg px-4 py-2 hover:bg-green-300 hover:cursor-pointer hover:text-black"
+          class="bg-spotty-green-500 text-white font-semibold text-sm rounded-lg px-4 py-2 hover:bg-green-300 hover:text-black"
           @click="handleSave()">Save</button>
       </div>
     </div>
@@ -78,7 +78,6 @@ import type { User } from '~/lib/models/user';
 
 const { session } = useAuth();
 const { getUserById, updateUserDetails } = useUser();
-const { getCurrentSpotifyUser } = useSpotify();
 
 const user = ref<Partial<User> | null>(null);
 
