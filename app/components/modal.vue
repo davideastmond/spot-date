@@ -23,6 +23,7 @@
   </div>
 </template>
 <script setup lang="ts">
+// TODO: explore aria-hidden
 const { onClose } = defineProps<{
   onClose: () => void
 }>()

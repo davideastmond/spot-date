@@ -27,10 +27,16 @@ export function useSpotify() {
     return res as SpotifyPlaylistTracksApiResponse & { status: string };
   }
 
+  async function searchSpotify(query: string) {
+    const res = await $fetch(`/api/spotify/search?q=${query}`);
+    return res;
+  }
+
   return {
     getNewAlbumReleases,
     getCurrentSpotifyUser,
     getCurrentUserPlaylists,
     getTracksByPlaylistId,
+    searchSpotify,
   };
 }
