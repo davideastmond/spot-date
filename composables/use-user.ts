@@ -34,8 +34,7 @@ export function useUser() {
       `/api/user/me/posts?limit=${limit}&skip=${skip}`
     );
 
-    console.log("48 posts", res);
-    return res.posts;
+    return res.posts.sort((a, b) => b.createdAt! - a.createdAt!);
   }
 
   async function getPostsByUserId({
