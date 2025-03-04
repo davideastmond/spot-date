@@ -3,17 +3,23 @@
   <div class="bg-smoke-grey p-4 rounded-md">
     <header>
       <div class="flex gap-2">
-        <Avatar :avatarUrl="avatarDict[post.posterId!].image" size="lg">
+        <Avatar :avatarUrl="avatarDict[post?.posterId as string]?.image" size="lg">
           <Icon name="mdi:account-circle" style="color: white" size="32px" />
         </Avatar>
         <div>
-          <p>{{ avatarDict[post.posterId!].name }}</p>
+          <p>{{ avatarDict[post?.posterId as string]?.name }}</p>
           <p class="font-thin text-sm">{{ unixToDateString(post.createdAt) }}</p>
         </div>
       </div>
     </header>
     <div class="mt-4">
       <p>{{ post.content?.text }}</p>
+      <div v-if="post.content?.multimedia && post.content.multimedia.length > 0" class="my-4">
+        <div v-for="media in post.content.multimedia" :key="media.id">
+          <MediaCard :header="false" :media="media" />
+        </div>
+
+      </div>
     </div>
     <div class="flex justify-between mt-4 border-t p-2">
       <!-- Reaction and comment section -->
