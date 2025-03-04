@@ -11,8 +11,9 @@
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4" v-for="post in userPosts" :key="post.id">
-        <Userpost :avatar-url="avatarDict[post.posterId]?.image!" :user-name="avatarDict[post.posterId]?.nickname!"
-          :text-content="post.content.text" :id="post.id" :reactions="post.reactions" />
+        <!-- <Userpost :avatar-url="avatarDict[post.posterId]?.image" :user-name="avatarDict[post.posterId]?.nickname"
+          :text-content="post.content.text" :key="post.id" :reactions="post.reactions" /> -->
+        <Userpost v-for="post in userPosts" :key="post.id" :post="post" :avatar-dict="avatarDict" />
       </div>
     </div>
   </div>
@@ -20,6 +21,7 @@
 <script setup lang="ts">
 import type { User } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
+import type { MediaType, RawMediaContent } from '~/lib/types/spotify/search-result/spotify-search-result';
 
 // We need to fetch the user context from the search parameter and load the user
 // We also need to fetch the context user's feed
@@ -52,7 +54,7 @@ onMounted(async () => {
 async function refreshPosts() {
   // Fetch user's posts (not their feed)
   const posts = await getPostsByUserId({ userId: route.query.user as string });
-  userPosts.value = posts;
+  userPosts.value = posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // Fetch avatars for all users in the posts
   const userIds = posts.map(post => post.posterId);
@@ -96,7 +98,7 @@ function getPostingPlaceholderText(): string {
   return `Write something to ${userContext.value?.nickname}`;
 }
 
-async function handleCreateNewPost(postText: string) {
+async function handleCreateNewPost({ postText, mediaContent }: { postText: string, mediaContent?: { mediaType?: MediaType, data?: RawMediaContent } }) {
   const { createPost } = usePost();
   if (isOwnFeed.value) {
     await createPost({ text: postText, multimedia: [], targetId: session.value!.user!.id });
