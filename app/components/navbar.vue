@@ -7,7 +7,7 @@
       <!-- Search bar -->
       <div>
         <input type="text" placeholder="Search"
-          class="bg-spotty-white text-spotty-deep-brown w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]"
+          class="bg-spotty-white text-spotty-deep-brown lg:w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]"
           v-on:keyup="handleInitiateSearch" v-model="searchQuery" />
       </div>
       <div class="hidden lg:block">
