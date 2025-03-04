@@ -1,5 +1,6 @@
 import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/album/spotify-album.types";
 import type { SpotifyPlaylistTracksApiResponse } from "~/lib/types/spotify/playlist/spotify-playlist-tracks-api-response";
+import type { SpotifySearchResult } from "~/lib/types/spotify/search-result/spotify-search-result";
 import type { SpotifyPlaylistApiResponse } from "~/lib/types/spotify/user/spotify-user.types";
 
 export function useSpotify() {
@@ -28,8 +29,12 @@ export function useSpotify() {
   }
 
   async function searchSpotify(query: string) {
-    const res = await $fetch(`/api/spotify/search?q=${query}`);
-    return res;
+    try {
+      const res = await $fetch(`/api/spotify/search?q=${query}`);
+      return res as SpotifySearchResult;
+    } catch (e) {
+      throw e;
+    }
   }
 
   return {

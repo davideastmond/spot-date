@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import Feedheader from '~/app/components/feedheader/feedheader.vue';
 import type { UserPost } from '~/lib/models/user-post';
+import type { ChosenMedia } from '~/lib/types/user-posts/media';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
 
 const posts = ref<UserPost[]>([]);
@@ -19,11 +20,11 @@ onMounted(async () => {
   await fetchPosts({})
 });
 
-const handlePostCreated = async (data: string) => {
+const handlePostCreated = async ({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) => {
   // Post needs to be created here
   await createPost({
-    text: data,
-    multimedia: [],
+    text: postText,
+    multimedia: [mediaContent!],
     targetId: session.value?.user?.id!
   })
   await fetchPosts({});
