@@ -23,3 +23,10 @@ export type SpotifySearchResult = {
     items: SpotifyPlayList[];
   };
 };
+
+export type MediaType = "artist" | "track" | "album" | "playlist";
+export type RawMediaContent =
+  | SpotifyBaseTrackItem
+  | SpotifyAlbumArtist
+  | SpotifyAlbumItem
+  | SpotifyPlayList;

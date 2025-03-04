@@ -34,7 +34,17 @@ export default defineEventHandler(async (event) => {
   const { content, targetId } = requestBody;
 
   const isOwnWall = targetId === session.user.id;
-  console.info("isOwnWall:", isOwnWall);
+  console.log("isOwnWall: ", isOwnWall);
+
+  if (content.multimedia) {
+    content.multimedia = content.multimedia.map((media) => ({
+      ...media,
+      id: crypto.randomUUID(),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    }));
+  }
+
   try {
     const newPost = await UserPostController.createPost({
       posterId: session.user.id,

@@ -1,18 +1,21 @@
-import { object, string } from "zod";
+import { object, string, z } from "zod";
+
+const mediaContent = object({
+  artistName: string(),
+  imageUrl: string(),
+  label: string(),
+  spotifyExternalUrl: string(),
+});
 
 const multimediaContent = object({
-  href: string().url(),
-  description: string().max(2000),
-  image: object({
-    url: string().url(),
-    alt: string().max(255),
-  }),
+  contentType: z.enum(["artist", "track", "album", "playlist"]),
+  mediaContent: mediaContent,
 });
 
 export const userPostValidator = object({
   targetId: string(),
   content: object({
     text: string().min(1).max(2000),
-    multimedia: multimediaContent.array().optional(),
+    multimedia: multimediaContent.nullable().array(),
   }),
 });

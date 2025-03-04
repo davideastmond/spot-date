@@ -1,3 +1,5 @@
+import type { ExternalUrls } from "../album/spotify-album.types";
+
 export type SpotifyUserAPIResponse = {
   country: string;
   display_name: string;
@@ -29,7 +31,7 @@ export type SpotifyPlayList = {
   };
   type: string;
   uri: string;
-};
+} & ExternalUrls;
 
 export type SpotifyPlaylistApiResponse = {
   total: number;

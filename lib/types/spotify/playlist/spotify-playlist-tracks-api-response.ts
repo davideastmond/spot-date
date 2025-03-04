@@ -1,4 +1,5 @@
 import type {
+  ExternalUrls,
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
 } from "../album/spotify-album.types";
@@ -25,4 +26,4 @@ export type SpotifyBaseTrackItem = {
   video_thumbnail: {
     url: string | null;
   };
-};
+} & ExternalUrls;
