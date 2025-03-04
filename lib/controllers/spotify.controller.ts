@@ -61,7 +61,7 @@ export const SpotifyController = {
     }
 
     try {
-      const { access_token } = await getSpotifyRefreshToken(jwt);
+      const { access_token } = await getSpotifyJwtData(jwt);
       const res = await fetch("https://api.spotify.com/v1/me", {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -97,7 +97,7 @@ export const SpotifyController = {
     if (!jwt) {
       return null;
     }
-    const { access_token } = await getSpotifyRefreshToken(jwt);
+    const { access_token } = await getSpotifyJwtData(jwt);
     const res = await fetch("https://api.spotify.com/v1/me/playlists", {
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -115,7 +115,7 @@ export const SpotifyController = {
     if (!jwt) {
       return null;
     }
-    const { access_token } = await getSpotifyRefreshToken(jwt);
+    const { access_token } = await getSpotifyJwtData(jwt);
     const res = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
       {
@@ -134,21 +134,26 @@ export const SpotifyController = {
       return null;
     }
 
+    const { access_token } = await getSpotifyJwtData(jwt);
+
     const searchParams = new URLSearchParams();
     searchParams.append("q", query);
     searchParams.append("type", "track,album,artist,playlist");
+    searchParams.append("limit", "5");
 
     const baseUrl = "https://api.spotify.com/v1/search";
     const endPointUrl = baseUrl.concat("?", searchParams.toString());
 
     const results = await fetch(endPointUrl, {
       headers: {
-        Authorization: `Bearer ${jwt.access_token}`,
+        Authorization: `Bearer ${access_token}`,
       },
     });
 
     if (!results.ok) {
-      throw new Error("Failed to fetch search results");
+      throw new Error(
+        "Failed to fetch search results: " + JSON.stringify(results.statusText)
+      );
     }
     return results.json();
   },
@@ -174,9 +179,9 @@ const requestClientCredentialsAccessToken =
     throw new Error("Failed to fetch access token");
   };
 
-export async function getSpotifyRefreshToken(jwtReference: JwtData) {
+export async function getSpotifyJwtData(jwtReference: JwtData) {
   if (Date.now() < jwtReference.expires_at * 1000) {
-    console.info("114 getSpotifyRefreshToken: token has not expired");
+    console.info("Line 190 getSpotifyRefreshToken: token has not expired");
     return jwtReference;
   }
 
@@ -197,8 +202,20 @@ export async function getSpotifyRefreshToken(jwtReference: JwtData) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.log(data);
+    console.error("205", data);
     throw new Error("Failed to refresh token");
+  }
+  console.log("214 refreshToken", data.refresh_token);
+  // Testing
+  if (data.refresh_token && data.expires_at) {
+    console.log(
+      "\x1b[43m Line 218 getSpotifyRefreshToken: token has been refreshed and saved to DB"
+    );
+    await JwtController.updateData(jwtReference.id, {
+      refresh_token: data.refresh_token,
+      access_token: data.access_token,
+      expires_at: data.expires_at,
+    });
   }
   return data as {
     access_token: string;
