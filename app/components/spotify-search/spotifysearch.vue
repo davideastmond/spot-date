@@ -1,15 +1,17 @@
 <template>
-  <div class="bg-black">
-    <div class="flex p-2">
+  <div class="bg-black pb-4">
+    <div class="flex p-2 w-full">
       <div class="w-full">
         <input type="text" v-model="searchQuery" @keyup="handleSearch" placeholder="Search for a track, album or artist"
           class="rounded-lg h-[36px] p-2 w-full bg-smoke-grey focus:outline-none" />
       </div>
     </div>
     <div v-if="isSearchError">
-      <p class="text-spotty-burnt text-center">There was an issue searching <b>Spotify</b>. <br />You can try to <button
-          class="underline text-spotty-green-500" @click="handleReauth">Sign-in
-          again</button></p>
+      <p class="text-spotty-burnt text-center">There was an issue searching <b>Spotify</b>. <br />You can try to
+        <button class="underline text-spotty-green-500" @click="handleReauth">Sign-in
+          again
+        </button>
+      </p>
     </div>
     <!-- Search results space -->
     <div class="h-[500px] p-2 overflow-auto" v-if="searchResults">
