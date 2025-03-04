@@ -3,9 +3,11 @@
   <div class="bg-smoke-grey p-4 rounded-md">
     <header>
       <div class="flex gap-2">
-        <Avatar :avatarUrl="avatarDict[post?.posterId as string]?.image" size="lg">
-          <Icon name="mdi:account-circle" style="color: white" size="32px" />
-        </Avatar>
+        <NuxtLink :to="getPosterProfileUrl()">
+          <Avatar :avatarUrl="avatarDict[post?.posterId as string]?.image" size="lg">
+            <Icon name="mdi:account-circle" style="color: white" size="32px" />
+          </Avatar>
+        </NuxtLink>
         <div>
           <p>{{ avatarDict[post?.posterId as string]?.name }}</p>
           <p class="font-thin text-sm">{{ unixToDateString(post.createdAt) }}</p>
@@ -64,6 +66,10 @@ function togglePanelIfVisible() {
   if (reactionPanelVisible.value) {
     reactionPanelVisible.value = false;
   }
+}
+
+function getPosterProfileUrl() {
+  return `/users/feed?user=${post.posterId}`;
 }
 
 async function handleReactionClicked(reaction: Reaction) {
