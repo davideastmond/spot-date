@@ -36,6 +36,26 @@ export function usePost() {
     return res.id;
   }
 
+  async function createPostComment({
+    text,
+    multimedia,
+    targetId,
+    parentId,
+  }: {
+    text: string;
+    multimedia?: ChosenMedia[];
+    targetId: string;
+    parentId: string;
+  }) {
+    const res = await $fetch<{ status: string; id: string }>(
+      `/api/posts/${parentId}/comments`,
+      {
+        method: "POST",
+        body: { content: { text, multimedia }, targetId },
+      }
+    );
+    return res.id;
+  }
   function getChosenMediaFromSpotifyData(
     mediaType: MediaType,
     data: RawMediaContent
@@ -90,9 +110,17 @@ export function usePost() {
         };
     }
   }
+
+  async function getCommentsByPostId(postId: string) {
+    const res = await $fetch<{ status: number; comments: Comment[] }>(
+      `/api/posts/${postId}/comments`
+    );
+    return res.comments;
+  }
   return {
     reactToPost,
     createPost,
+    createPostComment,
     getChosenMediaFromSpotifyData,
   };
 }
