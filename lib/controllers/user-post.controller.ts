@@ -105,7 +105,11 @@ export const UserPostController = {
       .query$()
       .where("targetId", "==", targetId)
       .get();
-    return posts.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    return posts.docs
+      .filter((doc) => {
+        return _.isNil(doc.data().parentPostId);
+      })
+      .map((doc) => ({ ...doc.data(), id: doc.id }));
   },
   getCommentsByParentPostId: async ({
     parentPostId,
