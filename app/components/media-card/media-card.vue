@@ -5,10 +5,11 @@
         <Icon name="mdi:close" style="color: white" size="16px" />
       </button>
     </header>
-    <NuxtLink :to="media.mediaContent?.spotifyExternalUrl" target="blank" class="text-sm self-center justify-end px-2"
-      aria-label="View on Spotify">
+    <NuxtLink v-if="media && media.mediaContent" :to="media.mediaContent?.spotifyExternalUrl" target="blank"
+      class="text-sm self-center justify-end px-2" aria-label="View on Spotify">
       <div>
-        <NuxtImg v-if="media.mediaContent?.imageUrl" :src="media.mediaContent?.imageUrl" class="w-8 h-8 rounded-full" />
+        <NuxtImg v-if="media?.mediaContent?.imageUrl" :src="media?.mediaContent?.imageUrl"
+          class="w-8 h-8 rounded-full" />
         <p class="text-sm">{{ media.mediaContent?.label }}</p>
         <p class="text-sm">{{ media.mediaContent?.artistName }}</p>
         <p class="text-sm text-spotty-green-500 uppercase">{{ media?.contentType }}</p>

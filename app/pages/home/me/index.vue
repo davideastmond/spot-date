@@ -1,6 +1,6 @@
 <template>
-  <Feedheader v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
-    v-on:reaction-clicked="fetchPosts({})" v-on:comment-created="handleCommentCreated" />
+  <Feedheader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
+    v-on:comment-created="handleCommentCreated" />
 </template>
 
 <script setup lang="ts">
