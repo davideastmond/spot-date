@@ -59,7 +59,8 @@ async function refreshPosts() {
   userPosts.value = posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // Fetch avatars for all users in the posts
-  const userIds = posts.map(post => post.posterId);
+
+  const userIds = posts.map(post => post.posterId).concat(session.value!.user!.id)
   avatarDict.value = await getAvatarDict(userIds);
 }
 

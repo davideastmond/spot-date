@@ -9,21 +9,45 @@
     <p class="font-thin text-base ">{{ unixToDateString(post.createdAt) }}</p>
     <div v-if="post.content?.multimedia && post.content.multimedia.length > 0">
       <!-- For multimedia -->
-      <MediaCard v-for="media in post.content.multimedia" :media="media" />
+      <MediaCard v-for="media in post.content.multimedia" :media="media" :reaction="getUserReaction()" />
     </div>
     <div>
       <p>{{ post.content?.text }}</p>
+    </div>
+    <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
+      <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
+    </div>
+    <div>
+      <Reactionbutton v-on:button-clicked="togglePanelIfVisible()" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import type { UserPost } from '~/lib/models/user-post';
+import type { Reaction } from '~/lib/types/user-posts/reaction';
 const { unixToDateString } = useDate()
-
+const { session } = useAuth();
+const reactionPanelVisible = ref(false);
 type PostCommentCardProps = {
   avatarDict: Record<string, { image: string | null | undefined, name: string, nickname: string }>;
   post: Partial<UserPost>;
 }
 const { avatarDict, post } = defineProps<PostCommentCardProps>();
 
+function getUserReaction(): Reaction | null {
+  return post.reactions?.find(reaction => reaction.posterId === session.value?.user?.id)?.reaction || null;
+}
+
+async function handleReactionClicked(reaction: Reaction) {
+  const { reactToPost } = usePost();
+  try {
+    await reactToPost(post.id as string, reaction);
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+}
+
+function togglePanelIfVisible() {
+  reactionPanelVisible.value = !reactionPanelVisible.value;
+}
 </script>

@@ -26,8 +26,9 @@ const avatarDict = ref<Record<string, { image: string | null | undefined, name: 
 const { getAvatarDict } = useUser();
 
 onMounted(async () => {
+  const { session } = useAuth();
   const userIds = Array.from(new Set(posts.map(post => post?.posterId)))
-  const res = await getAvatarDict(userIds);
+  const res = await getAvatarDict(userIds.concat(session.value!.user!.id));
   avatarDict.value = res;
 });
 function handleReactionClicked(postId: string, reaction: Reaction) {

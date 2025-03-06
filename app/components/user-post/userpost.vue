@@ -82,7 +82,7 @@ type UserPostProps = {
 /* As props we need
 - TBD: multi media content
 */
-const { post, onReactionClicked, onCommentCreated } = defineProps<UserPostProps>();
+const { post, onReactionClicked, onCommentCreated, avatarDict } = defineProps<UserPostProps>();
 const { session } = useAuth();
 
 onMounted(async () => {
