@@ -20,7 +20,7 @@
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
 
 type MediaCardProps = {
-  header: boolean;
+  header?: boolean;
   onClose?: () => void;
   media: ChosenMedia
 }
