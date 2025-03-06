@@ -1,3 +1,4 @@
+import type { UserPost } from "~/lib/models/user-post";
 import type {
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
@@ -111,16 +112,19 @@ export function usePost() {
     }
   }
 
-  async function getCommentsByPostId(postId: string) {
+  async function getCommentsByPostId(
+    postId: string
+  ): Promise<Partial<UserPost>[]> {
     const res = await $fetch<{ status: number; comments: Comment[] }>(
       `/api/posts/${postId}/comments`
     );
-    return res.comments;
+    return res.comments as Partial<UserPost>[];
   }
   return {
     reactToPost,
     createPost,
     createPostComment,
     getChosenMediaFromSpotifyData,
+    getCommentsByPostId,
   };
 }
