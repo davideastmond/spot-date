@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-center flex-col gap-x-8 mt-10">
+    <div class="flex justify-center flex-col gap-x-8">
       <Postingwidget v-on:post-created="onPostCreated" placeholder="What's on your mind?" />
     </div>
     <div class="flex flex-col gap-y-4 my-10" v-if="posts.length > 0 && avatarDict">
