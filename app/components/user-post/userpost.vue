@@ -34,7 +34,8 @@
       </div>
       <!-- Render comments iyt gere -->
       <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2">
-        <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict" />
+        <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict"
+          v-on:reaction-clicked="handleCommentReaction" />
       </div>
     </div>
     <div class="flex justify-between mt-4 border-t p-2">
@@ -108,6 +109,15 @@ async function handleReactionClicked(reaction: Reaction) {
   try {
     await reactToPost(post.id as string, reaction);
     onReactionClicked?.(post.id as string, reaction);
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+}
+
+async function handleCommentReaction(postId: string, reaction: Reaction) {
+  try {
+    await reactToPost(postId, reaction);
+    await fetchComments();
   } catch (error) {
     console.error((error as Error).message);
   }

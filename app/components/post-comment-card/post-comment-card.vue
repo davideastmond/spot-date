@@ -18,7 +18,7 @@
       <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
     </div>
     <div>
-      <Reactionbutton v-on:button-clicked="togglePanelIfVisible()" />
+      <Reactionbutton v-on:button-clicked="togglePanelIfVisible()" :reaction="getUserReaction()" />
     </div>
   </div>
 </template>
@@ -28,23 +28,20 @@ import type { Reaction } from '~/lib/types/user-posts/reaction';
 const { unixToDateString } = useDate()
 const { session } = useAuth();
 const reactionPanelVisible = ref(false);
+
 type PostCommentCardProps = {
   avatarDict: Record<string, { image: string | null | undefined, name: string, nickname: string }>;
   post: Partial<UserPost>;
+  onReactionClicked?: (postId: string, reaction: Reaction) => void;
 }
-const { avatarDict, post } = defineProps<PostCommentCardProps>();
+const { avatarDict, post, onReactionClicked } = defineProps<PostCommentCardProps>();
 
 function getUserReaction(): Reaction | null {
   return post.reactions?.find(reaction => reaction.posterId === session.value?.user?.id)?.reaction || null;
 }
 
 async function handleReactionClicked(reaction: Reaction) {
-  const { reactToPost } = usePost();
-  try {
-    await reactToPost(post.id as string, reaction);
-  } catch (error) {
-    console.error((error as Error).message);
-  }
+  onReactionClicked?.(post.id as string, reaction);
 }
 
 function togglePanelIfVisible() {
