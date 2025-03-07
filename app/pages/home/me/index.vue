@@ -1,6 +1,26 @@
 <template>
-  <Feedheader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
-    v-on:comment-created="handleCommentCreated" />
+  <div class="flex lg:justify-center lg:gap-4">
+    <div>
+      <FeedSideMenu>
+        <template #avatar>
+          <li>
+            <NuxtLink to="/home">
+              <div class="flex items
+              -center gap-2">
+                <Avatar :avatar-url="session?.user?.image" size="md" />
+                <p class="text-spotty-white">{{ session?.user?.name }}</p>
+              </div>
+            </NuxtLink>
+          </li>
+        </template>
+      </FeedSideMenu>
+    </div>
+    <div>
+      <Feedheader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
+        v-on:comment-created="handleCommentCreated" />
+    </div>
+
+  </div>
 </template>
 
 <script setup lang="ts">

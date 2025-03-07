@@ -1,11 +1,15 @@
 <template>
   <!-- This could be someone else's feed, or the session user's own feed. -->
   <div class="flex lg:ml-[10%] lg:mr-[10%] lg:justify-evenly flex-col lg:flex-row gap-x-10 gap-y-10 mt-4">
-    <div v-if="userContext">
-      <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
-        :name="userContext!.name!" :is-following="isFollowing" v-on:follow="handleFollow" v-on:unfollow="handleUnFollow"
-        :is-own-profile="isOwnFeed" />
-    </div>
+    <FeedSideMenu>
+      <template #public-profile>
+        <div v-if="userContext">
+          <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
+            :name="userContext!.name!" :is-following="isFollowing" v-on:follow="handleFollow"
+            v-on:unfollow="handleUnFollow" :is-own-profile="isOwnFeed" />
+        </div>
+      </template>
+    </FeedSideMenu>
     <div>
       <div>
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
