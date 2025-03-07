@@ -84,7 +84,6 @@ async function handleReauth() {
 }
 
 function handleClick({ mediaType, data }: { mediaType: MediaType, data: RawMediaContent }) {
-  console.log(mediaType, data);
   onMediaSelected?.({ mediaType, data });
 }
 </script>
