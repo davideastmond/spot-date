@@ -48,14 +48,15 @@
               <NuxtLink to="/profile">
                 <button type="button" class="hover:opacity-50 py-2 w-full flex justify-center">
                   <div class="flex items-center gap-2">
-                    <div v-if="session?.user?.image" class="h-[32px] min-w-[32px] rounded-full overflow-hidden ">
-                      <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image"
-                        alt="authenticated-user-avatar" />
+                    <div v-if="session?.user?.image">
+                      <Avatar :avatar-url="session?.user?.image" size="md" />
+                      <!-- <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image"
+                        alt="authenticated-user-avatar" /> -->
                     </div>
                     <div v-else>
                       <Icon name="mdi:account-circle" style="color: #0b0909" />
                     </div>
-                    <p class="text-black">{{ session?.user?.name }}</p>
+                    <p class="text-black font-bold">{{ session?.user?.name }}</p>
                   </div>
                 </button>
               </NuxtLink>
