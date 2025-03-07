@@ -1,4 +1,5 @@
 import { Filter } from "firebase-admin/firestore";
+import _ from "lodash";
 import type { UserPost } from "../models/user-post";
 import type { UserPostReactionWithId } from "../models/user-post-reaction";
 import { userPostsRepository } from "../repositories/user-posts.repository";
@@ -37,7 +38,9 @@ export const UserPostController = {
         )
       )
       .get();
-    return posts.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    return posts.docs
+      .filter((doc) => _.isNil(doc.data().parentPostId))
+      .map((doc) => ({ ...doc.data(), id: doc.id }));
   },
   addReactionToPost: async ({
     userId,
@@ -102,7 +105,28 @@ export const UserPostController = {
       .query$()
       .where("targetId", "==", targetId)
       .get();
-    return posts.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    return posts.docs
+      .filter((doc) => {
+        return _.isNil(doc.data().parentPostId);
+      })
+      .map((doc) => ({ ...doc.data(), id: doc.id }));
+  },
+  getCommentsByParentPostId: async ({
+    parentPostId,
+  }: {
+    parentPostId: string;
+  }): Promise<Partial<UserPost>[]> => {
+    const comments = await userPostsRepository
+      .query$()
+      .where("parentPostId", "==", parentPostId)
+      .get();
+    return comments.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  },
+  getPostByPostId: async (
+    postId: string
+  ): Promise<Partial<UserPost> | null> => {
+    const post = await userPostsRepository.getById$<Partial<UserPost>>(postId);
+    return post;
   },
   filterDuplicates: (posts: Partial<UserPost>[]): Partial<UserPost>[] => {
     const postIds = new Set<string>();

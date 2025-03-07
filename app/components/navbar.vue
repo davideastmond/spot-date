@@ -7,7 +7,7 @@
       <!-- Search bar -->
       <div>
         <input type="text" placeholder="Search"
-          class="bg-spotty-white text-spotty-deep-brown w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]"
+          class="bg-spotty-white text-spotty-deep-brown lg:w-[400px] pl-2 focus:outline-none rounded-sm py-[0.3rem]"
           v-on:keyup="handleInitiateSearch" v-model="searchQuery" />
       </div>
       <div class="hidden lg:block">
@@ -64,13 +64,6 @@
               <NuxtLink to="/home">
                 <button type="button" class="hover:opacity-50 py-2 w-full">
                   <p class="text-spotty-black">Feed</p>
-                </button>
-              </NuxtLink>
-            </li>
-            <li v-if="status === 'authenticated'">
-              <NuxtLink to="/playlists">
-                <button type="button" class="hover:opacity-50 py-2 w-full">
-                  <p class="text-spotty-black">My Playlists</p>
                 </button>
               </NuxtLink>
             </li>
@@ -136,7 +129,7 @@ async function handleInitiateSearch(event: KeyboardEvent) {
 @media only screen and (min-width: 1024px) {
   .largeScreenResponsiveSize {
     width: 200px;
-    left: calc(100vw - 200px);
+    left: calc(100vw - 300px);
   }
 }
 </style>

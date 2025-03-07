@@ -1,3 +1,4 @@
+import type { ChosenMedia } from "../types/user-posts/media";
 import type { UserPostReactionWithId } from "./user-post-reaction";
 
 export type UserPost = {
@@ -17,20 +18,7 @@ export type UserPostContent = {
   multimedia?: MultimediaContent[];
 };
 
-export type MultimediaContent = {
-  href: string;
-  description?: string;
-  id: string;
-  parentPostId: string;
-  content?: {
-    url: string;
-    alt?: string;
-  };
-  image: {
-    url: string;
-    alt?: string;
-  };
-} & TimeStamp;
+export type MultimediaContent = ChosenMedia & { id: string } & TimeStamp;
 
 type TimeStamp = {
   updatedAt: number;

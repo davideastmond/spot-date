@@ -17,7 +17,7 @@ export type SpotifyAlbumItem = {
   type: string;
   uri: string;
   artists: SpotifyAlbumArtist[];
-};
+} & ExternalUrls;
 
 export type SpotifyAlbumImage = {
   height: number;
@@ -31,4 +31,11 @@ export type SpotifyAlbumArtist = {
   name: string;
   type: string;
   uri: string;
+  images: SpotifyAlbumImage[];
+} & ExternalUrls;
+
+export type ExternalUrls = {
+  external_urls: {
+    spotify: string;
+  };
 };

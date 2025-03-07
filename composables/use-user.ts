@@ -34,8 +34,7 @@ export function useUser() {
       `/api/user/me/posts?limit=${limit}&skip=${skip}`
     );
 
-    console.log("48 posts", res);
-    return res.posts;
+    return res.posts.sort((a, b) => b.createdAt! - a.createdAt!);
   }
 
   async function getPostsByUserId({
@@ -83,27 +82,25 @@ export function useUser() {
     return res.posts;
   }
 
-  async function getAvatarDict(
-    userIds: string[]
-  ): Promise<
+  async function getAvatarDict(): Promise<
     Record<string, { image: string; name: string; nickname: string }>
   > {
-    const res = await Promise.allSettled(
-      userIds.map((userId) => getUserById(userId))
-    );
+    const res = await $fetch<{
+      data: { image: string; name: string; nickname: string; id: string }[];
+    }>("/api/user", {
+      method: "GET",
+    });
     const avatarDict: Record<
       string,
       { image: string; name: string; nickname: string }
     > = {};
 
-    res.forEach((result, index) => {
-      if (result.status === "fulfilled") {
-        avatarDict[userIds[index]] = {
-          image: result.value.image!,
-          name: result.value.name!,
-          nickname: result.value.nickname!,
-        };
-      }
+    res.data.forEach((result, index) => {
+      avatarDict[result.id] = {
+        image: result.image!,
+        name: result.name!,
+        nickname: result.nickname!,
+      };
     });
     return avatarDict;
   }

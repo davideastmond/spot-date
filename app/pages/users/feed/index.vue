@@ -10,9 +10,11 @@
       <div>
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
-      <div class="my-4" v-for="post in userPosts" :key="post.id">
-        <Userpost :avatar-url="avatarDict[post.posterId]?.image!" :user-name="avatarDict[post.posterId]?.nickname!"
-          :text-content="post.content.text" :id="post.id" :reactions="post.reactions" />
+      <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
+        <!-- <Userpost :avatar-url="avatarDict[post.posterId]?.image" :user-name="avatarDict[post.posterId]?.nickname"
+          :text-content="post.content.text" :key="post.id" :reactions="post.reactions" /> -->
+        <Userpost v-for="post in userPosts" :key="post.id" :post="post" :avatar-dict="avatarDict"
+          v-on:comment-created="handleCreateComment" />
       </div>
     </div>
   </div>
@@ -20,6 +22,8 @@
 <script setup lang="ts">
 import type { User } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
+import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
+import type { ChosenMedia } from '~/lib/types/user-posts/media';
 
 // We need to fetch the user context from the search parameter and load the user
 // We also need to fetch the context user's feed
@@ -52,13 +56,10 @@ onMounted(async () => {
 async function refreshPosts() {
   // Fetch user's posts (not their feed)
   const posts = await getPostsByUserId({ userId: route.query.user as string });
-  userPosts.value = posts;
+  userPosts.value = posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // Fetch avatars for all users in the posts
-  const userIds = posts.map(post => post.posterId);
-  avatarDict.value = await getAvatarDict(userIds);
-
-  console.log(avatarDict.value);
+  avatarDict.value = await getAvatarDict();
 }
 
 async function handleFollow() {
@@ -96,13 +97,27 @@ function getPostingPlaceholderText(): string {
   return `Write something to ${userContext.value?.nickname}`;
 }
 
-async function handleCreateNewPost(postText: string) {
+async function handleCreateNewPost({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) {
   const { createPost } = usePost();
-  if (isOwnFeed.value) {
-    await createPost({ text: postText, multimedia: [], targetId: session.value!.user!.id });
-  } else {
-    await createPost({ text: postText, multimedia: [], targetId: route.query.user as string });
+  try {
+    if (isOwnFeed.value) {
+      await createPost({ text: postText, multimedia: [mediaContent!], targetId: session.value!.user!.id });
+    } else {
+      await createPost({ text: postText, multimedia: [mediaContent!], targetId: route.query.user as string });
+    }
+    await refreshPosts();
+  } catch (error) {
+    console.error((error as Error).message);
   }
-  await refreshPosts();
+}
+
+async function handleCreateComment({ postText, mediaContent, parentId, targetId }: UserCommentData) {
+  const { createPostComment } = usePost();
+  try {
+    await createPostComment({ text: postText, multimedia: [mediaContent!], parentId, targetId });
+    await refreshPosts();
+  } catch (error) {
+    console.error((error as Error).message);
+  }
 }
 </script>

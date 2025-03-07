@@ -1,4 +1,15 @@
-import type { UserPostContent } from "~/lib/models/user-post";
+import type { UserPost } from "~/lib/models/user-post";
+import type {
+  SpotifyAlbumArtist,
+  SpotifyAlbumItem,
+} from "~/lib/types/spotify/album/spotify-album.types";
+import type { SpotifyBaseTrackItem } from "~/lib/types/spotify/playlist/spotify-playlist-tracks-api-response";
+import type {
+  MediaType,
+  RawMediaContent,
+} from "~/lib/types/spotify/search-result/spotify-search-result";
+import type { SpotifyPlayList } from "~/lib/types/spotify/user/spotify-user.types";
+import type { ChosenMedia } from "~/lib/types/user-posts/media";
 import type { Reaction } from "~/lib/types/user-posts/reaction";
 
 export function usePost() {
@@ -14,7 +25,11 @@ export function usePost() {
     text,
     multimedia,
     targetId,
-  }: UserPostContent & { targetId: string }) {
+  }: {
+    text: string;
+    multimedia?: ChosenMedia[];
+    targetId: string;
+  }) {
     const res = await $fetch<{ status: string; id: string }>(`/api/posts`, {
       method: "POST",
       body: { content: { text, multimedia }, targetId },
@@ -22,8 +37,94 @@ export function usePost() {
     return res.id;
   }
 
+  async function createPostComment({
+    text,
+    multimedia,
+    targetId,
+    parentId,
+  }: {
+    text: string;
+    multimedia?: ChosenMedia[];
+    targetId: string;
+    parentId: string;
+  }) {
+    const res = await $fetch<{ status: string; id: string }>(
+      `/api/posts/${parentId}/comments`,
+      {
+        method: "POST",
+        body: { content: { text, multimedia }, targetId },
+      }
+    );
+    return res.id;
+  }
+  function getChosenMediaFromSpotifyData(
+    mediaType: MediaType,
+    data: RawMediaContent
+  ): ChosenMedia {
+    switch (mediaType) {
+      case "artist":
+        const artist = data as SpotifyAlbumArtist;
+        return {
+          contentType: mediaType,
+          mediaContent: {
+            imageUrl: artist.images[0]?.url,
+            label: artist.name,
+            spotifyExternalUrl: artist.external_urls.spotify,
+            artistName: artist.name,
+          },
+        };
+
+      case "track":
+        const track = data as SpotifyBaseTrackItem;
+        return {
+          contentType: mediaType,
+          mediaContent: {
+            imageUrl: track.album.images[0]?.url,
+            label: track.name,
+            spotifyExternalUrl: track.external_urls.spotify,
+            artistName: track.artists[0].name,
+          },
+        };
+
+      case "album":
+        const album = data as SpotifyAlbumItem;
+        return {
+          contentType: mediaType,
+          mediaContent: {
+            imageUrl: album.images[0]?.url,
+            label: album.name,
+            spotifyExternalUrl: album.external_urls.spotify,
+            artistName: album.artists[0].name,
+          },
+        };
+
+      case "playlist":
+        const playlist = data as SpotifyPlayList;
+        return {
+          contentType: mediaType,
+          mediaContent: {
+            imageUrl: playlist.images[0]?.url,
+            label: playlist.name,
+            spotifyExternalUrl: playlist.external_urls.spotify,
+            artistName: playlist.owner.display_name,
+          },
+        };
+    }
+  }
+
+  async function getCommentsByPostId(
+    postId: string
+  ): Promise<Partial<UserPost>[]> {
+    const res = await $fetch<{ status: number; comments: Comment[] }>(
+      `/api/posts/${postId}/comments`
+    );
+    return res.comments as Partial<UserPost>[];
+  }
   return {
     reactToPost,
     createPost,
+    createPostComment,
+    getChosenMediaFromSpotifyData,
+    getCommentsByPostId,
   };
 }

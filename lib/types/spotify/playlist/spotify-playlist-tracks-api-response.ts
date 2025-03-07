@@ -1,4 +1,5 @@
 import type {
+  ExternalUrls,
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
 } from "../album/spotify-album.types";
@@ -9,18 +10,20 @@ export type SpotifyPlaylistTracksApiResponse = {
 };
 
 export type SpotifyTrackItem = {
-  track: {
-    album: SpotifyAlbumItem;
-    artists: SpotifyAlbumArtist[];
-    id: string;
-    href: string;
-    name: string;
-    popularity: number;
-    track: boolean;
-    type: string;
-    uri: string;
-    video_thumbnail: {
-      url: string | null;
-    };
-  };
+  track: SpotifyBaseTrackItem;
 };
+
+export type SpotifyBaseTrackItem = {
+  album: SpotifyAlbumItem;
+  artists: SpotifyAlbumArtist[];
+  id: string;
+  href: string;
+  name: string;
+  popularity: number;
+  track: boolean;
+  type: string;
+  uri: string;
+  video_thumbnail: {
+    url: string | null;
+  };
+} & ExternalUrls;

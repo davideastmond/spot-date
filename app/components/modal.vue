@@ -1,7 +1,7 @@
 <template>
-  <div id="spotty-modal" tabindex="-1" aria-hidden="true"
+  <div id="spotty-modal" tabindex="-1"
     class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-md max-h-full lg:left-[40vw] top-[20vh]">
+    <div class="relative w-full max-w-md max-h-full lg:left-[40vw] lg:top-[400px]]">
       <!-- Modal content -->
       <div class="relative rounded-lg shadow-sm bg-gray-500">
         <!-- Modal header -->
@@ -23,6 +23,7 @@
   </div>
 </template>
 <script setup lang="ts">
+// TODO: explore aria-hidden
 const { onClose } = defineProps<{
   onClose: () => void
 }>()

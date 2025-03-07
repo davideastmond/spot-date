@@ -1,4 +1,4 @@
-import type { MultimediaContent } from "~/lib/models/user-post";
+import type { ChosenMedia } from "./media";
 
 export type NewPostAPIRequest = {
   posterId: string;
@@ -6,6 +6,6 @@ export type NewPostAPIRequest = {
   targetId: string;
   content: {
     text: string;
-    multimedia?: MultimediaContent[];
+    multimedia?: ChosenMedia[];
   };
 };
