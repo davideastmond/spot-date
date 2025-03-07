@@ -45,9 +45,6 @@ export default defineEventHandler(async (event) => {
       };
     }
 
-    const isOwnWall = requestBody.targetId === authSession.user.id;
-    console.info("32 isOwnWall", isOwnWall);
-
     const { content, targetId } = requestBody;
 
     // Filter out any nulls

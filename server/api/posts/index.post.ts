@@ -33,9 +33,6 @@ export default defineEventHandler(async (event) => {
 
   const { content, targetId } = requestBody;
 
-  const isOwnWall = targetId === session.user.id;
-  console.log("isOwnWall: ", isOwnWall);
-
   if (content.multimedia && content.multimedia.length > 0) {
     content.multimedia = content.multimedia.filter((media) => media !== null);
   }
