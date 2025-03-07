@@ -181,7 +181,6 @@ const requestClientCredentialsAccessToken =
 
 export async function getSpotifyJwtData(jwtReference: JwtData) {
   if (Date.now() < jwtReference.expires_at * 1000) {
-    console.info("Line 190 getSpotifyRefreshToken: token has not expired");
     return jwtReference;
   }
 
@@ -202,15 +201,11 @@ export async function getSpotifyJwtData(jwtReference: JwtData) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.error("205", data);
     throw new Error("Failed to refresh token");
   }
-  console.log("214 refreshToken", data.refresh_token);
-  // Testing
+
+  // Save JWT data to database
   if (data.refresh_token && data.expires_at) {
-    console.log(
-      "\x1b[43m Line 218 getSpotifyRefreshToken: token has been refreshed and saved to DB"
-    );
     await JwtController.updateData(jwtReference.id, {
       refresh_token: data.refresh_token,
       access_token: data.access_token,
