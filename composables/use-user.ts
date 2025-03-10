@@ -1,5 +1,7 @@
 import type { User } from "~/lib/models/user";
+import type { UserMusicData } from "~/lib/models/user-music-data";
 import type { UserPost } from "~/lib/models/user-post";
+import type { ChosenMedia } from "~/lib/types/user-posts/media";
 
 export function useUser() {
   async function getUserById(userId: string): Promise<Partial<User>> {
@@ -95,7 +97,7 @@ export function useUser() {
       { image: string; name: string; nickname: string }
     > = {};
 
-    res.data.forEach((result, index) => {
+    res.data.forEach((result) => {
       avatarDict[result.id] = {
         image: result.image!,
         name: result.name!,
@@ -103,6 +105,20 @@ export function useUser() {
       };
     });
     return avatarDict;
+  }
+
+  async function postMusicFavorite(data: ChosenMedia) {
+    await $fetch<void>("/api/user-music-data", {
+      method: "POST",
+      body: data,
+    });
+  }
+
+  async function getMyMusicFavorites(userId: string): Promise<UserMusicData[]> {
+    const res = await $fetch<{ data: UserMusicData[] }>(
+      `/api/user/${userId}/music-data`
+    );
+    return res.data;
   }
 
   return {
@@ -115,5 +131,7 @@ export function useUser() {
     getUserById,
     unfollowUser,
     updateUserDetails,
+    postMusicFavorite,
+    getMyMusicFavorites,
   };
 }
