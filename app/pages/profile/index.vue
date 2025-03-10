@@ -47,6 +47,15 @@
         </button>
       </div>
     </div>
+    <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg mt-16">
+      <h1 class="mediumTitle text-center">Music faves</h1>
+      <!-- A sumamry of 3-4 can appear here, otherwise we take them to another page -->
+      <div class="flex justify-center">
+        <NuxtLink to="/home/me/music" class="flex justify-center">
+          <button class="bg-spotty-green-500 p-2 rounded-sm text-black">Edit...</button>
+        </NuxtLink>
+      </div>
+    </div>
   </div>
   <Modal v-if="modalOpen" :onClose="() => modalOpen = false">
     <div class="p-2 pb-4">
