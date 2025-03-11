@@ -1,8 +1,10 @@
 <template>
   <div class="mt-10">
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg mb-6">
-      <p>Add playlists, artists, tracks and albums on this page using the Spotify picker.</p>
-      <p>This data will be used by our AI-algo to match your with sizzlin'🫰🏿 users that you might gel with!</p>
+      <h1 class="mediumTitle text-center">Music Faves</h1>
+      <p class="font-thin">Add playlists, artists, tracks and albums on this page using the Spotify picker.</p>
+      <p class="font-thin">This data will be used by our AI-algo to match your with sizzlin'🫰🏿 users that you might
+        gel with!</p>
     </div>
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg">
       <div class="flex justify-center">
@@ -38,7 +40,7 @@ const searchOpen = ref(false);
 const userMusicData = ref<UserMusicData[] | null>(null);
 const { session } = useAuth();
 const { getChosenMediaFromSpotifyData } = usePost();
-const { postMusicFavorite, getMyMusicFavorites } = useUser();
+const { postMusicFavorite, getMusicFavorites } = useUser();
 
 onMounted(async () => {
   await fetchMyMusicFavorites();
@@ -47,7 +49,7 @@ onMounted(async () => {
 async function fetchMyMusicFavorites() {
   try {
     if (session.value?.user) {
-      userMusicData.value = await getMyMusicFavorites(session.value?.user?.id);
+      userMusicData.value = await getMusicFavorites(session.value?.user?.id);
     }
   } catch (error) {
     console.error("Error fetching user favorites")
@@ -68,6 +70,12 @@ async function handleMediaSelected({ mediaType, data }: { mediaType: MediaType, 
 }
 
 async function deleteElement(elementId: string) {
-  console.log("Delete element", elementId);
+  const { deleteMyMusicFaveById } = useUser()
+  try {
+    await deleteMyMusicFaveById(session.value?.user?.id as string, elementId);
+    await fetchMyMusicFavorites();
+  } catch (error) {
+    console.error(error);
+  }
 }
 </script>
