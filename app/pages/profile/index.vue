@@ -50,6 +50,13 @@
     <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg mt-16">
       <h1 class="mediumTitle text-center">Music faves</h1>
       <!-- A sumamry of 3-4 can appear here, otherwise we take them to another page -->
+      <div>
+        <MediaCard v-if="musicFaves && musicFaves.length > 0" v-for="media in musicFaves" :key="media.id" :media="media"
+          class="hover:bg-spotty-green-500/3 p-2 w-full max-w-[unset]" />
+        <div v-else>
+          <p class="font-light text-center">No favorites yet!</p>
+        </div>
+      </div>
       <div class="flex justify-center">
         <NuxtLink to="/home/me/music" class="flex justify-center">
           <button class="bg-spotty-green-500 p-2 rounded-sm text-black">Edit...</button>
@@ -84,11 +91,13 @@
 
 <script setup lang="ts">
 import type { User } from '~/lib/models/user';
+import type { UserMusicData } from '~/lib/models/user-music-data';
 
 const { session } = useAuth();
-const { getUserById, updateUserDetails } = useUser();
+const { getUserById, updateUserDetails, getMusicFavorites } = useUser();
 
 const user = ref<Partial<User> | null>(null);
+const musicFaves = ref<UserMusicData[] | null>(null);
 
 const modalOpen = ref(false);
 const modalContext = ref<'none' | 'nickname' | 'bio'>('none');
@@ -98,6 +107,10 @@ const bio = ref('');
 
 onMounted(async () => {
   await fetchUserDetails();
+  const apiResponse = await getMusicFavorites(session.value!.user!.id as string);
+
+  // Just render max
+  musicFaves.value = apiResponse.slice(0, 3);
 });
 
 
