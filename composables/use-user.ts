@@ -114,11 +114,18 @@ export function useUser() {
     });
   }
 
-  async function getMyMusicFavorites(userId: string): Promise<UserMusicData[]> {
+  async function getMusicFavorites(userId: string): Promise<UserMusicData[]> {
     const res = await $fetch<{ data: UserMusicData[] }>(
       `/api/user/${userId}/music-data`
     );
     return res.data;
+  }
+
+  async function deleteMyMusicFaveById(userId: string, musicFaveDocId: string) {
+    await $fetch<void>(`/api/user/${userId}/music-data`, {
+      method: "DELETE",
+      body: { musicFaveDocumentId: musicFaveDocId },
+    });
   }
 
   return {
@@ -132,6 +139,7 @@ export function useUser() {
     unfollowUser,
     updateUserDetails,
     postMusicFavorite,
-    getMyMusicFavorites,
+    getMusicFavorites,
+    deleteMyMusicFaveById,
   };
 }
