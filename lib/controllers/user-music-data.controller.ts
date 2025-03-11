@@ -23,4 +23,10 @@ export const UserMusicDataController = {
       id: doc.id,
     })) as UserMusicData[];
   },
+  getDataById: async (entryId: string): Promise<UserMusicData | null> => {
+    return userMusicDataRepository.getById$(entryId);
+  },
+  deleteEntryById: async (entryId: string): Promise<void> => {
+    await userMusicDataRepository.delete$(entryId);
+  },
 };

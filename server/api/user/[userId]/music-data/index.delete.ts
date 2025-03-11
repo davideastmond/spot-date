@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    await UserMusicDataController.deleteEntry(musicFaveDocumentId);
+    await UserMusicDataController.deleteEntryById(musicFaveDocumentId);
     return {
       status: "Success",
       message: "Music data deleted",
