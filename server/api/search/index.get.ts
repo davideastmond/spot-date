@@ -18,9 +18,14 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  const searchResults = await SearchController.searchUsers(q);
+  const userSearchResults = await SearchController.searchUsers(q);
+  const postSearchResults = await SearchController.searchUserPosts(q);
+
   return {
     status: "ok",
-    data: searchResults,
+    data: {
+      users: userSearchResults,
+      posts: postSearchResults,
+    },
   };
 });
