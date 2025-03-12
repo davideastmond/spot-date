@@ -1,6 +1,7 @@
 import { getServerSession } from "#auth";
 import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
+import { SearchController } from "~/lib/controllers/search.controller";
 import { UserController } from "~/lib/controllers/user.controller";
 import { updateUserDetailsValidator } from "~/lib/validators/update-user-details.validator";
 export default defineEventHandler(async (event) => {
@@ -40,11 +41,13 @@ export default defineEventHandler(async (event) => {
       error: "Bad Request: Invalid request body",
     };
   }
+
   try {
     if (requestBody.field === "bio") {
       await UserController.updateBio(session.user.id, requestBody.data);
     } else {
       await UserController.updateNickname(session.user.id, requestBody.data);
+      await SearchController.updateNickname(session.user.id, requestBody.data);
     }
     return {
       status: `User ${requestBody.field} was updated.`,

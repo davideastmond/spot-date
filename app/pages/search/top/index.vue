@@ -9,7 +9,7 @@ definePageMeta({
 })
 const route = useRoute();
 
-const { searchUsers } = useSearch();
-await searchUsers(route.query.q as string);
+const { performSearch } = useSearch();
+await performSearch(route.query.q as string);
 
 </script>
