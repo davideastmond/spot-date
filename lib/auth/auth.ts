@@ -3,7 +3,9 @@ import SpotifyProvider, {
 } from "@auth/core/providers/spotify";
 import type { AuthConfig, Session } from "@auth/core/types";
 import { JwtController } from "../controllers/jwt.controller";
+import { SearchController } from "../controllers/search.controller";
 import { UserController } from "../controllers/user.controller";
+import type { SecureThirdPartyUser } from "../models/user";
 const runtimeConfig = useRuntimeConfig();
 
 const scopes =
@@ -76,6 +78,22 @@ export const authOptions: AuthConfig = {
         expires_at,
       });
 
+      try {
+        // Check if the user is indexed in Algolia
+        const userIndexed = await SearchController.searchUsers(
+          existingUser.id as string
+        );
+        if (userIndexed.length === 0) {
+          console.info("Indexing user as this user was not found in algolia");
+          await SearchController.indexUser(
+            existingUser as SecureThirdPartyUser
+          );
+        } else {
+          console.info("User already indexed");
+        }
+      } catch (error) {
+        console.error("Error indexing user: ", (error as Error).message);
+      }
       return true;
     },
     async jwt({ token }) {
