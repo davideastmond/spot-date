@@ -38,7 +38,7 @@
           v-on:reaction-clicked="handleCommentReaction" />
       </div>
     </div>
-    <div class="flex justify-between mt-4 border-t p-2">
+    <div class="flex justify-between mt-4 border-t p-2" v-if="showControlButtons">
       <!-- Reaction and comment section -->
       <div>
         <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
@@ -78,12 +78,13 @@ type UserPostProps = {
   post: Partial<UserPost>;
   onReactionClicked?: (postId: string, reaction: Reaction) => void;
   onCommentCreated?: (data: UserCommentData) => void;
+  showControlButtons?: boolean;
 }
 
 /* As props we need
 - TBD: multi media content
 */
-const { post, onReactionClicked, onCommentCreated, avatarDict } = defineProps<UserPostProps>();
+const { post, onReactionClicked, onCommentCreated, avatarDict, showControlButtons = true } = defineProps<UserPostProps>();
 const { session } = useAuth();
 
 onMounted(async () => {
