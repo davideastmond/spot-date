@@ -15,10 +15,7 @@
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
-        <!-- <Userpost :avatar-url="avatarDict[post.posterId]?.image" :user-name="avatarDict[post.posterId]?.nickname"
-          :text-content="post.content.text" :key="post.id" :reactions="post.reactions" /> -->
-        <Userpost v-for="post in userPosts" :key="post.id" :post="post" :avatar-dict="avatarDict"
-          v-on:comment-created="handleCreateComment" />
+        <Userpost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment" />
       </div>
     </div>
   </div>
@@ -63,12 +60,14 @@ onMounted(async () => {
 })
 
 async function refreshPosts() {
+  console.log("function runs", userPosts.value)
   // Fetch user's posts (not their feed)
   const posts = await getPostsByUserId({ userId: route.query.user as string });
   userPosts.value = posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // Fetch avatars for all users in the posts
   avatarDict.value = await getAvatarDict();
+  console.log("function after", userPosts.value)
 }
 
 async function handleFollow() {
