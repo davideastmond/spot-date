@@ -60,14 +60,12 @@ onMounted(async () => {
 })
 
 async function refreshPosts() {
-  console.log("function runs", userPosts.value)
   // Fetch user's posts (not their feed)
   const posts = await getPostsByUserId({ userId: route.query.user as string });
   userPosts.value = posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   // Fetch avatars for all users in the posts
   avatarDict.value = await getAvatarDict();
-  console.log("function after", userPosts.value)
 }
 
 async function handleFollow() {
