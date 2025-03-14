@@ -11,7 +11,6 @@
           <Avatar size="lg" :avatar-url="user.image">
             <Icon name="mdi:account-circle" style="color: #f6f4f4" :class="getAvatarSize('lg')" />
           </Avatar>
-
           <h3>{{ user.nickname }}</h3>
         </NuxtLink>
       </div>
