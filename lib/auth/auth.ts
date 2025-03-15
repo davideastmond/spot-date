@@ -112,6 +112,7 @@ export const authOptions: AuthConfig = {
     },
 
     async session({ token, session }) {
+      console.log("115 session", token, session);
       session = {
         ...session,
         user: {
