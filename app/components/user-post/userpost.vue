@@ -32,7 +32,7 @@
           </div>
         </button>
       </div>
-      <!-- Render comments iyt gere -->
+      <!-- Render comments here -->
       <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2">
         <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict"
           v-on:reaction-clicked="handleCommentReaction" />
