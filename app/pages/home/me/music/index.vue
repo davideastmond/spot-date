@@ -58,9 +58,9 @@ async function fetchMyMusicFavorites() {
 }
 async function handleMediaSelected({ mediaType, data }: { mediaType: MediaType, data: RawMediaContent }) {
   // When a media is selected, we need to assign it as the chosen media
-  const chosenData = getChosenMediaFromSpotifyData(mediaType, data);
+
   try {
-    await postMusicFavorite(chosenData);
+    await postMusicFavorite(getChosenMediaFromSpotifyData(mediaType, data));
     await fetchMyMusicFavorites();
     // We need to refresh the page
     searchOpen.value = false;
