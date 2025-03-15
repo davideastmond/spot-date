@@ -1,7 +1,9 @@
 import { getServerSession } from "#auth";
 import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
+import { SearchController } from "~/lib/controllers/search.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
+import { UserPost } from "~/lib/models/user-post";
 import { NewPostAPIRequest } from "~/lib/types/user-posts/new-post-api-request";
 import { userPostValidator } from "~/lib/validators/user-post.validator";
 // This is the post route to create new user posts. UserId is 'me'
@@ -52,6 +54,8 @@ export default defineEventHandler(async (event) => {
       targetId,
       content,
     });
+
+    await SearchController.indexPost(newPost as UserPost);
     return {
       status: "success",
       id: newPost.id,

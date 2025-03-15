@@ -4,24 +4,25 @@ import type { UserPost } from "~/lib/models/user-post";
 const userResults = ref<Partial<SecureThirdPartyUser>[]>([]);
 const userSearchResults = reactive({ users: userResults });
 
+const postResults = ref<Partial<UserPost>[]>([]);
+const postSearchResults = reactive({ posts: postResults });
+
 export function useSearch() {
-  async function searchUsers(query: string) {
+  async function performSearch(query: string) {
     const res = await $fetch<{
       status: string;
-      data: Partial<SecureThirdPartyUser>[];
-    }>(`/api/search/users?q=${query}`);
-    userResults.value = res.data;
-  }
-  async function searchPosts(query: string): Promise<UserPost[]> {
-    const res = await $fetch<{ status: number; posts: UserPost[] }>(
-      `/api/search/posts?q=${query}`
-    );
-    return res.posts;
+      data: {
+        users: Partial<SecureThirdPartyUser>[];
+        posts: Partial<UserPost>[];
+      };
+    }>(`/api/search?q=${query}`);
+    userResults.value = res.data.users;
+    postResults.value = res.data.posts;
   }
 
   return {
-    searchUsers,
-    searchPosts,
+    performSearch,
     userSearchResults,
+    postSearchResults,
   };
 }

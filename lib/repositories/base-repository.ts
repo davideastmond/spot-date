@@ -30,4 +30,7 @@ export abstract class BaseRepository {
   async update$<T>(id: string, data: Partial<T>): Promise<void> {
     await this.db.collection(this.collectionName).doc(id).update(data);
   }
+  async delete$(id: string): Promise<void> {
+    await this.db.collection(this.collectionName).doc(id).delete();
+  }
 }

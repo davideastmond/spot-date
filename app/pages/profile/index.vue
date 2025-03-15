@@ -47,6 +47,22 @@
         </button>
       </div>
     </div>
+    <div class="bg-spotty-deep-brown rounded-md p-8 lg:ml-[30%] lg:mr-[30%] shadow-lg mt-16">
+      <h1 class="mediumTitle text-center">Music faves</h1>
+      <!-- A sumamry of 3-4 can appear here, otherwise we take them to another page -->
+      <div>
+        <MediaCard v-if="musicFaves && musicFaves.length > 0" v-for="media in musicFaves" :key="media.id" :media="media"
+          class="hover:bg-spotty-green-500/3 p-2 w-full max-w-[unset]" />
+        <div v-else>
+          <p class="font-light text-center">No favorites yet!</p>
+        </div>
+      </div>
+      <div class="flex justify-center">
+        <NuxtLink to="/home/me/music" class="flex justify-center">
+          <button class="bg-spotty-green-500 p-2 rounded-sm text-black">Edit...</button>
+        </NuxtLink>
+      </div>
+    </div>
   </div>
   <Modal v-if="modalOpen" :onClose="() => modalOpen = false">
     <div class="p-2 pb-4">
@@ -62,7 +78,6 @@
         <textarea id="bio" maxlength="200" v-model="bio"
           class="resize-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Bio" required></textarea>
-
       </div>
       <div class="mt-6 flex justify-end">
         <button
@@ -75,11 +90,13 @@
 
 <script setup lang="ts">
 import type { User } from '~/lib/models/user';
+import type { UserMusicData } from '~/lib/models/user-music-data';
 
 const { session } = useAuth();
-const { getUserById, updateUserDetails } = useUser();
+const { getUserById, updateUserDetails, getMusicFavorites } = useUser();
 
 const user = ref<Partial<User> | null>(null);
+const musicFaves = ref<UserMusicData[] | null>(null);
 
 const modalOpen = ref(false);
 const modalContext = ref<'none' | 'nickname' | 'bio'>('none');
@@ -89,6 +106,10 @@ const bio = ref('');
 
 onMounted(async () => {
   await fetchUserDetails();
+  const apiResponse = await getMusicFavorites(session.value!.user!.id as string);
+
+  // Just render max
+  musicFaves.value = apiResponse.slice(0, 3);
 });
 
 

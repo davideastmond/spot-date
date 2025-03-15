@@ -1,12 +1,12 @@
 <template>
-  <div class="rounded-sm bg-spotty-deep-brown p-2 max-w-[150px]">
+  <div class="rounded-sm bg-spotty-deep-brown p-2 max-w-[150px] ">
     <header v-if="header" class="flex justify-end">
       <button @click="handleClose" class="text-sm self-center justify-end px-2" aria-label="Remove">
         <Icon name="mdi:close" style="color: white" size="16px" />
       </button>
     </header>
     <NuxtLink v-if="media && media.mediaContent" :to="media.mediaContent?.spotifyExternalUrl" target="blank"
-      class="text-sm self-center justify-end px-2" aria-label="View on Spotify">
+      class="text-sm self-center justify-end p-0" aria-label="View on Spotify">
       <div>
         <NuxtImg v-if="media?.mediaContent?.imageUrl" :src="media?.mediaContent?.imageUrl"
           class="w-8 h-8 rounded-full" />
@@ -18,12 +18,13 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { UserMusicData } from '~/lib/models/user-music-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
 
 type MediaCardProps = {
   header?: boolean;
   onClose?: () => void;
-  media: ChosenMedia
+  media: ChosenMedia | UserMusicData
 }
 
 const { header, media, onClose } = defineProps<MediaCardProps>();

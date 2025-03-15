@@ -1,26 +1,28 @@
 <template>
   <!-- This could be someone else's feed, or the session user's own feed. -->
   <div class="flex lg:ml-[10%] lg:mr-[10%] lg:justify-evenly flex-col lg:flex-row gap-x-10 gap-y-10 mt-4">
-    <div v-if="userContext">
-      <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
-        :name="userContext!.name!" :is-following="isFollowing" v-on:follow="handleFollow" v-on:unfollow="handleUnFollow"
-        :is-own-profile="isOwnFeed" />
-    </div>
+    <FeedSideMenu class="max-h-[50vw]">
+      <template #public-profile>
+        <div v-if="userContext">
+          <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
+            :name="userContext!.name!" :is-following="isFollowing" v-on:follow="handleFollow"
+            v-on:unfollow="handleUnFollow" :is-own-profile="isOwnFeed" class="max-h-fit" :music-faves="musicFaves" />
+        </div>
+      </template>
+    </FeedSideMenu>
     <div>
       <div>
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
-        <!-- <Userpost :avatar-url="avatarDict[post.posterId]?.image" :user-name="avatarDict[post.posterId]?.nickname"
-          :text-content="post.content.text" :key="post.id" :reactions="post.reactions" /> -->
-        <Userpost v-for="post in userPosts" :key="post.id" :post="post" :avatar-dict="avatarDict"
-          v-on:comment-created="handleCreateComment" />
+        <Userpost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment" />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import type { User } from '~/lib/models/user';
+import type { UserMusicData } from '~/lib/models/user-music-data';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
@@ -36,12 +38,13 @@ const avatarDict = ref<Record<string, { image: string, name: string, nickname: s
 const route = useRoute();
 
 const reationsUserDict = ref<Record<string, { name: string | null, nickname: string | null }>>({});
+const musicFaves = ref<UserMusicData[] | null>(null);
 
 const isFollowing = computed(() => followers.value.some(follower => follower.id === userContext.value?.id));
 const isOwnFeed = computed(() => userContext.value?.id === session.value?.user?.id);
 
 const { session } = useAuth();
-
+const { getMusicFavorites } = useUser();
 onMounted(async () => {
   const user = await getUserById(route.query.user as string);
   userContext.value = user;
@@ -51,6 +54,9 @@ onMounted(async () => {
   followers.value = myFollowers;
 
   await getReactionUserDict();
+
+  const musicFaveData = await getMusicFavorites(user.id as string);
+  musicFaves.value = musicFaveData.slice(0, 3);
 })
 
 async function refreshPosts() {

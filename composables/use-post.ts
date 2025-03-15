@@ -115,10 +115,12 @@ export function usePost() {
   async function getCommentsByPostId(
     postId: string
   ): Promise<Partial<UserPost>[]> {
-    const res = await $fetch<{ status: number; comments: Comment[] }>(
+    const res = await $fetch<{ status: number; comments: UserPost[] }>(
       `/api/posts/${postId}/comments`
     );
-    return res.comments as Partial<UserPost>[];
+    return res.comments.sort(
+      (a, b) => a.createdAt - b.createdAt
+    ) as Partial<UserPost>[];
   }
   return {
     reactToPost,

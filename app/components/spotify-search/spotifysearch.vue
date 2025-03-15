@@ -56,8 +56,9 @@ const { searchSpotify } = useSpotify();
 const isSearchError = ref(false);
 const { signIn } = useAuth();
 
-const { onMediaSelected } = defineProps<{
-  onMediaSelected?: ({ mediaType, data }: { mediaType: MediaType, data: RawMediaContent }) => void
+const { onMediaSelected, callbackUrl } = defineProps<{
+  onMediaSelected?: ({ mediaType, data }: { mediaType: MediaType, data: RawMediaContent }) => void;
+  callbackUrl?: string;
 }>();
 
 const searchResults = ref<SpotifySearchResult | null>(null);
@@ -79,7 +80,7 @@ async function handleSearch() {
 
 async function handleReauth() {
   await signIn('spotify', {
-    callbackUrl: '/home'
+    callbackUrl: callbackUrl || '/home'
   });
 }
 

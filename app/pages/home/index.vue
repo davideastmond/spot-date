@@ -1,6 +1,32 @@
 <template>
-  <Feedheader id="home-feed" v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
-    v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated" />
+  <div class="lg:flex lg:justify-center mt-10">
+    <div>
+      <FeedSideMenu>
+        <template #avatar>
+          <li>
+            <NuxtLink to="/home">
+              <div class="flex items-center gap-2">
+                <Avatar :avatar-url="session?.user?.image" size="md" />
+                <p class="text-spotty-white">{{ session?.user?.name }}</p>
+              </div>
+            </NuxtLink>
+          </li>
+        </template>
+        <template #connections>
+          <li>
+            <div class="flex items-center gap-2">
+              <Icon name="material-icon-theme:authors" width="32" height="32" />
+              <p class="text-spotty-white">Connections</p>
+            </div>
+          </li>
+        </template>
+      </FeedSideMenu>
+    </div>
+    <div>
+      <Feedheader id="home-feed" v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
+        v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated" />
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
 import type { UserPost } from '~/lib/models/user-post';
