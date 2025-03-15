@@ -28,7 +28,8 @@ export default defineNuxtConfig({
     },
   },
   image: {
-    inject: true,
+    provider: "netlify",
+    domains: ["i.scdn.co"],
   },
   dir: {
     pages: "app/pages",
