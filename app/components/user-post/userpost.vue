@@ -81,9 +81,6 @@ type UserPostProps = {
   showControlButtons?: boolean;
 }
 
-/* As props we need
-- TBD: multi media content
-*/
 const { post, onReactionClicked, onCommentCreated, avatarDict, showControlButtons = true } = defineProps<UserPostProps>();
 const { session } = useAuth();
 
