@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-16 mb-16">
+  <div class="mt-16 mb-16 p-2">
     <div class="mb-8">
       <p class="largeTitle text-center lg:text-start">Latest albums on Spotify</p>
       <p class="subtitle text-gray-400 text-center lg:text-start">What's hot and who's listening?</p>
