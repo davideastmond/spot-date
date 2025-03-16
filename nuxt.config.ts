@@ -58,6 +58,7 @@ export default defineNuxtConfig({
       firebase: {
         config: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       },
+      appVersion: "0.1.1b",
     },
   },
   components: {
