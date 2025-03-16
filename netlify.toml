@@ -1,2 +1,3 @@
 [images]
-  remote_images=["https://i.scdn.co/*"]
+  remote_images=["https://i.scdn.co/*", "https://image-cdn-fa.spotifycdn.com/*", "https://image-cdn-ak.spotifycdn.com/*", "https://mosaic.scdn.co/*", "https://mosaic.scdn.co/*"]
+  targetPort=3000
