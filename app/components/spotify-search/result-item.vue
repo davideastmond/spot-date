@@ -6,7 +6,7 @@
         <p class="text-sm self-center">{{ contentLabel }}</p>
       </button>
     </div>
-    <NuxtLink :to="externalUrl" target="blank" class="text-sm self-center justify-end px-2"
+    <NuxtLink v-if="externalUrl" :to="externalUrl" target="blank" class="text-sm self-center justify-end px-2"
       aria-label="View on Spotify">
       <NuxtImg src="/images/common/spotify-logo-color.svg" height="16" width="16" />
     </NuxtLink>
