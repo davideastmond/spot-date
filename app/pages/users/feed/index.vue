@@ -1,7 +1,7 @@
 <template>
   <!-- This could be someone else's feed, or the session user's own feed. -->
   <div class="flex lg:ml-[10%] lg:mr-[10%] lg:justify-evenly flex-col lg:flex-row gap-x-10 gap-y-10 mt-4">
-    <FeedSideMenu class="max-h-[50vw]">
+    <FeedSideMenu class="h-fit">
       <template #public-profile>
         <div v-if="userContext">
           <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
@@ -29,7 +29,7 @@ import type { ChosenMedia } from '~/lib/types/user-posts/media';
 
 // We need to fetch the user context from the search parameter and load the user
 // We also need to fetch the context user's feed
-const { getUserById, getPostsByUserId, getMyFollowers, followUser, unfollowUser, getAvatarDict } = useUser();
+const { getUserById, getPostsByUserId, getFollowersByUserId, followUser, unfollowUser, getAvatarDict } = useUser();
 const userContext = ref<Partial<User> | null>(null);
 const userPosts = ref<UserPost[]>([]);
 const followers = ref<Partial<User>[]>([]);
@@ -50,7 +50,7 @@ onMounted(async () => {
   userContext.value = user;
 
   await refreshPosts();
-  const myFollowers = await getMyFollowers();
+  const myFollowers = await getFollowersByUserId("me");
   followers.value = myFollowers;
 
   await getReactionUserDict();
@@ -70,12 +70,12 @@ async function refreshPosts() {
 
 async function handleFollow() {
   await followUser(userContext.value!.id!);
-  followers.value = await getMyFollowers();
+  followers.value = await getFollowersByUserId("me");
 }
 
 async function handleUnFollow() {
   await unfollowUser(userContext.value!.id!);
-  followers.value = await getMyFollowers();
+  followers.value = await getFollowersByUserId("me");
 }
 
 async function getReactionUserDict() {
