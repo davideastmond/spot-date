@@ -10,7 +10,16 @@ export default defineEventHandler(async (event) => {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const userContext = await UserController.getUserById(authSession.user.id);
+  const userId = getRouterParam(event, "userId");
+
+  if (!userId) {
+    return new Response("Bad Request: `userId` is required", { status: 400 });
+  }
+
+  const userIdContext = userId === "me" ? authSession.user.id : userId;
+
+  const userContext = await UserController.getUserById(userIdContext);
+
   if (!userContext) {
     return new Response("User not found", { status: 404 });
   }
