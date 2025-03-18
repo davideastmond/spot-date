@@ -55,9 +55,9 @@ export function useUser() {
     return res.posts;
   }
 
-  async function getMyFollowers(): Promise<Partial<User>[]> {
+  async function getFollowersByUserId(id: string): Promise<Partial<User>[]> {
     const res = await $fetch<{ status: number; data: Partial<User>[] }>(
-      `/api/user/me/following`
+      `/api/user/${id}/following`
     );
     return res.data;
   }
@@ -132,7 +132,6 @@ export function useUser() {
     followUser,
     getAvatarDict,
     getFeedByUserId,
-    getMyFollowers,
     getMyPosts,
     getPostsByUserId,
     getUserById,
@@ -141,5 +140,6 @@ export function useUser() {
     postMusicFavorite,
     getMusicFavorites,
     deleteMyMusicFaveById,
+    getFollowersByUserId,
   };
 }

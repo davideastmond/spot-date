@@ -22,17 +22,24 @@
     </div>
     <div v-if="!isOwnProfile">
       <!-- Follow and unfollow buttons -->
-      <div v-if="!isFollowing" class="flex justify-end mt-4">
-        <button @click="handleFollowButtonClicked">
-          <Icon name="mdi:account-add-outline" aria-label="follow user" />
-        </button>
-      </div>
-      <div v-else class="flex justify-end mt-4">
-        <button @click="handleFollowButtonClicked">
-          <Icon name="mdi:account-remove-outline" aria-label="unfollow user" class="text-red-400" />
-        </button>
-      </div>
+      <FollowButton :isFollowing="isFollowing" :handleFollowButtonClicked="handleFollowButtonClicked" />
     </div>
+    <FeedSideMenu>
+      <template #connections>
+        <li>
+          <button @click="toggleConnectionsModal()">
+            <div class="flex items-center gap-2">
+              <Icon name="material-icon-theme:authors" width="32" height="32" />
+              <p class="text-spotty-white">Connections</p>
+            </div>
+          </button>
+        </li>
+      </template>
+    </FeedSideMenu>
+    <Modal v-if="connectionsModalOpen" :onClose="() => toggleConnectionsModal()">
+      <ConnectionsComponent :user-context-id="route.query.user as string" :avatar-dict="avatarDict"
+        :is-own-profile="isOwnProfile" />
+    </Modal>
   </div>
 </template>
 <script setup lang="ts">
@@ -49,7 +56,15 @@ type PublicProfileProps = {
 }
 import { getAvatarSize } from '~/lib/definitions/avatar-size/get-avatar-size';
 import type { UserMusicData } from '~/lib/models/user-music-data';
+const connectionsModalOpen = ref(false);
+
 const { avatarUrl, name, nickname, bio, isFollowing, onFollow, onUnfollow, isOwnProfile } = defineProps<PublicProfileProps>();
+
+const route = useRoute();
+const avatarDict = ref<Record<string, { image: string, name: string, nickname: string }>>({});
+const { getAvatarDict } = useUser();
+
+const { session } = useAuth();
 
 function handleFollowButtonClicked() {
   if (isFollowing) {
@@ -57,6 +72,14 @@ function handleFollowButtonClicked() {
   } else {
     onFollow?.();
   }
+}
+
+onMounted(async () => {
+  avatarDict.value = await getAvatarDict();
+})
+
+function toggleConnectionsModal() {
+  connectionsModalOpen.value = !connectionsModalOpen.value;
 }
 /* 
   isFollowing is a boolean that determines if the user is following the user or not.

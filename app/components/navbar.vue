@@ -76,12 +76,10 @@
             <li v-if="status === 'authenticated'">
               <button type="button" class="hover:opacity-50 py-2 w-full" @click="handleSignOut">
                 <p class="text-spotty-black">Sign Out</p>
-                <div>
-                  <!-- TODO: investigate this  -->
-                </div>
               </button>
             </li>
           </ul>
+          <p class="text-spotty-green-500 text-xs text-right pr-2">{{ config.public.appVersion }}</p>
         </div>
       </nav>
       <NotificationIcon />
@@ -94,6 +92,7 @@ const { signIn, status, session, signOut } = useAuth()
 const navMenuOpen = ref(false);
 const searchQuery = ref('');
 
+const config = useRuntimeConfig();
 const handleSignOut = async () => {
   toggleNavMenu();
   await signOut();
