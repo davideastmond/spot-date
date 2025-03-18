@@ -14,10 +14,12 @@
         </template>
         <template #connections>
           <li>
-            <div class="flex items-center gap-2">
-              <Icon name="material-icon-theme:authors" width="32" height="32" />
-              <p class="text-spotty-white">Connections</p>
-            </div>
+            <button @click="toggleConnectionsModal()">
+              <div class="flex items-center gap-2">
+                <Icon name="material-icon-theme:authors" width="32" height="32" />
+                <p class="text-spotty-white">Connections</p>
+              </div>
+            </button>
           </li>
         </template>
       </FeedSideMenu>
@@ -26,6 +28,10 @@
       <Feedheader id="home-feed" v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
         v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated" />
     </div>
+    <Modal v-if="connectionsModalOpen" :onClose="() => connectionsModalOpen = false">
+      <ConnectionsComponent :user-context-id="session!.user!.id as string" :avatar-dict="avatarDict"
+        :is-own-profile="true" />
+    </Modal>
   </div>
 </template>
 <script setup lang="ts">
@@ -35,13 +41,16 @@ import type { ChosenMedia } from '~/lib/types/user-posts/media';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
 
 const posts = ref<UserPost[]>([]);
-const { getFeedByUserId } = useUser();
+const avatarDict = ref<Record<string, { image: string; name: string; nickname: string }>>({});
+const connectionsModalOpen = ref(false);
+const { getFeedByUserId, getAvatarDict } = useUser();
 const { createPost, createPostComment } = usePost();
 const { session } = useAuth();
 
 onMounted(async () => {
   // Fetch user's feed
   await fetchPosts();
+  avatarDict.value = await getAvatarDict();
 });
 
 async function fetchPosts() {
@@ -86,5 +95,9 @@ async function handleCommentCreated({ postText, mediaContent, parentId, targetId
   } catch (error) {
     console.error((error as Error).message);
   }
+}
+
+function toggleConnectionsModal() {
+  connectionsModalOpen.value = !connectionsModalOpen.value;
 }
 </script>
