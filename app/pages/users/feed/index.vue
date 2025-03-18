@@ -45,18 +45,20 @@ const isOwnFeed = computed(() => userContext.value?.id === session.value?.user?.
 
 const { session } = useAuth();
 const { getMusicFavorites } = useUser();
+const MAX_MUSIC_FAVES = 3;
+
 onMounted(async () => {
   const user = await getUserById(route.query.user as string);
   userContext.value = user;
 
   await refreshPosts();
-  const myFollowers = await getFollowersByUserId("me");
-  followers.value = myFollowers;
+
+  await refreshFollowers();
 
   await getReactionUserDict();
 
   const musicFaveData = await getMusicFavorites(user.id as string);
-  musicFaves.value = musicFaveData.slice(0, 3);
+  musicFaves.value = musicFaveData.slice(0, MAX_MUSIC_FAVES);
 })
 
 async function refreshPosts() {
@@ -70,11 +72,15 @@ async function refreshPosts() {
 
 async function handleFollow() {
   await followUser(userContext.value!.id!);
-  followers.value = await getFollowersByUserId("me");
+  await refreshFollowers();
 }
 
 async function handleUnFollow() {
   await unfollowUser(userContext.value!.id!);
+  await refreshFollowers();
+}
+
+async function refreshFollowers() {
   followers.value = await getFollowersByUserId("me");
 }
 
