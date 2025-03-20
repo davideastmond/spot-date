@@ -1,4 +1,4 @@
-import type { ChosenMedia } from "../types/user-posts/media";
+import type { ChosenMedia } from "~/lib/types/user-posts/media";
 import type { UserPostReactionWithId } from "./user-post-reaction";
 
 export type UserPost = {
