@@ -1,6 +1,6 @@
+import type { ChosenMedia } from "~/lib/types/user-posts/media";
 import type { UserMusicData } from "../models/user-music-data";
 import { userMusicDataRepository } from "../repositories/user-music-data.repository";
-import type { ChosenMedia } from "../types/user-posts/media";
 
 export const UserMusicDataController = {
   createDataEntry: async (
