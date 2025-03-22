@@ -4,7 +4,7 @@ import { authOptions } from "~/lib/auth/auth";
 import { SearchController } from "~/lib/controllers/search.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
 import { UserPost } from "~/lib/models/user-post";
-import { serverSideEventManager } from "~/lib/server-side-event-manager/server-side-event-manager";
+import { serverSentEventManager } from "~/lib/server-sent-event-manager/server-sent-event-manager";
 import { NewPostAPIRequest } from "~/lib/types/user-posts/new-post-api-request";
 import { userPostValidator } from "~/lib/validators/user-post.validator";
 // This is the post route to create new user posts. UserId is 'me'
@@ -58,12 +58,7 @@ export default defineEventHandler(async (event) => {
 
     await SearchController.indexPost(newPost as UserPost);
 
-    // Experiment
-    // serverSideEventManager.emitToUser(session.user.id, "new-post", {
-    //   post: newPost,
-    // });
-
-    serverSideEventManager.broadcastMessage("new-post", {
+    serverSentEventManager.broadcastMessage("new-post", {
       post: `${session.user.name} has posted a new post!`,
     });
     return {
