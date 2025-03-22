@@ -1,13 +1,13 @@
 import { NotificationController } from "~/lib/controllers/notification.controller";
 import type { SystemNotification } from "~/lib/models/system-notification/system-notification";
-import { serverSideEventManager } from "~/lib/server-side-event-manager/server-side-event-manager";
+import { serverSentEventManager } from "~/lib/server-sent-event-manager/server-sent-event-manager";
 
 class NotificationMarshaller {
   /**
    * Dispatches all unsent notifications to users
    */
   public async dispatch() {
-    const clients = serverSideEventManager.clients;
+    const clients = serverSentEventManager.clients;
     if (clients.length === 0) {
       console.info(
         "Marshall: No clients connected to dispatch notifications to"
@@ -48,7 +48,7 @@ class NotificationMarshaller {
 
   private dispatchNotification(notification: Partial<SystemNotification>) {
     // Dispatch the notification
-    serverSideEventManager.emitToUser(
+    serverSentEventManager.emitToUser(
       notification.targetUserId as string,
       notification.kind as string,
       notification.data as Record<string, any>
