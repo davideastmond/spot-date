@@ -34,6 +34,14 @@ export const UserController = {
     }
     return { ...(users.docs[0].data() as User), id: users.docs[0].id };
   },
+  getNicknameByUserId: async (userId: string): Promise<string> => {
+    const user = await userRepository.getById$<Partial<User>>(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    if (user.nickname) return user.nickname;
+    return user.name as string;
+  },
   updateBio: async (id: string, bio: string) => {
     return userRepository.update$(id, { bio });
   },
