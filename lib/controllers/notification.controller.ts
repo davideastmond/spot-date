@@ -3,12 +3,6 @@ import type { SystemNotification } from "../models/system-notification/system-no
 import { notificationRepository } from "../repositories/notification.respository";
 
 export const NotificationController = {
-  getNotificationsByUserId: async (
-    userId: string
-  ): Promise<SystemNotification[]> => {
-    return [];
-  },
-
   createUserNotification: async (
     inputData: NewUserNotificationParams
   ): Promise<string> => {
@@ -22,7 +16,6 @@ export const NotificationController = {
       sourceType: "user",
       data,
       kind,
-      sent: false,
     };
 
     return await notificationRepository.create$(
@@ -30,18 +23,26 @@ export const NotificationController = {
     );
   },
 
-  getPendingNotifications: async (): Promise<SystemNotification[]> => {
+  getPendingNotificationsByUserId: async (
+    userId: string
+  ): Promise<SystemNotification[]> => {
     const docs = await notificationRepository
       .query$()
-      .where("sent", "==", false)
+      .where("status", "==", "unread")
+      .where("targetUserId", "==", userId)
       .get();
     return docs.docs.map(
       (doc) => ({ ...doc.data(), id: doc.id } as SystemNotification)
     );
   },
-  markSent: async (notificationId: string) => {
+  getNotificationById: async (
+    notificationId: string
+  ): Promise<Partial<SystemNotification> | null> => {
+    return notificationRepository.getById$<SystemNotification>(notificationId);
+  },
+  markRead: async (notificationId: string) => {
     await notificationRepository.update$(notificationId, {
-      sent: true,
+      status: "read",
     });
   },
 };
