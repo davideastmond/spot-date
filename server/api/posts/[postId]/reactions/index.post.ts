@@ -1,7 +1,9 @@
 import { getServerSession } from "#auth";
 import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
+import { NotificationController } from "~/lib/controllers/notification.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
+import { UserController } from "~/lib/controllers/user.controller";
 import { postReactionValidator } from "~/lib/validators/post-reaction.validator";
 
 export default defineEventHandler(async (event) => {
@@ -46,6 +48,28 @@ export default defineEventHandler(async (event) => {
       postId,
       reaction: requestBody.reaction,
     });
+
+    const postInQuestion = await UserPostController.getPostByPostId(postId);
+    if (!postInQuestion) {
+      setResponseStatus(event, 404);
+      return {
+        error: "Post not found",
+      };
+    }
+
+    if (session.user.id !== postInQuestion.posterId) {
+      const reactingUserNickname = await UserController.getNicknameByUserId(
+        session.user.id
+      );
+      await NotificationController.createUserNotification({
+        triggerUserId: session.user.id,
+        targetUserId: postInQuestion.posterId as string,
+        kind: "like",
+        data: {
+          body: `${reactingUserNickname} reacted to your post`,
+        },
+      });
+    }
     setResponseStatus(event, 200);
     return {
       status: "OK",
