@@ -1,4 +1,4 @@
-import type { NotificationContent } from "~/lib/models/system-notification/system-notification";
+import type { SystemNotification } from "~/lib/models/system-notification/system-notification";
 import type { User } from "~/lib/models/user";
 import type { UserMusicData } from "~/lib/models/user-music-data";
 import type { UserPost } from "~/lib/models/user-post";
@@ -132,7 +132,7 @@ export function useUser() {
   async function getNotifications() {
     return await $fetch<{
       status: number;
-      notifications: Partial<NotificationContent>[];
+      notifications: Partial<SystemNotification>[];
     }>(`/api/notifications`);
   }
 
