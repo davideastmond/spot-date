@@ -13,7 +13,6 @@ export type SystemNotification = {
   readAt?: number | null;
   status: NotificationStatus;
   kind: NotificationKind;
-  sent: boolean;
 };
 
 export type NotificationContent = {
