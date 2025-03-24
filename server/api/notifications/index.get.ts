@@ -18,14 +18,7 @@ export default defineEventHandler(async (event) => {
       );
     return {
       status: 200,
-      notifications: notifications.map((n) => ({
-        body: n.data.body,
-        link: n.data.link,
-        imageUrl: n.data.imageUrl,
-        createdAt: n.createdAt,
-        kind: n.kind,
-        id: n.id,
-      })),
+      notifications,
     };
   } catch (error) {
     console.error(error);
