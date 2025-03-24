@@ -1,20 +1,21 @@
 <template>
-  <div>
-    <slot name="icon"></slot>
+  <div class="flex gap-2">
+    <slot name="avatar"></slot>
     <NuxtLink v-if="notification.data?.link" :to="getNotificationUrl(notification.data.link)"
       @click="toggleNotificationsOpen()">
       <button @click="onNotificationElementClicked?.(notification.id!)">
-        <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{ notification.data.body }}</li>
+        <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{
+          notification.data.body }}</li>
       </button>
     </NuxtLink>
-    <div v-else>
+    <div v-else class="content-center">
       <button @click="onNotificationElementClicked?.(notification.id!)">
         <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{ notification.data!.body }}</li>
       </button>
     </div>
-    <div>
-      <p class="text-xs font-thin text-right">{{ unixToDateString(notification.createdAt) }}</p>
-    </div>
+  </div>
+  <div>
+    <p class="text-xs font-thin text-right">{{ unixToDateString(notification.createdAt) }}</p>
   </div>
 </template>
 <script setup lang="ts">

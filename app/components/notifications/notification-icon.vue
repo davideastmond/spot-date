@@ -14,7 +14,13 @@
           <ul class="p-2">
             <NotificationElement :notification="notification"
               v-on:notification-element-clicked="onNotificationElementClicked?.(notification.id as string)"
-              :toggle-notifications-open="toggleNotificationsOpen"></NotificationElement>
+              :toggle-notifications-open="toggleNotificationsOpen">
+              <template #avatar>
+                <Avatar :avatar-url="avatarDict[notification.triggerUserId as string]?.image" size="md">
+                  <Icon name="mdi:account-circle" style="color: white" size="32px" />
+                </Avatar>
+              </template>
+            </NotificationElement>
           </ul>
         </div>
         <div v-if="notifications.length === 0" class="bg-white text-spotty-black"
