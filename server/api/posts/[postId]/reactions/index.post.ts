@@ -66,7 +66,8 @@ export default defineEventHandler(async (event) => {
         targetUserId: postInQuestion.posterId as string,
         kind: "like",
         data: {
-          body: `${reactingUserNickname} reacted to your post`,
+          title: `${reactingUserNickname} reacted to your post`,
+          body: postInQuestion.content?.text,
         },
       });
     }
