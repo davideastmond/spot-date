@@ -5,7 +5,7 @@
     </div>
     <div class="flex justify-center flex-col">
       <p class="truncatable self-center">{{ artists![0].name }} </p>
-      <p class="font-thin truncatable self-center">{{ name }}</p>
+      <p class="font-thin truncatable self-center max-w-[180px]">{{ name }}</p>
     </div>
   </div>
 </template>
@@ -17,12 +17,3 @@ import type { SpotifyAlbumItem } from '~/lib/types/spotify/album/spotify-album.t
 const { name, images, artists } = defineProps<Partial<SpotifyAlbumItem>>();
 
 </script>
-
-<style lang="css" scoped>
-.truncatable {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 180px;
-}
-</style>
