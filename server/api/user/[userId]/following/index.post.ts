@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
         targetUserId: requestBody.userId,
         kind: "follow",
         data: {
-          body: `${triggeringUserName} followed you`,
+          title: `${triggeringUserName} followed you`,
           link: `/users/feed?user=${authSession.user.id}`,
         },
       });
