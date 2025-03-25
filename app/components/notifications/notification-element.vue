@@ -5,12 +5,14 @@
       @click="toggleNotificationsOpen()">
       <button @click="onNotificationElementClicked?.(notification.id!)">
         <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{
-          notification.data.body }}</li>
+          notification.data.title }}</li>
+        <li v-if="notification.data?.body" class="text-xs">{{ notification.data.body }}</li>
       </button>
     </NuxtLink>
     <div v-else class="content-center">
       <button @click="onNotificationElementClicked?.(notification.id!)">
-        <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{ notification.data!.body }}</li>
+        <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{ notification.data!.title }}</li>
+        <li v-if="notification.data?.body" class="text-xs">{{ notification.data.body }}</li>
       </button>
     </div>
   </div>
@@ -20,13 +22,13 @@
 </template>
 <script setup lang="ts">
 import type { SystemNotification } from '~/lib/models/system-notification/system-notification';
-const runtimeConfig = useRuntimeConfig();
-const { unixToDateString } = useDate();
 type NotificationElementProps = {
   notification: Partial<SystemNotification>;
   onNotificationElementClicked?: (notificationId: string) => void;
   toggleNotificationsOpen: () => void;
 }
+const runtimeConfig = useRuntimeConfig();
+const { unixToDateString } = useDate();
 
 const { notification, onNotificationElementClicked, toggleNotificationsOpen } = defineProps<NotificationElementProps>();
 
