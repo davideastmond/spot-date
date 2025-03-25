@@ -83,8 +83,8 @@ export default defineEventHandler(async (event) => {
           targetUserId: parentPost.posterId as string,
           kind: "comment",
           data: {
-            body: `You have a new comment from ${sourceUserNickname}`,
-            link: `/posts/${postId}`,
+            title: `You have a new comment from ${sourceUserNickname}`,
+            body: parentPost.content?.text,
           },
         });
       }
