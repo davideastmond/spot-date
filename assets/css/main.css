@@ -49,6 +49,12 @@ body {
   font-weight: 100;
 }
 
+.truncatable {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 button {
   cursor: pointer;
 }
