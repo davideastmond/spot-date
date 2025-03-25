@@ -16,7 +16,8 @@ export type SystemNotification = {
 };
 
 export type NotificationContent = {
-  body: string;
+  title: string;
+  body?: string;
   link?: string;
   imageUrl?: string;
 };
