@@ -148,20 +148,6 @@ async function handleMarkRead(notificationId: string) {
 </script>
 
 <style scoped>
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.2s;
-}
-
 @media only screen and (min-width: 1024px) {
   .largeScreenResponsiveSize {
     width: 200px;
