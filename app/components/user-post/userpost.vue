@@ -33,7 +33,7 @@
         </button>
       </div>
       <!-- Render comments here -->
-      <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2">
+      <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2 animate-fade-in">
         <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict"
           v-on:reaction-clicked="handleCommentReaction" />
       </div>
