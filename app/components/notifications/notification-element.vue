@@ -3,18 +3,22 @@
     <slot name="avatar"></slot>
     <NuxtLink v-if="notification.data?.link" :to="getNotificationUrl(notification.data.link)"
       @click="toggleNotificationsOpen()">
-      <div class="content-center max-w-[300px] truncatable">
+      <div class="content-center max-w-[300px]">
         <button @click="onNotificationElementClicked?.(notification.id!)">
           <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{
             notification.data.title }}</li>
-          <li v-if="notification.data?.body" class="text-xs">{{ notification.data.body }}</li>
+          <div class="truncatable max-h-[200px] max-w-[300px]">
+            <li v-if="notification.data?.body" class="text-xs">{{ notification.data.body }}</li>
+          </div>
         </button>
       </div>
     </NuxtLink>
-    <div v-else class="content-center max-w-[300px] truncatable">
+    <div v-else class="content-center max-w-[300px]">
       <button @click="onNotificationElementClicked?.(notification.id!)">
         <li :key="notification.id" v-click-outside="toggleNotificationsOpen">{{ notification.data!.title }}</li>
-        <li v-if="notification.data?.body" class="text-xs">{{ notification.data.body }}</li>
+        <div class="truncatable max-h-[200px] max-w-[300px]">
+          <li v-if="notification.data?.body" class="text-xs">{{ notification.data.body }}</li>
+        </div>
       </button>
     </div>
   </div>
