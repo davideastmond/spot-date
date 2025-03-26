@@ -1,7 +1,7 @@
 import type {
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
-} from "../album/spotify-album.types";
+} from "../album/spotify-album-types";
 import type { SpotifyBaseTrackItem } from "../playlist/spotify-playlist-tracks-api-response";
 import type { SpotifyPlayList } from "../user/spotify-user.types";
 

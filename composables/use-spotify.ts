@@ -1,4 +1,4 @@
-import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/album/spotify-album.types";
+import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/album/spotify-album-types";
 import type { SpotifyPlaylistTracksApiResponse } from "~/lib/types/spotify/playlist/spotify-playlist-tracks-api-response";
 import type { SpotifySearchResult } from "~/lib/types/spotify/search-result/spotify-search-result";
 import type { SpotifyPlaylistApiResponse } from "~/lib/types/spotify/user/spotify-user.types";

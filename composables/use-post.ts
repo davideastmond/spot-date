@@ -2,7 +2,7 @@ import type { UserPost } from "~/lib/models/user-post";
 import type {
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
-} from "~/lib/types/spotify/album/spotify-album.types";
+} from "~/lib/types/spotify/album/spotify-album-types";
 import type { SpotifyBaseTrackItem } from "~/lib/types/spotify/playlist/spotify-playlist-tracks-api-response";
 import type {
   MediaType,
