@@ -39,9 +39,13 @@ const { unixToDateString } = useDate();
 const { notification, onNotificationElementClicked, toggleNotificationsOpen } = defineProps<NotificationElementProps>();
 
 function getNotificationUrl(url: string) {
-  if (url) {
-    return `${runtimeConfig.public.domainUrl}${url}`
+  if (!url || url === "") {
+    return "";
   }
-  return ""
+
+  if (url.includes("https://")) {
+    return url;
+  }
+  return `${runtimeConfig.public.domainUrl}${url}`
 }
 </script>
