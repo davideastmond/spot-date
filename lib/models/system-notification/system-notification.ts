@@ -1,7 +1,7 @@
 export type NotificationSourceType = "admin" | "user";
 export type NotificationStatus = "unread" | "read";
 
-export type NotificationKind = "follow" | "like" | "comment" | "mention";
+export type NotificationKind = "follow" | "reaction" | "comment" | "mention";
 
 export type SystemNotification = {
   id: string;
