@@ -1,13 +1,15 @@
 <template>
   <!-- this component should show avatars of the user's followers -->
-  <div class="bg-spotty-deep-brown">
-    <h2>Connections</h2>
-    <div v-if="followers.length > 0">
+  <div class="bg-spotty-deep-brown p-4">
+    <h2 class="text-center text-lg uppercase">Connections</h2>
+    <div v-if="followers.length > 0" class="mt-4">
       <div v-for="follower in followers" :key="follower.id" class="p-2 flex justify-around items-center">
-        <Avatar :avatarUrl="avatarDict[follower!.id as string].image" size="lg">
-          <Icon name="mdi:account-circle" style="color: white" size="32px" />
-        </Avatar>
-        <p>{{ follower.name }}</p>
+        <NuxtLink :href="getUserPageLink(follower.id as string)">
+          <Avatar :avatarUrl="avatarDict[follower!.id as string].image" size="lg">
+            <Icon name="mdi:account-circle" style="color: white" size="32px" />
+          </Avatar>
+          <p>{{ follower.name }}</p>
+        </NuxtLink>
         <div v-if="isOwnProfile">
           <FollowButton :isFollowing="true"
             :handle-follow-button-clicked="() => handleUnfollowUser(follower.id as string)" />
@@ -29,6 +31,7 @@ type ConnectionsComponentProps = {
 const { userContextId, avatarDict, isOwnProfile = false } = defineProps<ConnectionsComponentProps>();
 const followers = ref<Partial<User>[]>([]);
 const { getFollowersByUserId, unfollowUser } = useUser();
+const runtimeConfig = useRuntimeConfig();
 
 onMounted(async () => {
   await fetchFollowers();
@@ -36,6 +39,11 @@ onMounted(async () => {
 
 async function fetchFollowers() {
   followers.value = await getFollowersByUserId(userContextId);
+}
+
+function getUserPageLink(userId: string) {
+  const baseUrl = runtimeConfig.public.domainUrl;
+  return `${baseUrl}/users/feed?user=${userId}`;
 }
 
 async function handleUnfollowUser(userId: string) {
