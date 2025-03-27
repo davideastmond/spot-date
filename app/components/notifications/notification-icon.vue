@@ -8,9 +8,10 @@
         <Icon name="material-symbols:notifications-sharp" width="24" height="24" />
       </button>
     </div>
-    <div v-if="menuOpen" class="rounded-sm absolute top-[40px] right-0 bg-spotty-white shadow-xl animate-fade-in">
+    <div v-if="menuOpen" class="rounded-sm absolute top-[40px] right-0 bg-spotty-white shadow-xl animate-fade-in z-[1]">
       <div class="flex flex-col">
-        <div v-for="notification in notifications" :key="notification.id" class="bg-white text-spotty-black">
+        <div v-for="notification in notifications" :key="notification.id"
+          class="bg-white text-spotty-black  hover:bg-slate-200">
           <ul class="p-2">
             <NotificationElement :notification="notification"
               v-on:notification-element-clicked="onNotificationElementClicked?.(notification.id as string)"
