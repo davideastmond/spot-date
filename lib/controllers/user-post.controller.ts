@@ -128,6 +128,16 @@ export const UserPostController = {
     const post = await userPostsRepository.getById$<Partial<UserPost>>(postId);
     return post;
   },
+  getParentPostById: async (parentPostId: string) => {
+    const post = await userPostsRepository.getById$<Partial<UserPost>>(
+      parentPostId
+    );
+
+    if (post && post.parentPostId) {
+      throw new Error("This is not a parent post");
+    }
+    return post;
+  },
   filterDuplicates: (posts: Partial<UserPost>[]): Partial<UserPost>[] => {
     const postIds = new Set<string>();
     return posts.filter((post) => {
