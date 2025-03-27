@@ -122,11 +122,20 @@ export function usePost() {
       (a, b) => a.createdAt - b.createdAt
     ) as Partial<UserPost>[];
   }
+
+  async function getPostByParentId(postParentId: string) {
+    // This should not get child comments - only the parent
+    const res = await $fetch<{ data: Partial<UserPost> }>(
+      `/api/posts/${postParentId}`
+    );
+    return res.data;
+  }
   return {
     reactToPost,
     createPost,
     createPostComment,
     getChosenMediaFromSpotifyData,
     getCommentsByPostId,
+    getPostByParentId,
   };
 }
