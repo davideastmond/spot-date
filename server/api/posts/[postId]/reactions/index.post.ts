@@ -64,10 +64,13 @@ export default defineEventHandler(async (event) => {
       await NotificationController.createUserNotification({
         triggerUserId: session.user.id,
         targetUserId: postInQuestion.posterId as string,
-        kind: "like",
+        kind: "reaction",
         data: {
           title: `${reactingUserNickname} reacted to your post`,
           body: postInQuestion.content?.text,
+          link: postInQuestion.parentPostId
+            ? `/user-post?id=${postInQuestion.parentPostId}`
+            : `/user-post?id=${postId}`,
         },
       });
     }

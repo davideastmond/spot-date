@@ -82,9 +82,11 @@ export default defineEventHandler(async (event) => {
           triggerUserId: authSession.user.id,
           targetUserId: parentPost.posterId as string,
           kind: "comment",
+
           data: {
             title: `You have a new comment from ${sourceUserNickname}`,
             body: parentPost.content?.text,
+            link: `/user-post?id=${postId}`,
           },
         });
       }
