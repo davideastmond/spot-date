@@ -1,4 +1,4 @@
-import type { Reaction } from "../types/user-posts/reaction";
+import type { Reaction } from "~/lib/types/user-posts/reaction";
 
 export type UserPostReaction = {
   parentPostId: string;

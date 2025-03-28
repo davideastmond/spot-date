@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SpotifyAlbumItem } from '~/lib/types/spotify/album/spotify-album.types';
+import type { SpotifyAlbumItem } from '~/lib/types/spotify/album/spotify-album-types';
 
 
 

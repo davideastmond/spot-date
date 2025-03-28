@@ -1,10 +1,10 @@
 import { Filter } from "firebase-admin/firestore";
 import _ from "lodash";
-import type { UserPost } from "../models/user-post";
-import type { UserPostReactionWithId } from "../models/user-post-reaction";
+import type { UserPost } from "~/lib/models/user-post";
+import type { UserPostReactionWithId } from "~/lib/models/user-post-reaction";
+import type { NewPostAPIRequest } from "~/lib/types/user-posts/new-post-api-request";
+import type { Reaction } from "~/lib/types/user-posts/reaction";
 import { userPostsRepository } from "../repositories/user-posts.repository";
-import type { NewPostAPIRequest } from "../types/user-posts/new-post-api-request";
-import type { Reaction } from "../types/user-posts/reaction";
 
 export const UserPostController = {
   createPost: async (data: NewPostAPIRequest): Promise<Partial<UserPost>> => {
@@ -126,6 +126,16 @@ export const UserPostController = {
     postId: string
   ): Promise<Partial<UserPost> | null> => {
     const post = await userPostsRepository.getById$<Partial<UserPost>>(postId);
+    return post;
+  },
+  getParentPostById: async (parentPostId: string) => {
+    const post = await userPostsRepository.getById$<Partial<UserPost>>(
+      parentPostId
+    );
+
+    if (post && post.parentPostId) {
+      throw new Error("This is not a parent post");
+    }
     return post;
   },
   filterDuplicates: (posts: Partial<UserPost>[]): Partial<UserPost>[] => {

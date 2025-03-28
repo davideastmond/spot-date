@@ -2,7 +2,7 @@ import type { UserPost } from "~/lib/models/user-post";
 import type {
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
-} from "~/lib/types/spotify/album/spotify-album.types";
+} from "~/lib/types/spotify/album/spotify-album-types";
 import type { SpotifyBaseTrackItem } from "~/lib/types/spotify/playlist/spotify-playlist-tracks-api-response";
 import type {
   MediaType,
@@ -122,11 +122,20 @@ export function usePost() {
       (a, b) => a.createdAt - b.createdAt
     ) as Partial<UserPost>[];
   }
+
+  async function getPostByParentId(postParentId: string) {
+    // This should not get child comments - only the parent
+    const res = await $fetch<{ data: Partial<UserPost> }>(
+      `/api/posts/${postParentId}`
+    );
+    return res.data;
+  }
   return {
     reactToPost,
     createPost,
     createPostComment,
     getChosenMediaFromSpotifyData,
     getCommentsByPostId,
+    getPostByParentId,
   };
 }

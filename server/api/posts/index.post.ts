@@ -56,6 +56,7 @@ export default defineEventHandler(async (event) => {
     });
 
     await SearchController.indexPost(newPost as UserPost);
+
     return {
       status: "success",
       id: newPost.id,

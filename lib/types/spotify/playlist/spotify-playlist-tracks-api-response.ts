@@ -2,7 +2,7 @@ import type {
   ExternalUrls,
   SpotifyAlbumArtist,
   SpotifyAlbumItem,
-} from "../album/spotify-album.types";
+} from "~/lib/types/spotify/album/spotify-album-types";
 
 export type SpotifyPlaylistTracksApiResponse = {
   href: string;

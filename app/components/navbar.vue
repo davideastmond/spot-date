@@ -48,8 +48,6 @@
                   <div class="flex items-center gap-2">
                     <div v-if="session?.user?.image">
                       <Avatar :avatar-url="session?.user?.image" size="md" />
-                      <!-- <NuxtImg class="h-[32px] min-w-[32px]" :src="session.user.image"
-                        alt="authenticated-user-avatar" /> -->
                     </div>
                     <div v-else>
                       <Icon name="mdi:account-circle" style="color: #0b0909" />
@@ -82,15 +80,21 @@
           <p class="text-spotty-green-500 text-xs text-right pr-2">{{ config.public.appVersion }}</p>
         </div>
       </nav>
-      <NotificationIcon />
+      <NotificationIcon :notifications="notifcationElements" v-on:notification-element-clicked="handleMarkRead"
+        :avatar-dict="avatarDict" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { SystemNotification } from '~/lib/models/system-notification/system-notification';
+
 const { signIn, status, session, signOut } = useAuth()
 const navMenuOpen = ref(false);
 const searchQuery = ref('');
+const notifcationElements = ref<Partial<SystemNotification>[]>([]);
+const avatarDict = ref<Record<string, { image: string, name: string, nickname: string }>>({});
+const { getNotifications, getAvatarDict } = useUser();
 
 const config = useRuntimeConfig();
 const handleSignOut = async () => {
@@ -100,6 +104,11 @@ const handleSignOut = async () => {
 const toggleNavMenu = () => {
   navMenuOpen.value = !navMenuOpen.value;
 };
+
+onMounted(async () => {
+  avatarDict.value = await getAvatarDict();
+  await pollForNotifications();
+});
 
 async function handleInitiateSearch(event: KeyboardEvent) {
   if (event.key === 'Enter' && searchQuery.value.length > 2) {
@@ -111,23 +120,34 @@ async function handleInitiateSearch(event: KeyboardEvent) {
     })
   }
 }
+
+async function pollForNotifications() {
+  const response = await getNotifications();
+  if (response.status !== 200 as any) {
+    console.error("There was a problem fetching notifications");
+    await new Promise(resolve => setTimeout(resolve, 8000));
+    await pollForNotifications();
+  } else {
+    notifcationElements.value = response.notifications;
+    await new Promise(resolve => setTimeout(resolve, 8000));
+    await pollForNotifications();
+  }
+}
+
+async function handleMarkRead(notificationId: string) {
+  const { markNotificationAsRead } = useUser();
+
+  try {
+    await markNotificationAsRead(notificationId);
+    notifcationElements.value = notifcationElements.value.filter(notification => notification.id !== notificationId);
+  } catch (error) {
+    console.error("There was a problem marking the notification as read", error);
+  }
+
+}
 </script>
 
 <style scoped>
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.2s;
-}
-
 @media only screen and (min-width: 1024px) {
   .largeScreenResponsiveSize {
     width: 200px;

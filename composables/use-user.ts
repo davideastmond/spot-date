@@ -1,3 +1,4 @@
+import type { SystemNotification } from "~/lib/models/system-notification/system-notification";
 import type { User } from "~/lib/models/user";
 import type { UserMusicData } from "~/lib/models/user-music-data";
 import type { UserPost } from "~/lib/models/user-post";
@@ -128,18 +129,33 @@ export function useUser() {
     });
   }
 
+  async function getNotifications() {
+    return await $fetch<{
+      status: number;
+      notifications: Partial<SystemNotification>[];
+    }>(`/api/notifications`);
+  }
+
+  async function markNotificationAsRead(notificationId: string): Promise<void> {
+    await $fetch<void>(`/api/notifications`, {
+      method: "PATCH",
+      body: { notificationId },
+    });
+  }
   return {
+    deleteMyMusicFaveById,
     followUser,
     getAvatarDict,
     getFeedByUserId,
+    getFollowersByUserId,
+    getMusicFavorites,
     getMyPosts,
+    getNotifications,
     getPostsByUserId,
     getUserById,
+    markNotificationAsRead,
+    postMusicFavorite,
     unfollowUser,
     updateUserDetails,
-    postMusicFavorite,
-    getMusicFavorites,
-    deleteMyMusicFaveById,
-    getFollowersByUserId,
   };
 }

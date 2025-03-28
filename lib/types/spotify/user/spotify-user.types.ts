@@ -1,4 +1,4 @@
-import type { ExternalUrls } from "../album/spotify-album.types";
+import type { ExternalUrls } from "~/lib/types/spotify/album/spotify-album-types";
 
 export type SpotifyUserAPIResponse = {
   country: string;
