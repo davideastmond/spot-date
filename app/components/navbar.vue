@@ -89,7 +89,8 @@
 <script setup lang="ts">
 import type { SystemNotification } from '~/lib/models/system-notification/system-notification';
 
-const { signIn, status, session, signOut } = useAuth()
+const { signIn, status, session, signOut } = useAuth();
+
 const navMenuOpen = ref(false);
 const searchQuery = ref('');
 const notifcationElements = ref<Partial<SystemNotification>[]>([]);
@@ -129,6 +130,21 @@ async function pollForNotifications() {
     await pollForNotifications();
   } else {
     notifcationElements.value = response.notifications;
+    if (response.notifications.length > 0) {
+      useHead({
+        title: `(${response.notifications.length}) Notifications`,
+        meta: [
+          {
+            name: 'description',
+            content: `You have ${response.notifications.length} new notifications`
+          }
+        ]
+      })
+    } else {
+      useHead({
+        title: "Spotdate"
+      })
+    }
     await new Promise(resolve => setTimeout(resolve, 8000));
     await pollForNotifications();
   }
