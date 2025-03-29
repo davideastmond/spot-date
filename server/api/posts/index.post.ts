@@ -1,8 +1,10 @@
 import { getServerSession } from "#auth";
 import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
+import { NotificationController } from "~/lib/controllers/notification.controller";
 import { SearchController } from "~/lib/controllers/search.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
+import { UserController } from "~/lib/controllers/user.controller";
 import { UserPost } from "~/lib/models/user-post";
 import { NewPostAPIRequest } from "~/lib/types/user-posts/new-post-api-request";
 import { userPostValidator } from "~/lib/validators/user-post.validator";
@@ -56,6 +58,33 @@ export default defineEventHandler(async (event) => {
     });
 
     await SearchController.indexPost(newPost as UserPost);
+    const posterName = await UserController.getNicknameByUserId(
+      session.user.id
+    );
+
+    let titleCaption = `${posterName} posted a new comment on your feed.`;
+    if (content.multimedia && content.multimedia.length > 0) {
+      const media = content.multimedia[0];
+      titleCaption = `${posterName} posted a new comment on your feed: ${media.mediaContent.label}`;
+    }
+
+    // If the poster isn't the same as the targetId, create a notification
+    if (newPost.posterId !== newPost.targetId) {
+      await NotificationController.createUserNotification({
+        triggerUserId: session.user.id,
+        targetUserId: targetId,
+        data: {
+          title: titleCaption,
+          body: newPost.content?.text ?? "",
+          link: `/user-post?id=${newPost.id}`,
+          multimedia:
+            content.multimedia && content.multimedia.length > 0
+              ? content.multimedia[0]
+              : undefined,
+        },
+        kind: "comment",
+      });
+    }
 
     return {
       status: "success",
