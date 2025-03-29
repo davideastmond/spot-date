@@ -21,6 +21,9 @@
                   <Icon name="mdi:account-circle" style="color: white" size="32px" />
                 </Avatar>
               </template>
+              <template v-if="notification.data?.multimedia" #media>
+                <MediaContentBody :media="notification.data.multimedia" />
+              </template>
             </NotificationElement>
           </ul>
         </div>

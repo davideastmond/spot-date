@@ -7,19 +7,14 @@
     </header>
     <NuxtLink v-if="media && media.mediaContent" :to="media.mediaContent?.spotifyExternalUrl" target="blank"
       class="text-sm self-center justify-end p-0" aria-label="View on Spotify">
-      <div>
-        <NuxtImg v-if="media?.mediaContent?.imageUrl" :src="media?.mediaContent?.imageUrl"
-          class="w-8 h-8 rounded-full" />
-        <p class="text-sm">{{ media.mediaContent?.label }}</p>
-        <p class="text-sm">{{ media.mediaContent?.artistName }}</p>
-        <p class="text-sm text-spotty-green-500 uppercase">{{ media?.contentType }}</p>
-      </div>
+      <MediaContentBody :media="media" />
     </NuxtLink>
   </div>
 </template>
 <script setup lang="ts">
 import type { UserMusicData } from '~/lib/models/user-music-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
+import MediaContentBody from './media-content-body.vue';
 
 type MediaCardProps = {
   header?: boolean;
