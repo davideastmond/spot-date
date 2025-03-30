@@ -1,6 +1,6 @@
 <template>
   <!-- This is the view that has a parent post with the comments and reactions -->
-  <div>
+  <div class="lg:ml-[20%] lg:mr-[20%]">
     <div v-if="hasError" class="text-center mt-4">
       <p class="text-lg">There was an error loading the post. In may not exist.</p>
     </div>
