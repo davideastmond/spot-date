@@ -4,7 +4,7 @@
     <div v-if="hasError" class="text-center mt-4">
       <p class="text-lg">There was an error loading the post. In may not exist.</p>
     </div>
-    <Userpost v-if="userPostContext" :post="userPostContext" :avatar-dict="avatarDict"
+    <UserPost v-if="userPostContext" :post="userPostContext" :avatar-dict="avatarDict"
       v-on:comment-created="handleCreateComment" />
   </div>
 </template>

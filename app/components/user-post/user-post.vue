@@ -38,6 +38,10 @@
           v-on:reaction-clicked="handleCommentReaction" />
       </div>
     </div>
+    <div v-if="post.reactions && post.reactions.length > 0">
+      <!-- The current reaction types and the count go here -->
+      <DisplayReactionsWidget :reactions="post.reactions" />
+    </div>
     <div class="flex justify-between mt-4 border-t p-2" v-if="showControlButtons">
       <!-- Reaction and comment section -->
       <div>

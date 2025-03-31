@@ -5,7 +5,7 @@
     </div>
     <div class="flex flex-col gap-y-4 my-10 lg:max-w-[40vw]" v-if="posts.length > 0 && avatarDict">
       <!-- Render posts here, figure out how to do scroll rendering -->
-      <Userpost v-for="post in posts" :key="post.id" :post="post" :avatar-dict="avatarDict"
+      <UserPost v-for="post in posts" :key="post.id" :post="post" :avatar-dict="avatarDict"
         v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated" />
     </div>
   </div>

@@ -15,7 +15,7 @@
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
-        <Userpost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment" />
+        <UserPost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment" />
       </div>
     </div>
   </div>
