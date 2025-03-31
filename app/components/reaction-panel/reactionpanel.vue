@@ -3,33 +3,33 @@
     <div class="flex gap-4">
       <div>
         <button type="button" :name="REACTION.like" @click="handleReactionClicked"
-          :class="getClassByReaction(REACTION.like)">👍🏿</button>
+          :class="getClassByReaction(REACTION.like)">{{ getReactionIcon(REACTION.like) }}</button>
       </div>
       <div>
         <button type="button" :name="REACTION.love" @click="handleReactionClicked"
-          :class="getClassByReaction(REACTION.love)">💗</button>
+          :class="getClassByReaction(REACTION.love)">{{ getReactionIcon(REACTION.love) }}</button>
       </div>
       <div>
         <button type="button" :name="REACTION.laugh" @click="handleReactionClicked"
-          :class="getClassByReaction(REACTION.laugh)">🤣</button>
+          :class="getClassByReaction(REACTION.laugh)">{{ getReactionIcon(REACTION.laugh) }}</button>
       </div>
       <div>
         <button type="button" :name="REACTION.wow" @click="handleReactionClicked"
-          :class="getClassByReaction(REACTION.wow)">😲</button>
+          :class="getClassByReaction(REACTION.wow)">{{ getReactionIcon(REACTION.wow) }}</button>
       </div>
       <div>
         <button type="button" :name="REACTION.music" @click="handleReactionClicked"
-          :class="getClassByReaction(REACTION.music)">🎶</button>
+          :class="getClassByReaction(REACTION.music)">{{ getReactionIcon(REACTION.music) }}</button>
       </div>
       <div>
         <button type="button" :name="REACTION.jam" @click="handleReactionClicked"
-          :class="getClassByReaction(REACTION.jam)">🎧</button>
+          :class="getClassByReaction(REACTION.jam)">{{ getReactionIcon(REACTION.jam) }}</button>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { REACTION, type Reaction } from '~/lib/types/user-posts/reaction';
+import { getReactionIcon, REACTION, type Reaction } from '~/lib/types/user-posts/reaction';
 
 type ReactionPanelProps = {
   onReactionClicked: (reaction: Reaction) => void;
