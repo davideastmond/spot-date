@@ -15,7 +15,8 @@
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
-        <UserPost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment" />
+        <UserPost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment"
+          v-on:reaction-clicked="handleReactionClicked" />
       </div>
     </div>
   </div>
@@ -131,5 +132,9 @@ async function handleCreateComment({ postText, mediaContent, parentId, targetId 
   } catch (error) {
     console.error((error as Error).message);
   }
+}
+
+async function handleReactionClicked() {
+  await refreshPosts();
 }
 </script>
