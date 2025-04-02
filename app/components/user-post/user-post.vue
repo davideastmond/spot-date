@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="flex" v-if="commentWidgetVisible">
+    <div class="flex animate-fade-in" v-if="commentWidgetVisible">
       <Postingwidget placeholder="Write a comment" v-on:post-created="handleCreateComment" />
     </div>
   </div>
