@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row">
-    <div v-for="(_, reaction) in reactionAggregation()" :key="reaction">
+    <div v-for="(_, reaction) in reactionMap" :key="reaction">
       <div>
         <button @click="toggleReactorList(reaction)">
           <p>{{ getReactionIcon(reaction) }}</p>
@@ -28,6 +28,7 @@ type DisplayReactionsWidgetProps = {
 }
 
 const { reactions } = defineProps<DisplayReactionsWidgetProps>();
+const { getUserById } = useUser();
 const reactorDataMap = ref<Record<string, Array<{ userId: string, nickname: string, image: string | null }>>>({});
 const reactorListVisible = ref<Record<string, boolean>>({
   like: false,
@@ -38,19 +39,18 @@ const reactorListVisible = ref<Record<string, boolean>>({
   jam: false
 });
 
-
-const reactionAggregation = () => {
-  const reactionMap: Record<string, number> = {};
+// This simply uses the reactions from the post object, passed in via props.
+const reactionMap = computed(() => {
+  const map: Record<string, number> = {};
   reactions.forEach(reaction => {
-    if (reactionMap[reaction.reaction]) {
-      reactionMap[reaction.reaction] += 1;
+    if (map[reaction.reaction]) {
+      map[reaction.reaction] += 1;
     } else {
-      reactionMap[reaction.reaction] = 1;
+      map[reaction.reaction] = 1;
     }
   });
-
-  return reactionMap;
-}
+  return map;
+});
 
 onMounted(async () => {
   await getReactingUsersData();
@@ -61,8 +61,8 @@ function toggleReactorList(reaction: string) {
 }
 
 async function getReactingUsersData() {
-  const { getUserById } = useUser();
   try {
+    // This gets the user data for all the users who reacted to the post.
     const requests = await Promise.all(reactions.map((r) => getUserById(r.posterId)));
 
     reactorDataMap.value = reactions.reduce((acc, currentElement) => {
