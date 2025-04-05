@@ -11,17 +11,19 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
 
 const { onPostCreated, posts, onReactionClicked, onCommentCreated } = defineProps<{
-  onPostCreated: ({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) => void;
+  onPostCreated: ({ postText, mediaContent, taggedUsers }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) => void;
   posts: UserPost[];
   onReactionClicked?: (postId: string, reaction: Reaction) => void;
   onCommentCreated?: (data: UserCommentData) => void;
 }>();
+
 const avatarDict = ref<Record<string, { image: string | null | undefined, name: string, nickname: string }> | null>(null);
 const { getAvatarDict } = useUser();
 

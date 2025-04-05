@@ -35,6 +35,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
@@ -70,12 +71,13 @@ async function handleReactionClicked(postId: string, reaction: Reaction) {
     console.error((error as Error).message);
   }
 }
-async function handlePostCreated({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) {
+async function handlePostCreated({ postText, mediaContent, taggedUsers = [] }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) {
   try {
     await createPost({
       text: postText,
       multimedia: [mediaContent!],
-      targetId: session.value?.user?.id!
+      targetId: session.value?.user?.id!,
+      taggedUsers: taggedUsers.map((taggedUser) => taggedUser.userId) as string[]
     });
     await fetchPosts();
   } catch (error) {
@@ -83,13 +85,14 @@ async function handlePostCreated({ postText, mediaContent }: { postText: string,
   }
 }
 
-async function handleCommentCreated({ postText, mediaContent, parentId, targetId }: UserCommentData) {
+async function handleCommentCreated({ postText, mediaContent, parentId, targetId, taggedUsers = [] }: UserCommentData) {
   try {
     await createPostComment({
       text: postText,
+      taggedUsers: taggedUsers.map((taggedUser) => taggedUser.userId) as string[],
       multimedia: [mediaContent!],
       parentId,
-      targetId
+      targetId,
     });
     await fetchPosts();
   } catch (error) {

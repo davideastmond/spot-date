@@ -54,7 +54,7 @@ import type { MediaType, RawMediaContent } from '~/lib/types/spotify/search-resu
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
 
 type PostingWidgetProps = {
-  onPostCreated?: ({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) => void;
+  onPostCreated?: ({ postText, taggedUsers, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) => void;
   placeholder: string;
 }
 
@@ -71,9 +71,9 @@ const { onPostCreated, placeholder } = defineProps<PostingWidgetProps>();
 const { session } = useAuth();
 const { getChosenMediaFromSpotifyData } = usePost();
 
-async function handleCreateUserPost() {
+function handleCreateUserPost() {
   if (postText.value.trim().length === 0) return;
-  onPostCreated?.({ postText: postText.value, mediaContent: chosenMedia.value });
+  onPostCreated?.({ postText: postText.value, mediaContent: chosenMedia.value, taggedUsers: taggedUsers.value });
   postText.value = '';
   chosenMedia.value = null;
 }

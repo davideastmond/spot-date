@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import Feedheader from '~/app/components/feedheader/feedheader.vue';
+import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
@@ -40,10 +41,11 @@ onMounted(async () => {
   await fetchPosts({})
 });
 
-const handlePostCreated = async ({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) => {
+const handlePostCreated = async ({ postText, mediaContent, taggedUsers = [] }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) => {
   // Post needs to be created here
   await createPost({
     text: postText,
+    taggedUsers: taggedUsers.map(user => user.userId) as string[],
     multimedia: [mediaContent!],
     targetId: session.value?.user?.id!
   })
@@ -59,10 +61,11 @@ const fetchPosts = async ({ limit, skip }: { limit?: number; skip?: number }) =>
   }
 };
 
-async function handleCommentCreated({ postText, mediaContent, parentId, targetId }: UserCommentData) {
+async function handleCommentCreated({ postText, mediaContent, parentId, targetId, taggedUsers = [] }: UserCommentData) {
   try {
     await createPostComment({
       text: postText,
+      taggedUsers: taggedUsers.map(user => user.userId) as string[],
       multimedia: [mediaContent!],
       parentId,
       targetId

@@ -22,6 +22,11 @@
         </div>
       </div>
     </div>
+    <div v-if="post.content?.taggedUsers && post.content?.taggedUsers.length > 0">
+      <!-- Tagged users -->
+      <p v-for="taggedUser in post.content.taggedUsers" class="text-sm text-spotty-green-500">
+        @{{ avatarDict[taggedUser].nickname }} </p>
+    </div>
     <div>
       <!-- Section to show comment count -->
       <div class="flex justify-end mb-2" v-if="comments && comments.length > 0">
@@ -63,6 +68,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
@@ -151,9 +157,9 @@ async function fetchComments() {
 function getCommentsEntitiesArrowIcon() {
   return commentsEntitiesOpen.value ? '🔺' : '🔻';
 }
-async function handleCreateComment({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) {
+async function handleCreateComment({ postText, mediaContent, taggedUsers }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) {
   // We won't do the network request from this component! The parent needs to handle it.
-  onCommentCreated?.({ postText, mediaContent, targetId: post.posterId as string, parentId: post.id as string });
+  onCommentCreated?.({ postText, taggedUsers, mediaContent, targetId: post.posterId as string, parentId: post.id as string });
 
   // TODO: this is not sustainable
   setTimeout(async () => {
