@@ -17,11 +17,9 @@
 
 <script setup lang="ts">
 import type { SpotifyAlbumItem } from '~/lib/types/spotify/album/spotify-album-types';
-
-
+const albumData = ref<SpotifyAlbumItem[]>([]);
 
 const { getNewAlbumReleases } = useSpotify();
-const albumData = ref<SpotifyAlbumItem[]>([]);
 onMounted(async () => {
   const apiResponse = await getNewAlbumReleases({ limit: 4 });
   albumData.value = apiResponse.albums.items;
