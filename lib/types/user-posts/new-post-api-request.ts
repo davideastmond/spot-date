@@ -7,5 +7,6 @@ export type NewPostAPIRequest = {
   content: {
     text: string;
     multimedia?: ChosenMedia[];
+    taggedUsers?: string[];
   };
 };
