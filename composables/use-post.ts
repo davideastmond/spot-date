@@ -25,14 +25,16 @@ export function usePost() {
     text,
     multimedia,
     targetId,
+    taggedUsers = [],
   }: {
     text: string;
     multimedia?: ChosenMedia[];
     targetId: string;
+    taggedUsers?: string[];
   }) {
     const res = await $fetch<{ status: string; id: string }>(`/api/posts`, {
       method: "POST",
-      body: { content: { text, multimedia }, targetId },
+      body: { content: { text, multimedia, taggedUsers }, targetId },
     });
     return res.id;
   }
@@ -42,17 +44,19 @@ export function usePost() {
     multimedia,
     targetId,
     parentId,
+    taggedUsers = [],
   }: {
     text: string;
     multimedia?: ChosenMedia[];
     targetId: string;
     parentId: string;
+    taggedUsers?: string[];
   }) {
     const res = await $fetch<{ status: string; id: string }>(
       `/api/posts/${parentId}/comments`,
       {
         method: "POST",
-        body: { content: { text, multimedia }, targetId },
+        body: { content: { text, multimedia, taggedUsers }, targetId },
       }
     );
     return res.id;
