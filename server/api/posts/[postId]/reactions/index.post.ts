@@ -1,9 +1,9 @@
 import { getServerSession } from "#auth";
 import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
-import { NotificationController } from "~/lib/controllers/notification.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
 import { UserController } from "~/lib/controllers/user.controller";
+import { NotificationDispatcher } from "~/lib/utils/notification-dispatcher/notification-dispatcher";
 import { postReactionValidator } from "~/lib/validators/post-reaction.validator";
 
 export default defineEventHandler(async (event) => {
@@ -58,22 +58,16 @@ export default defineEventHandler(async (event) => {
     }
 
     if (session.user.id !== postInQuestion.posterId) {
-      const reactingUserNickname = await UserController.getNicknameByUserId(
-        session.user.id
-      );
-      await NotificationController.createUserNotification({
-        triggerUserId: session.user.id,
-        targetUserId: postInQuestion.posterId as string,
-        kind: "reaction",
-        data: {
-          title: `${reactingUserNickname} reacted to your post`,
-          body: postInQuestion.content?.text,
-          link: postInQuestion.parentPostId
-            ? `/user-post?id=${postInQuestion.parentPostId}`
-            : `/user-post?id=${postId}`,
-        },
+      const reactingUser = await UserController.getUserById(session.user.id);
+      const notificationDispatcher = new NotificationDispatcher(reactingUser!);
+      await notificationDispatcher.createPostReactionNotification({
+        to: postInQuestion.posterId as string,
+        body: postInQuestion.content?.text as string,
+        parentPostId: postInQuestion.parentPostId,
+        postId,
       });
     }
+
     setResponseStatus(event, 200);
     return {
       status: "OK",
