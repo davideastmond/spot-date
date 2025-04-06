@@ -1,10 +1,10 @@
 import { getServerSession } from "#auth";
 import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
-import { NotificationController } from "~/lib/controllers/notification.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
 import { UserController } from "~/lib/controllers/user.controller";
 import { NewPostAPIRequest } from "~/lib/types/user-posts/new-post-api-request";
+import { NotificationDispatcher } from "~/lib/utils/notification-dispatcher/notification-dispatcher";
 import { userPostValidator } from "~/lib/validators/user-post.validator";
 // Posts a new comment
 export default defineEventHandler(async (event) => {
@@ -72,24 +72,22 @@ export default defineEventHandler(async (event) => {
       targetId,
     });
 
+    const triggerUser = await UserController.getUserById(authSession.user.id);
+    const notificationDispatcher = new NotificationDispatcher(triggerUser!);
     // If the parent post is a comment. If the source of that parent post is not the posting user, notify the source user via a notification
-    if (parentPost.targetId) {
-      if (parentPost.posterId !== authSession.user.id) {
-        const sourceUserNickname = await UserController.getNicknameByUserId(
-          authSession.user.id
-        );
-        await NotificationController.createUserNotification({
-          triggerUserId: authSession.user.id,
-          targetUserId: parentPost.posterId as string,
-          kind: "comment",
+    if (parentPost.targetId && parentPost.posterId !== authSession.user.id) {
+      await notificationDispatcher.createCommentNotification({
+        to: parentPost.posterId as string,
+        body: parentPost.content?.text as string,
+        postId,
+      });
+    }
 
-          data: {
-            title: `You have a new comment from ${sourceUserNickname}`,
-            body: parentPost.content?.text,
-            link: `/user-post?id=${postId}`,
-          },
-        });
-      }
+    if (content.taggedUsers && content.taggedUsers.length > 0) {
+      await notificationDispatcher.createUserMentionNotification({
+        to: content.taggedUsers,
+        postId,
+      });
     }
     return {
       status: "ok",
