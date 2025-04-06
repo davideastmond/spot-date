@@ -20,10 +20,10 @@
         @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
     </div>
     <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
-      <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
+      <ReactionPanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
     </div>
     <div>
-      <Reactionbutton v-on:button-clicked="togglePanelIfVisible()" :reaction="getUserReaction()" />
+      <ReactionButton v-on:button-clicked="togglePanelIfVisible()" :reaction="getUserReaction()" />
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 import type { NewUserNotificationParams } from "~/lib/types/notifications/notification-definitions";
 import type { SystemNotification } from "../models/system-notification/system-notification";
-import { notificationRepository } from "../repositories/notification.respository";
+import { notificationRepository } from "../repositories/notification.repository";
 
 export const NotificationController = {
   createUserNotification: async (

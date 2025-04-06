@@ -51,10 +51,10 @@
       <!-- Reaction and comment section -->
       <div>
         <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
-          <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked"
+          <ReactionPanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked"
             :reaction="getUserReaction()" />
         </div>
-        <Reactionbutton :onButtonClicked="togglePanelVisible" :reaction="getUserReaction()" />
+        <ReactionButton :onButtonClicked="togglePanelVisible" :reaction="getUserReaction()" />
       </div>
       <div>
         <div>
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="flex animate-fade-in" v-if="commentWidgetVisible">
-      <Postingwidget placeholder="Write a comment" v-on:post-created="handleCreateComment" />
+      <PostingWidget placeholder="Write a comment" v-on:post-created="handleCreateComment" />
     </div>
   </div>
 </template>
@@ -73,7 +73,6 @@ import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
-import Reactionpanel from '../reaction-panel/reactionpanel.vue';
 
 const { unixToDateString } = useDate();
 const { reactToPost } = usePost();

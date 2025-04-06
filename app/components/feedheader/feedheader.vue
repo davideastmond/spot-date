@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-center flex-col gap-x-8">
-      <Postingwidget v-on:post-created="onPostCreated" placeholder="What's on your mind?" />
+      <PostingWidget v-on:post-created="onPostCreated" placeholder="What's on your mind?" />
     </div>
     <div class="flex flex-col gap-y-4 my-10 lg:max-w-[40vw]" v-if="posts.length > 0 && avatarDict">
       <!-- Render posts here, figure out how to do scroll rendering -->

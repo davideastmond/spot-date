@@ -4,7 +4,7 @@
     <FeedSideMenu class="h-fit">
       <template #public-profile>
         <div v-if="userContext">
-          <Publicprofile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
+          <PublicProfile :avatar-url="userContext?.image!" :nickname="userContext?.nickname" :bio="userContext?.bio"
             :name="userContext!.name!" :is-following="isFollowing" v-on:follow="handleFollow"
             v-on:unfollow="handleUnFollow" :is-own-profile="isOwnFeed" class="max-h-fit" :music-faves="musicFaves" />
         </div>
@@ -12,7 +12,7 @@
     </FeedSideMenu>
     <div>
       <div>
-        <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
+        <PostingWidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
         <UserPost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment"
@@ -38,7 +38,7 @@ const followers = ref<Partial<User>[]>([]);
 const avatarDict = ref<Record<string, { image: string, name: string, nickname: string }>>({});
 const route = useRoute();
 
-const reationsUserDict = ref<Record<string, { name: string | null, nickname: string | null }>>({});
+const reactionsUserDict = ref<Record<string, { name: string | null, nickname: string | null }>>({});
 const musicFaves = ref<UserMusicData[] | null>(null);
 
 const isFollowing = computed(() => followers.value.some(follower => follower.id === userContext.value?.id));
@@ -93,9 +93,9 @@ async function getReactionUserDict() {
 
     for await (const reaction of post.reactions) {
       if (reaction.posterId) {
-        if (!reationsUserDict.value[reaction.posterId]) {
+        if (!reactionsUserDict.value[reaction.posterId]) {
           const user = await getUserById(reaction.posterId);
-          reationsUserDict.value[reaction.posterId] = { name: user.name || null, nickname: user.nickname || null };
+          reactionsUserDict.value[reaction.posterId] = { name: user.name || null, nickname: user.nickname || null };
         }
       }
     }
