@@ -112,13 +112,13 @@ function getPostingPlaceholderText(): string {
 
 async function handleCreateNewPost({ postText, mediaContent, taggedUsers = [] }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) {
   const { createPost } = usePost();
-  const transformedTaggedUsers = taggedUsers.map((taggedUser) => taggedUser.userId) as string[];
+  const taggedUserIds = taggedUsers.map((taggedUser) => taggedUser.userId) as string[];
   try {
 
     if (isOwnFeed.value) {
-      await createPost({ text: postText, multimedia: [mediaContent!], targetId: session.value!.user!.id, taggedUsers: transformedTaggedUsers });
+      await createPost({ text: postText, multimedia: [mediaContent!], targetId: session.value!.user!.id, taggedUsers: taggedUserIds });
     } else {
-      await createPost({ text: postText, multimedia: [mediaContent!], targetId: route.query.user as string, taggedUsers: transformedTaggedUsers });
+      await createPost({ text: postText, multimedia: [mediaContent!], targetId: route.query.user as string, taggedUsers: taggedUserIds });
     }
     await refreshPosts();
   } catch (error) {
