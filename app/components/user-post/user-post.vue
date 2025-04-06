@@ -25,7 +25,7 @@
     <div v-if="post.content?.taggedUsers && post.content?.taggedUsers.length > 0">
       <!-- Tagged users -->
       <p v-for="taggedUser in post.content.taggedUsers" class="text-sm text-spotty-green-500">
-        @{{ avatarDict[taggedUser].nickname }} </p>
+        @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
     </div>
     <div>
       <!-- Section to show comment count -->
