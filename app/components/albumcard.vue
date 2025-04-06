@@ -13,7 +13,6 @@
 <script setup lang="ts">
 import type { SpotifyAlbumItem } from '~/lib/types/spotify/album/spotify-album-types';
 
-
 const { name, images, artists } = defineProps<Partial<SpotifyAlbumItem>>();
 
 </script>

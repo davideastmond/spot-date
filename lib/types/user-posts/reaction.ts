@@ -8,3 +8,20 @@ export const REACTION = {
 };
 
 export type Reaction = (typeof REACTION)[keyof typeof REACTION];
+
+export const getReactionIcon = (reaction: Reaction) => {
+  switch (reaction) {
+    case REACTION.like:
+      return "👍🏿";
+    case REACTION.love:
+      return "💗";
+    case REACTION.laugh:
+      return "🤣";
+    case REACTION.wow:
+      return "😲";
+    case REACTION.music:
+      return "🎶";
+    case REACTION.jam:
+      return "🎧";
+  }
+};

@@ -1,8 +1,8 @@
 import { getServerSession } from "#auth";
 import { z } from "zod";
 import { authOptions } from "~/lib/auth/auth";
-import { NotificationController } from "~/lib/controllers/notification.controller";
 import { UserController } from "~/lib/controllers/user.controller";
+import { NotificationDispatcher } from "~/lib/utils/notification-dispatcher/notification-dispatcher";
 import { userFollowActionValidator } from "~/lib/validators/user-follow-action.validator";
 export default defineEventHandler(async (event) => {
   const authSession = await getServerSession(event, authOptions);
@@ -28,26 +28,21 @@ export default defineEventHandler(async (event) => {
       });
     }
   }
-
   // Follow action vs. unfollow action
   if (requestBody.action === "follow") {
     // Add the id to the user's follow list
     try {
-      setResponseStatus(event, 201);
-      await UserController.followUser(authSession.user.id, requestBody.userId);
-      const triggeringUserName = await UserController.getNicknameByUserId(
+      const triggeringUser = await UserController.getUserById(
         authSession.user.id
       );
-      await NotificationController.createUserNotification({
-        triggerUserId: authSession!.user!.id as string,
-        targetUserId: requestBody.userId,
-        kind: "follow",
-        data: {
-          title: `${triggeringUserName} followed you`,
-          link: `/users/feed?user=${authSession.user.id}`,
-        },
+      const notificationDispatcher = new NotificationDispatcher(
+        triggeringUser!
+      );
+      await UserController.followUser(authSession.user.id, requestBody.userId);
+      await notificationDispatcher.createFollowNotification({
+        to: requestBody.userId,
       });
-
+      setResponseStatus(event, 201);
       return {
         status: 201,
         message: "User followed",

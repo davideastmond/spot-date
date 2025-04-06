@@ -15,13 +15,14 @@
         <Postingwidget :placeholder="getPostingPlaceholderText()" v-on:post-created="handleCreateNewPost" />
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
-        <Userpost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment" />
+        <UserPost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment"
+          v-on:reaction-clicked="handleReactionClicked" />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import type { User } from '~/lib/models/user';
+import type { SecureThirdPartyUser, User } from '~/lib/models/user';
 import type { UserMusicData } from '~/lib/models/user-music-data';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
@@ -109,13 +110,15 @@ function getPostingPlaceholderText(): string {
   return `Write something to ${userContext.value?.nickname}`;
 }
 
-async function handleCreateNewPost({ postText, mediaContent }: { postText: string, mediaContent?: ChosenMedia | null }) {
+async function handleCreateNewPost({ postText, mediaContent, taggedUsers = [] }: { postText: string, mediaContent?: ChosenMedia | null, taggedUsers?: Partial<SecureThirdPartyUser>[] }) {
   const { createPost } = usePost();
+  const taggedUserIds = taggedUsers.map((taggedUser) => taggedUser.userId) as string[];
   try {
+
     if (isOwnFeed.value) {
-      await createPost({ text: postText, multimedia: [mediaContent!], targetId: session.value!.user!.id });
+      await createPost({ text: postText, multimedia: [mediaContent!], targetId: session.value!.user!.id, taggedUsers: taggedUserIds });
     } else {
-      await createPost({ text: postText, multimedia: [mediaContent!], targetId: route.query.user as string });
+      await createPost({ text: postText, multimedia: [mediaContent!], targetId: route.query.user as string, taggedUsers: taggedUserIds });
     }
     await refreshPosts();
   } catch (error) {
@@ -123,13 +126,17 @@ async function handleCreateNewPost({ postText, mediaContent }: { postText: strin
   }
 }
 
-async function handleCreateComment({ postText, mediaContent, parentId, targetId }: UserCommentData) {
+async function handleCreateComment({ postText, mediaContent, parentId, targetId, taggedUsers = [] }: UserCommentData) {
   const { createPostComment } = usePost();
   try {
-    await createPostComment({ text: postText, multimedia: [mediaContent!], parentId, targetId });
+    await createPostComment({ text: postText, multimedia: [mediaContent!], parentId, targetId, taggedUsers: taggedUsers.map((taggedUser) => taggedUser.userId) as string[] });
     await refreshPosts();
   } catch (error) {
     console.error((error as Error).message);
   }
+}
+
+async function handleReactionClicked() {
+  await refreshPosts();
 }
 </script>

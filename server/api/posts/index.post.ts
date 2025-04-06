@@ -3,8 +3,10 @@ import { ZodError } from "zod";
 import { authOptions } from "~/lib/auth/auth";
 import { SearchController } from "~/lib/controllers/search.controller";
 import { UserPostController } from "~/lib/controllers/user-post.controller";
+import { UserController } from "~/lib/controllers/user.controller";
 import { UserPost } from "~/lib/models/user-post";
 import { NewPostAPIRequest } from "~/lib/types/user-posts/new-post-api-request";
+import { NotificationDispatcher } from "~/lib/utils/notification-dispatcher/notification-dispatcher";
 import { userPostValidator } from "~/lib/validators/user-post.validator";
 // This is the post route to create new user posts. UserId is 'me'
 export default defineEventHandler(async (event) => {
@@ -56,7 +58,26 @@ export default defineEventHandler(async (event) => {
     });
 
     await SearchController.indexPost(newPost as UserPost);
+    const postUser = await UserController.getUserById(session.user.id);
 
+    const notificationDispatcher = new NotificationDispatcher(postUser!);
+
+    // If the poster isn't the same as the targetId, create a notification
+    if (newPost.posterId !== newPost.targetId) {
+      await notificationDispatcher.createNewPostNotification({
+        to: targetId,
+        body: newPost.content?.text ?? "",
+        postId: newPost.id as string,
+        multimedia: content.multimedia,
+      });
+    }
+
+    if (content.taggedUsers && content.taggedUsers.length > 0) {
+      await notificationDispatcher.createUserMentionNotification({
+        to: content.taggedUsers,
+        postId: newPost.id as string,
+      });
+    }
     return {
       status: "success",
       id: newPost.id,

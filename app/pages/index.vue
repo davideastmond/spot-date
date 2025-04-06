@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-useHead({ title: 'Spot Date' });
+useHead({ title: 'Spotdate' });
 const { session } = useAuth();
 
 

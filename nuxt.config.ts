@@ -7,6 +7,14 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-01-01",
   devtools: { enabled: false },
   css: ["~/assets/css/main.css"],
+  app: {
+    head: {
+      title: "Spotdate",
+      htmlAttrs: {
+        lang: "en",
+      },
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
@@ -58,7 +66,7 @@ export default defineNuxtConfig({
       firebase: {
         config: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       },
-      appVersion: "0.2.0b",
+      appVersion: "0.3.0b",
       domainUrl: process.env.DOMAIN_URL,
     },
   },

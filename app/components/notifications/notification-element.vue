@@ -21,6 +21,7 @@
         </div>
       </button>
     </div>
+    <slot name="media"></slot>
   </div>
   <div>
     <p class="text-xs font-thin text-right">{{ unixToDateString(notification.createdAt) }}</p>

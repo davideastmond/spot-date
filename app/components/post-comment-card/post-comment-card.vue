@@ -14,6 +14,11 @@
     <div>
       <p>{{ post.content?.text }}</p>
     </div>
+    <div v-if="post.content?.taggedUsers && post.content.taggedUsers.length > 0">
+      <!-- Tagged users -->
+      <p v-for="taggedUser in post.content.taggedUsers" class="text-xs font-thin text-spotty-green-500">
+        @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
+    </div>
     <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
       <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
     </div>

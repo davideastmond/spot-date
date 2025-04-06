@@ -17,5 +17,6 @@ export const userPostValidator = object({
   content: object({
     text: string().min(1).max(2000),
     multimedia: multimediaContent.nullable().array(),
+    taggedUsers: string().nullable().array(),
   }),
 });

@@ -1,3 +1,5 @@
+import type { ChosenMedia } from "~/lib/types/user-posts/media";
+
 export type NotificationSourceType = "admin" | "user";
 export type NotificationStatus = "unread" | "read";
 
@@ -20,4 +22,5 @@ export type NotificationContent = {
   body?: string;
   link?: string;
   imageUrl?: string;
+  multimedia?: ChosenMedia; // We won't use MultiMediaContent here, but we can use ChosenMedia
 };

@@ -16,6 +16,7 @@ export type EnrichedReactionContent = UserPostReactionWithId &
 export type UserPostContent = {
   text: string;
   multimedia?: MultimediaContent[];
+  taggedUsers?: string[];
 };
 
 export type MultimediaContent = ChosenMedia & { id: string } & TimeStamp;
