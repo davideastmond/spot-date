@@ -25,7 +25,7 @@
       </FeedSideMenu>
     </div>
     <div>
-      <Feedheader id="home-feed" v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
+      <FeedHeader id="home-feed" v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
         v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated" />
     </div>
     <Modal v-if="connectionsModalOpen" :onClose="() => connectionsModalOpen = false">

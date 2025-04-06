@@ -16,7 +16,7 @@
       </FeedSideMenu>
     </div>
     <div>
-      <Feedheader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
+      <FeedHeader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
         v-on:comment-created="handleCommentCreated" />
     </div>
 
@@ -24,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import Feedheader from '~/app/components/feedheader/feedheader.vue';
 import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';

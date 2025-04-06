@@ -26,7 +26,7 @@
     <Modal v-if="searchOpen" :onClose="() => searchOpen = false">
       <div class="p-2 pb-4">
         <div>
-          <Spotifysearch v-on:media-selected="handleMediaSelected" callback-url="/home/me/music" />
+          <SpotifySearch v-on:media-selected="handleMediaSelected" callback-url="/home/me/music" />
         </div>
       </div>
     </Modal>
