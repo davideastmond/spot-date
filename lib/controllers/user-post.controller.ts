@@ -148,4 +148,7 @@ export const UserPostController = {
       return true;
     });
   },
+  deletePostById: async (postId: string) => {
+    return userPostsRepository.delete$(postId);
+  },
 };
