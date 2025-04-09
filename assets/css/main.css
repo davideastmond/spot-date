@@ -72,7 +72,3 @@ button {
 .animate-fade-in {
   animation: fade-in 0.2s;
 }
-
-.no-scroll {
-  overflow: hidden;
-}
