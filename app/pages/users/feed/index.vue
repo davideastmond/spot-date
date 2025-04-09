@@ -16,7 +16,7 @@
       </div>
       <div class="my-4 flex flex-col gap-4" v-for="post in userPosts" :key="post.id">
         <UserPost :key="post.id" :post="post" :avatar-dict="avatarDict" v-on:comment-created="handleCreateComment"
-          v-on:reaction-clicked="handleReactionClicked" />
+          v-on:reaction-clicked="handleReactionClicked" v-on:deleted="handleDeletePost" />
       </div>
     </div>
   </div>
@@ -138,5 +138,15 @@ async function handleCreateComment({ postText, mediaContent, parentId, targetId,
 
 async function handleReactionClicked() {
   await refreshPosts();
+}
+
+async function handleDeletePost(postId: string) {
+  const { deletePostById } = usePost();
+  try {
+    await deletePostById(postId);
+    await refreshPosts();
+  } catch (error) {
+    console.error((error as Error).message);
+  }
 }
 </script>

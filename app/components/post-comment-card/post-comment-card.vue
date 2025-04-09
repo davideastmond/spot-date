@@ -1,29 +1,36 @@
 <template>
   <div class="container bg-spotty-deep-brown p-4 max-w-2/5 self-end rounded-sm">
-    <div class="flex gap-2">
-      <Avatar :avatar-url="avatarDict[post.posterId as string]?.image" size="sm">
-        <Icon name="mdi:account-circle" style="color: white" size="32px" />
-      </Avatar>
-      <p class="font-thin self-center">{{ avatarDict[post.posterId as string]?.name }}</p>
-    </div>
-    <p class="font-thin text-base ">{{ unixToDateString(post.createdAt) }}</p>
-    <div v-if="post.content?.multimedia && post.content.multimedia.length > 0">
-      <!-- For multimedia -->
-      <MediaCard v-for="media in post.content.multimedia" :media="media" :reaction="getUserReaction()" />
+    <div class="flex p-2 justify-end" v-if="session!.user!.id === post.posterId">
+      <button @click="handleDelete(post.id as string)">
+        <Icon name="ic:outline-close" size="16px" />
+      </button>
     </div>
     <div>
-      <p>{{ post.content?.text }}</p>
-    </div>
-    <div v-if="post.content?.taggedUsers && post.content.taggedUsers.length > 0">
-      <!-- Tagged users -->
-      <p v-for="taggedUser in post.content.taggedUsers" class="text-xs font-thin text-spotty-green-500">
-        @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
-    </div>
-    <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
-      <ReactionPanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
-    </div>
-    <div>
-      <ReactionButton v-on:button-clicked="togglePanelIfVisible()" :reaction="getUserReaction()" />
+      <div class="flex gap-2">
+        <Avatar :avatar-url="avatarDict[post.posterId as string]?.image" size="sm">
+          <Icon name="mdi:account-circle" style="color: white" size="32px" />
+        </Avatar>
+        <p class="font-thin self-center">{{ avatarDict[post.posterId as string]?.name }}</p>
+      </div>
+      <p class="font-thin text-base ">{{ unixToDateString(post.createdAt) }}</p>
+      <div v-if="post.content?.multimedia && post.content.multimedia.length > 0">
+        <!-- For multimedia -->
+        <MediaCard v-for="media in post.content.multimedia" :media="media" :reaction="getUserReaction()" />
+      </div>
+      <div>
+        <p>{{ post.content?.text }}</p>
+      </div>
+      <div v-if="post.content?.taggedUsers && post.content.taggedUsers.length > 0">
+        <!-- Tagged users -->
+        <p v-for="taggedUser in post.content.taggedUsers" class="text-xs font-thin text-spotty-green-500">
+          @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
+      </div>
+      <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
+        <ReactionPanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked" :reaction="getUserReaction()" />
+      </div>
+      <div>
+        <ReactionButton v-on:button-clicked="togglePanelIfVisible()" :reaction="getUserReaction()" />
+      </div>
     </div>
   </div>
 </template>
@@ -38,8 +45,9 @@ type PostCommentCardProps = {
   avatarDict: Record<string, { image: string | null | undefined, name: string, nickname: string }>;
   post: Partial<UserPost>;
   onReactionClicked?: (postId: string, reaction: Reaction) => void;
+  onDelete?: (postId: string) => void;
 }
-const { avatarDict, post, onReactionClicked } = defineProps<PostCommentCardProps>();
+const { avatarDict, post, onReactionClicked, onDelete } = defineProps<PostCommentCardProps>();
 
 function getUserReaction(): Reaction | null {
   return post.reactions?.find(reaction => reaction.posterId === session.value?.user?.id)?.reaction || null;
@@ -51,5 +59,9 @@ async function handleReactionClicked(reaction: Reaction) {
 
 function togglePanelIfVisible() {
   reactionPanelVisible.value = !reactionPanelVisible.value;
+}
+
+function handleDelete(postId: string) {
+  onDelete?.(postId);
 }
 </script>

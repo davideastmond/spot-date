@@ -17,7 +17,7 @@
     </div>
     <div>
       <FeedHeader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
-        v-on:comment-created="handleCommentCreated" />
+        v-on:comment-created="handleCommentCreated" v-on:delete-post="handleDeletePost" />
     </div>
 
   </div>
@@ -69,6 +69,15 @@ async function handleCommentCreated({ postText, mediaContent, parentId, targetId
       parentId,
       targetId
     });
+    await fetchPosts({});
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+}
+async function handleDeletePost(postId: string) {
+  const { deletePostById } = usePost();
+  try {
+    await deletePostById(postId);
     await fetchPosts({});
   } catch (error) {
     console.error((error as Error).message);

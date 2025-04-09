@@ -26,7 +26,8 @@
     </div>
     <div>
       <FeedHeader id="home-feed" v-if="posts.length > 0" :posts="posts" v-on:post-created="handlePostCreated"
-        v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated" />
+        v-on:reaction-clicked="handleReactionClicked" v-on:comment-created="handleCommentCreated"
+        v-on:delete-post="handleDeletePost" />
     </div>
     <Modal v-if="connectionsModalOpen" :onClose="() => connectionsModalOpen = false">
       <ConnectionsComponent :user-context-id="session!.user!.id as string" :avatar-dict="avatarDict"
@@ -102,5 +103,15 @@ async function handleCommentCreated({ postText, mediaContent, parentId, targetId
 
 function toggleConnectionsModal() {
   connectionsModalOpen.value = !connectionsModalOpen.value;
+}
+
+async function handleDeletePost(postId: string) {
+  const { deletePostById } = usePost();
+  try {
+    await deletePostById(postId);
+    await fetchPosts();
+  } catch (error) {
+    console.error((error as Error).message);
+  }
 }
 </script>
