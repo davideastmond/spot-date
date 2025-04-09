@@ -34,7 +34,7 @@
           </li>
         </ul>
 
-        <div v-if="navMenuOpen" v-click-outside="toggleNavMenu"
+        <div v-if="navMenuOpen" v-click-outside="toggleNavMenu" @click="toggleNavMenu"
           class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize z-100">
           <ul>
             <li v-if="status === 'unauthenticated'">
@@ -142,7 +142,7 @@ async function pollForNotifications() {
       })
     } else {
       useHead({
-        title: "Spotdate"
+        title: "SpotDate"
       })
     }
     await new Promise(resolve => setTimeout(resolve, 8000));
