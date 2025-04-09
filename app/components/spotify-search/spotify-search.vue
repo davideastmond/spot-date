@@ -15,36 +15,36 @@
     </div>
     <!-- Search results space -->
     <div class="h-[500px] p-2 overflow-auto" v-if="searchResults">
-      <Spotifysearchresultsection title="Artists">
+      <SpotifySearchResultSection title="Artists">
         <div v-for="artist in searchResults.artists?.items" :key="artist?.id">
           <ResultItem :imageUrl="artist.images[0]?.url" :contentLabel="artist.name"
             :externalUrl="artist.external_urls.spotify"
             v-on:click="handleClick({ mediaType: 'artist', data: artist })" />
         </div>
-      </Spotifysearchresultsection>
+      </SpotifySearchResultSection>
 
       <!-- Tracks -->
-      <Spotifysearchresultsection title="Tracks">
+      <SpotifySearchResultSection title="Tracks">
         <div v-for="track in searchResults.tracks?.items" :key="track?.id">
           <ResultItem :image-url="track.album.images[0]?.url" :content-label="track.name"
             :external-url="track.external_urls.spotify" v-on:click="handleClick({ mediaType: 'track', data: track })" />
         </div>
-      </Spotifysearchresultsection>
+      </SpotifySearchResultSection>
       <!-- Albums -->
-      <Spotifysearchresultsection title="Albums">
+      <SpotifySearchResultSection title="Albums">
         <div v-for="album in searchResults.albums?.items" :key="album?.id">
           <ResultItem :image-url="album.images[0]?.url" :content-label="album.name"
             :external-url="album.external_urls.spotify" v-on:click="handleClick({ mediaType: 'album', data: album })" />
         </div>
-      </Spotifysearchresultsection>
+      </SpotifySearchResultSection>
       <!-- Playlists -->
-      <Spotifysearchresultsection title="Playlists">
+      <SpotifySearchResultSection title="Playlists">
         <div v-for="playlist in searchResults.playlists?.items.filter((i) => i !== null)" :key="playlist?.id">
           <ResultItem v-if="playlist" :image-url="playlist?.images[0]?.url" :content-label="playlist?.name"
             :external-url="playlist?.external_urls.spotify"
             v-on:click="handleClick({ mediaType: 'playlist', data: playlist })" />
         </div>
-      </Spotifysearchresultsection>
+      </SpotifySearchResultSection>
     </div>
   </div>
 </template>

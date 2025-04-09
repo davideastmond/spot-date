@@ -7,7 +7,7 @@
     <div class="lg:ml-[20%] lg:mr-[20%]">
       <!-- Container for album renderings -->
       <div class="bg-spotty-deep-brown rounded-md p-8 shadow-xl flex lg:justify-evenly flex-col lg:flex-row">
-        <Albumcard v-for="album in albumData" :key="album.id" :name="album.name" :id="album.id" :images="album.images"
+        <AlbumCard v-for="album in albumData" :key="album.id" :name="album.name" :id="album.id" :images="album.images"
           :artists="album.artists" />
       </div>
     </div>

@@ -1,70 +1,79 @@
 <template>
   <!--This is the main post, designed to be rendered  -->
-  <div class="bg-smoke-grey p-4 rounded-md">
-    <header>
-      <div class="flex gap-2">
-        <NuxtLink :to="getPosterProfileUrl()">
-          <Avatar :avatarUrl="avatarDict[post?.posterId as string]?.image" size="lg">
-            <Icon name="mdi:account-circle" style="color: white" size="32px" />
-          </Avatar>
-        </NuxtLink>
-        <div>
-          <p>{{ avatarDict[post?.posterId as string]?.name }}</p>
-          <p class="font-thin text-sm">{{ unixToDateString(post.createdAt) }}</p>
-        </div>
-      </div>
-    </header>
-    <div class="mt-4">
-      <p>{{ post.content?.text }}</p>
-      <div v-if="post.content?.multimedia && post.content.multimedia.length > 0" class="my-4">
-        <div v-for="media in post.content.multimedia.filter((m) => m !== null)" :key="media.id">
-          <MediaCard :header="false" :media="media" v-if="media.contentType" />
-        </div>
-      </div>
+  <div class="bg-smoke-grey rounded-md">
+    <div class="flex p-2 justify-end" v-if="session!.user!.id === post.posterId">
+      <button @click="promptForDelete()">
+        <Icon name="ic:outline-close" size="16px" />
+      </button>
     </div>
-    <div v-if="post.content?.taggedUsers && post.content?.taggedUsers.length > 0">
-      <!-- Tagged users -->
-      <p v-for="taggedUser in post.content.taggedUsers" class="text-sm text-spotty-green-500">
-        @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
-    </div>
-    <div>
-      <!-- Section to show comment count -->
-      <div class="flex justify-end mb-2" v-if="comments && comments.length > 0">
-        <button @click="toggleCommentEntitiesOpen()">
-          <div class="flex gap-2">
-            <p class="font-thin">{{ comments.length }} comments</p>
-            <p>{{ getCommentsEntitiesArrowIcon() }}</p>
+    <div class="p-2">
+      <header>
+        <div class="flex gap-2">
+          <NuxtLink :to="getPosterProfileUrl()">
+            <Avatar :avatarUrl="avatarDict[post?.posterId as string]?.image" size="lg">
+              <Icon name="mdi:account-circle" style="color: white" size="32px" class="font-bold" />
+            </Avatar>
+          </NuxtLink>
+          <div>
+            <p>{{ avatarDict[post?.posterId as string]?.name }}</p>
+            <p class="font-thin text-sm">{{ unixToDateString(post.createdAt) }}</p>
           </div>
-        </button>
-      </div>
-      <!-- Render comments here -->
-      <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2 animate-fade-in">
-        <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict"
-          v-on:reaction-clicked="handleCommentReaction" />
-      </div>
-    </div>
-    <div v-if="post.reactions && post.reactions.length > 0">
-      <!-- The current reaction types and the count go here -->
-      <DisplayReactionsWidget :reactions="post.reactions" />
-    </div>
-    <div class="flex justify-between mt-4 border-t p-2" v-if="showControlButtons">
-      <!-- Reaction and comment section -->
-      <div>
-        <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
-          <Reactionpanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked"
-            :reaction="getUserReaction()" />
         </div>
-        <Reactionbutton :onButtonClicked="togglePanelVisible" :reaction="getUserReaction()" />
+      </header>
+      <div class="mt-4">
+        <p>{{ post.content?.text }}</p>
+        <div v-if="post.content?.multimedia && post.content.multimedia.length > 0" class="my-4">
+          <div v-for="media in post.content.multimedia.filter((m) => m !== null)" :key="media.id">
+            <MediaCard :header="false" :media="media" v-if="media.contentType" />
+          </div>
+        </div>
+      </div>
+      <div v-if="post.content?.taggedUsers && post.content?.taggedUsers.length > 0">
+        <!-- Tagged users -->
+        <p v-for="taggedUser in post.content.taggedUsers" class="text-sm text-spotty-green-500">
+          @{{ avatarDict[taggedUser]?.nickname || avatarDict[taggedUser]?.name }} </p>
       </div>
       <div>
+        <!-- Section to show comment count -->
+        <div class="flex justify-end mb-2" v-if="comments && comments.length > 0">
+          <button @click="toggleCommentEntitiesOpen()">
+            <div class="flex gap-2">
+              <p class="font-thin">{{ comments.length }} comments</p>
+              <p>{{ getCommentsEntitiesArrowIcon() }}</p>
+            </div>
+          </button>
+        </div>
+        <!-- Render comments here -->
+        <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2 animate-fade-in">
+          <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict"
+            v-on:reaction-clicked="handleCommentReaction" />
+        </div>
+      </div>
+      <div v-if="post.reactions && post.reactions.length > 0">
+        <!-- The current reaction types and the count go here -->
+        <DisplayReactionsWidget :reactions="post.reactions" />
+      </div>
+      <div class="flex justify-between mt-4 border-t p-2" v-if="showControlButtons">
+        <!-- Reaction and comment section -->
         <div>
-          <button class="min-w-[200px]" @click="toggleShowCommentWidget()">Comment</button>
+          <div v-if="reactionPanelVisible" class="absolute mt-[-70px]" v-on:mouseleave="togglePanelIfVisible()">
+            <ReactionPanel :post-id="post.id" v-on:reactionClicked="handleReactionClicked"
+              :reaction="getUserReaction()" />
+          </div>
+          <ReactionButton :onButtonClicked="togglePanelVisible" :reaction="getUserReaction()" />
+        </div>
+        <div>
+          <div>
+            <button class="min-w-[200px]" @click="toggleShowCommentWidget()">Comment</button>
+          </div>
         </div>
       </div>
+      <div class="flex animate-fade-in" v-if="commentWidgetVisible">
+        <PostingWidget placeholder="Write a comment" v-on:post-created="handleCreateComment" />
+      </div>
     </div>
-    <div class="flex animate-fade-in" v-if="commentWidgetVisible">
-      <Postingwidget placeholder="Write a comment" v-on:post-created="handleCreateComment" />
-    </div>
+    <DeletePostConfirmationModal v-if="deleteConfirmationModalVisible" :onDelete="() => handleDelete(post.id as string)"
+      :onClose="() => toggleDeleteConfirmationModal()" />
   </div>
 </template>
 <script setup lang="ts">
@@ -73,14 +82,14 @@ import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
 import type { ChosenMedia } from '~/lib/types/user-posts/media';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
-import Reactionpanel from '../reaction-panel/reactionpanel.vue';
 
 const { unixToDateString } = useDate();
 const { reactToPost } = usePost();
 const reactionPanelVisible = ref(false);
 const commentWidgetVisible = ref(false);
 const commentsEntitiesOpen = ref(false);
-
+const deleteConfirmationModalVisible = ref(false);
+const isScrollDisabled = ref(false);
 const comments = ref<Partial<UserPost>[]>([]);
 
 type UserPostProps = {
@@ -88,10 +97,11 @@ type UserPostProps = {
   post: Partial<UserPost>;
   onReactionClicked?: (postId: string, reaction: Reaction) => void;
   onCommentCreated?: (data: UserCommentData) => void;
+  onDeleted?: (postId: string) => void;
   showControlButtons?: boolean;
 }
 
-const { post, onReactionClicked, onCommentCreated, avatarDict, showControlButtons = true } = defineProps<UserPostProps>();
+const { post, onReactionClicked, onCommentCreated, avatarDict, onDeleted, showControlButtons = true } = defineProps<UserPostProps>();
 const { session } = useAuth();
 
 onMounted(async () => {
@@ -110,6 +120,11 @@ function togglePanelIfVisible() {
 
 function getPosterProfileUrl() {
   return `/users/feed?user=${post.posterId}`;
+}
+
+function toggleScroll() {
+  isScrollDisabled.value = !isScrollDisabled.value;
+  document.body.classList.toggle('no-scroll', isScrollDisabled.value);
 }
 
 async function handleReactionClicked(reaction: Reaction) {
@@ -166,6 +181,26 @@ async function handleCreateComment({ postText, mediaContent, taggedUsers }: { po
     commentWidgetVisible.value = false;
     await fetchComments();
   }, 1000);
+}
 
+function toggleDeleteConfirmationModal() {
+  deleteConfirmationModalVisible.value = !deleteConfirmationModalVisible.value;
+}
+function handleDelete(postId: string) {
+  toggleDeleteConfirmationModal();
+  onDeleted?.(postId);
+}
+
+
+
+function promptForDelete() {
+  toggleScroll();
+  deleteConfirmationModalVisible.value = !deleteConfirmationModalVisible.value;
 }
 </script>
+
+<style scoped>
+.no-scroll {
+  overflow: hidden;
+}
+</style>

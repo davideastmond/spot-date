@@ -134,6 +134,12 @@ export function usePost() {
     );
     return res.data;
   }
+
+  async function deletePostById(postId: string) {
+    await $fetch(`/api/posts/${postId}`, {
+      method: "DELETE",
+    });
+  }
   return {
     reactToPost,
     createPost,
@@ -141,5 +147,6 @@ export function usePost() {
     getChosenMediaFromSpotifyData,
     getCommentsByPostId,
     getPostByParentId,
+    deletePostById,
   };
 }

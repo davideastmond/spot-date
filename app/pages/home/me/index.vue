@@ -16,15 +16,14 @@
       </FeedSideMenu>
     </div>
     <div>
-      <Feedheader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
-        v-on:comment-created="handleCommentCreated" />
+      <FeedHeader :posts="posts" v-on:post-created="handlePostCreated" v-on:reaction-clicked="fetchPosts({})"
+        v-on:comment-created="handleCommentCreated" v-on:delete-post="handleDeletePost" />
     </div>
 
   </div>
 </template>
 
 <script setup lang="ts">
-import Feedheader from '~/app/components/feedheader/feedheader.vue';
 import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
@@ -70,6 +69,15 @@ async function handleCommentCreated({ postText, mediaContent, parentId, targetId
       parentId,
       targetId
     });
+    await fetchPosts({});
+  } catch (error) {
+    console.error((error as Error).message);
+  }
+}
+async function handleDeletePost(postId: string) {
+  const { deletePostById } = usePost();
+  try {
+    await deletePostById(postId);
     await fetchPosts({});
   } catch (error) {
     console.error((error as Error).message);

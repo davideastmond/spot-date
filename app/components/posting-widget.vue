@@ -43,7 +43,7 @@
       <MediaCard :header="true" :media="chosenMedia" :onClose="() => chosenMedia = null" />
     </div>
     <Modal v-if="searchModalOpen" :onClose="() => searchModalOpen = false">
-      <Spotifysearch v-on:mediaSelected="handleMediaSelected" />
+      <SpotifySearch v-on:mediaSelected="handleMediaSelected" />
     </Modal>
   </div>
 </template>

@@ -34,7 +34,7 @@
           </li>
         </ul>
 
-        <div v-if="navMenuOpen" v-click-outside="toggleNavMenu"
+        <div v-if="navMenuOpen" v-click-outside="toggleNavMenu" @click="toggleNavMenu"
           class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize z-100">
           <ul>
             <li v-if="status === 'unauthenticated'">
@@ -80,7 +80,7 @@
           <p class="text-spotty-green-500 text-xs text-right pr-2">{{ config.public.appVersion }}</p>
         </div>
       </nav>
-      <NotificationIcon :notifications="notifcationElements" v-on:notification-element-clicked="handleMarkRead"
+      <NotificationIcon :notifications="notificationElements" v-on:notification-element-clicked="handleMarkRead"
         :avatar-dict="avatarDict" />
     </div>
   </div>
@@ -93,7 +93,7 @@ const { signIn, status, session, signOut } = useAuth();
 
 const navMenuOpen = ref(false);
 const searchQuery = ref('');
-const notifcationElements = ref<Partial<SystemNotification>[]>([]);
+const notificationElements = ref<Partial<SystemNotification>[]>([]);
 const avatarDict = ref<Record<string, { image: string, name: string, nickname: string }>>({});
 const { getNotifications, getAvatarDict } = useUser();
 
@@ -129,7 +129,7 @@ async function pollForNotifications() {
     await new Promise(resolve => setTimeout(resolve, 8000));
     await pollForNotifications();
   } else {
-    notifcationElements.value = response.notifications;
+    notificationElements.value = response.notifications;
     if (response.notifications.length > 0) {
       useHead({
         title: `(${response.notifications.length}) Notifications`,
@@ -142,7 +142,7 @@ async function pollForNotifications() {
       })
     } else {
       useHead({
-        title: "Spotdate"
+        title: "SpotDate"
       })
     }
     await new Promise(resolve => setTimeout(resolve, 8000));
@@ -155,7 +155,7 @@ async function handleMarkRead(notificationId: string) {
 
   try {
     await markNotificationAsRead(notificationId);
-    notifcationElements.value = notifcationElements.value.filter(notification => notification.id !== notificationId);
+    notificationElements.value = notificationElements.value.filter(notification => notification.id !== notificationId);
   } catch (error) {
     console.error("There was a problem marking the notification as read", error);
   }
