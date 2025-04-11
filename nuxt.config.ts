@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/image",
     "@nuxt/fonts",
+    "@nuxt/test-utils/module",
   ],
   fonts: {
     experimental: {
