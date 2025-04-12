@@ -65,4 +65,52 @@ describe("UserController", () => {
       expect(res).toBe(null);
     });
   });
+  describe("getNicknameByUserId", () => {
+    beforeAll(() => {
+      userRepository.getById$ = vi.fn<any>(() => ({
+        nickname: "nickname",
+      }));
+    });
+    test("returns the nickname of the user", async () => {
+      const res = await UserController.getNicknameByUserId("1");
+      expect(res).toBe("nickname");
+    });
+    test("returns the name of the user if nickname is not set", async () => {
+      userRepository.getById$ = vi.fn<any>(() => ({
+        name: "name",
+      }));
+      const res = await UserController.getNicknameByUserId("1");
+      expect(res).toBe("name");
+    });
+  });
+  describe("followUser", () => {
+    beforeAll(() => {
+      userRepository.getById$ = vi.fn<any>(() => ({
+        following: [],
+      }));
+      userRepository.update$ = vi.fn<any>(() => Promise.resolve());
+    });
+    test("throws an error if user already in the follow list", async () => {
+      userRepository.getById$ = vi.fn<any>(() => ({
+        following: ["2"],
+      }));
+      await expect(() => UserController.followUser("1", "2")).rejects.toThrow();
+    });
+  });
+  describe("unfollowUser", () => {
+    beforeAll(() => {
+      userRepository.getById$ = vi.fn<any>(() => ({
+        following: ["2"],
+      }));
+      userRepository.update$ = vi.fn<any>(() => Promise.resolve());
+    });
+    test("throws an error if user not in the follow list", async () => {
+      userRepository.getById$ = vi.fn<any>(() => ({
+        following: [],
+      }));
+      await expect(() => UserController.unfollowUser("1", "2")).rejects.toThrow(
+        "User not in the follow list for this user"
+      );
+    });
+  });
 });
