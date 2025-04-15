@@ -11,7 +11,6 @@ const algoliaClient = algoliasearch(
 export const SearchController = {
   searchUsers: async (query: string): Promise<SecureThirdPartyUser[]> => {
     // Following the example from the Algolia documentation
-
     const response =
       await algoliaClient.searchSingleIndex<SecureThirdPartyUser>({
         indexName: ALGOLIA_INDEXES.users,
