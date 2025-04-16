@@ -89,7 +89,6 @@ export const UserPostController = {
     } else {
       updatedReactions = [newReaction];
     }
-
     return userPostsRepository.update$(postId, { reactions: updatedReactions });
   },
   getPostsByTargetId: async ({
