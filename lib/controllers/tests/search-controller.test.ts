@@ -12,6 +12,7 @@ vi.mock("algoliasearch", () => {
     algoliasearch: vi.fn(() => {
       return {
         partialUpdateObject: vi.fn(() => {
+          // This is how I had to spy on nested function calls
           partialUpdateObjectSpy();
           return { objectID: "1" };
         }),
