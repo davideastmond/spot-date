@@ -54,6 +54,7 @@ export class NotificationDispatcher {
       titleCaption = `${this._triggerUser?.nickname} posted a new comment on your feed: ${multimedia[0].mediaContent.label}`;
       composedData = {
         ...composedData,
+        title: titleCaption,
         multimedia: multimedia[0],
       };
     }

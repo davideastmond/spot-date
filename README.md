@@ -1,8 +1,8 @@
-# Spot Date
+# SpotDate
 
 ## Live deploy
 
--TBD
+[SpotDate](https://spotdate.netlify.app/)
 
 ## About
 
@@ -17,83 +17,26 @@ A social media app that connects users via common musical tastes.
 ## External APIs
 
 - Spotify Web API
+- Algolia API for searching support
 
 ## Development environment setup
 
-### Environment variables
-
-# Nuxt Minimal Starter
-
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
+1. Clone the repo and run `npm i` to install dependencies.
+2. Create a `.env` file in the root directory and add the following environment variables:
+   (TBD)
 
 ## Production
 
-Build the application for production:
+- Build the app for production: `npm run build`
+- Deploy the app to Netlify: `netlify deploy --prod`
 
-```bash
-# npm
-npm run build
+## Testing
 
-# pnpm
-pnpm build
+- Run the test suite: `npm t`
+- Code coverage report can be seen using: `npm run test-coverage`</b>
 
-# yarn
-yarn build
+## Development Server
 
-# bun
-bun run build
-```
+Start the development server on `http://localhost:8888`:
 
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+`netlify dev`
