@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const { notificationId } = await readBody<{ notificationId: string }>(event);
 
-  // Before marking as read, the target of the notificaiton has to be checked
+  // Before marking as read, the target of the notification has to be checked
   const targetNotification = await NotificationController.getNotificationById(
     notificationId
   );
