@@ -37,7 +37,7 @@
         <div v-if="navMenuOpen" v-click-outside="toggleNavMenu" @click="toggleNavMenu"
           class="bg-spotty-white absolute left-0 rounded-sm w-full shadow-xl pb-2 animate-fade-in largeScreenResponsiveSize z-100">
           <ul>
-            <li v-if="status === 'unauthenticated'">
+            <li v-if="status === 'unauthenticated'" class="pl-[10px] pt-[10px] text-center">
               <button @click="signIn" type="button" class="hover:opacity-50">
                 <p class="text-black">Sign In</p>
               </button>
@@ -80,6 +80,11 @@
           <p class="text-spotty-green-500 text-xs text-right pr-2">{{ config.public.appVersion }}</p>
         </div>
       </nav>
+      <NuxtLink v-if="status === 'authenticated'" to="/matcher">
+        <button>
+          <Icon name="ic:baseline-connect-without-contact" width="32" height="32" />
+        </button>
+      </NuxtLink>
       <NotificationIcon :notifications="notificationElements" v-on:notification-element-clicked="handleMarkRead"
         :avatar-dict="avatarDict" />
     </div>
@@ -99,7 +104,7 @@ const { getNotifications, getAvatarDict } = useUser();
 
 const config = useRuntimeConfig();
 const handleSignOut = async () => {
-  toggleNavMenu();
+  navMenuOpen.value = false;
   await signOut();
 };
 const toggleNavMenu = () => {
