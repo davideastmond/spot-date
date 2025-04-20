@@ -23,6 +23,17 @@ export const UserMusicDataController = {
       id: doc.id,
     })) as UserMusicData[];
   },
+  getArtistDataByUserId: async (userId: string): Promise<UserMusicData[]> => {
+    const docs = await userMusicDataRepository
+      .query$()
+      .where("ownerId", "==", userId)
+      .where("contentType", "==", "artist")
+      .get();
+    return docs.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    })) as UserMusicData[];
+  },
   getDataById: async (entryId: string): Promise<UserMusicData | null> => {
     return userMusicDataRepository.getById$(entryId);
   },
