@@ -32,6 +32,7 @@ export type SpotifyAlbumArtist = {
   type: string;
   uri: string;
   images: SpotifyAlbumImage[];
+  popularity: number;
 } & ExternalUrls;
 
 export type ExternalUrls = {
