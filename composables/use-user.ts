@@ -143,8 +143,10 @@ export function useUser() {
     });
   }
 
-  async function getMusicMatches() {
-    const res = await $fetch<{ data: any }>(`/api/music-matcher-service`);
+  async function getMusicMatches(): Promise<Partial<User> | null[]> {
+    const res = await $fetch<{ data: Partial<User> }>(
+      `/api/music-matcher-service`
+    );
     return res.data;
   }
 

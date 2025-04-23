@@ -26,8 +26,8 @@ export default defineEventHandler(async (event) => {
     (user) => user.id !== authSession.user!.id
   );
 
-  // Loop through the candidate users and get their music data and format it
-  // into the format that the model generateMatchData function expects
+  /* Loop through the candidate users and get their music data and format it
+   into the format that the LLM model's generateMatchData function expects */
   const candidateInput: MusicMatherPotentialsInputData = await Promise.all(
     candidateUsers.map((candidateUser) => {
       return UserMusicDataController.getDataByUserId(
@@ -41,23 +41,31 @@ export default defineEventHandler(async (event) => {
     }));
   });
 
+  try {
+    const data = await GeminiModel.generateMatchData(
+      { userId: authSession.user.id, data: subjectUserMusicData },
+      candidateInput
+    );
+
+    // The ranked data format needs to be parsed into a JS Array of Ids
+    // TODO: This step is brittle and needs to be improved
+    const parsedDataFromOutput: string[] = JSON.parse(data.split("\n")[1]);
+
+    // Get the user data for the matched users
+    const matchedUsers = await Promise.all(
+      parsedDataFromOutput.map((userId) => UserController.getUserById(userId))
+    );
+
+    return {
+      status: "success",
+      data: matchedUsers,
+    };
+  } catch (error) {
+    setResponseStatus(event, 500);
+    return {
+      error: "There was an error processing LLM model data",
+    };
+  }
+
   // Perform the LLM Model call and get the ranked data
-  const data = await GeminiModel.generateMatchData(
-    { userId: authSession.user.id, data: subjectUserMusicData },
-    candidateInput
-  );
-
-  // The ranked data format needs to be parsed into a JS Array of Ids
-  const parsedDataFromOutput: string[] = JSON.parse(data.split("\n")[1]);
-
-  // Get the user data for the matched users
-  const matchedUsers = await Promise.all(
-    parsedDataFromOutput.map((userId) => UserController.getUserById(userId))
-  );
-
-  console.info("Ranked userIds retrieved after LLM: ", parsedDataFromOutput);
-  return {
-    status: "success",
-    data: matchedUsers,
-  };
 });
