@@ -3,6 +3,9 @@
   <div class="lg:ml-[20%] lg:mr-[20%]">
     <div v-if="hasError" class="text-center mt-4">
       <p class="text-lg">There was an error loading the post. In may not exist.</p>
+      <NuxtLink to="/home/me">
+        <p class="text-lg text-spotty-green-500">Go back to home</p>
+      </NuxtLink>
     </div>
     <UserPost v-if="userPostContext" :post="userPostContext" :avatar-dict="avatarDict"
       v-on:comment-created="handleCreateComment" />
