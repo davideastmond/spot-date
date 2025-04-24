@@ -8,6 +8,10 @@ export type BaseUser = {
   country: string;
   posts: string[]; // Ids of the posts
   following: string[]; // userIds of people who user is following
+  matches?: {
+    matches: string[]; // userIds of people who user is matched with
+    createdAt: number; // timestamp of when the matches were last updated
+  };
 };
 
 export type User = BaseUser & {

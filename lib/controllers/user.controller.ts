@@ -79,4 +79,19 @@ export const UserController = {
       following: newFollowing,
     });
   },
+  updateMusicMatches: async (
+    userId: string,
+    matches: string[],
+    timestamp: number
+  ) => {
+    const userContext = await UserController.getUserById(userId);
+    if (!userContext) throw new Error("User not found");
+
+    return userRepository.update$(userId, {
+      matches: {
+        matches,
+        createdAt: timestamp,
+      },
+    });
+  },
 };
