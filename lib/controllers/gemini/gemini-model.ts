@@ -48,7 +48,7 @@ export const GeminiModel = {
         {
           "mediaType": "artist",
           "mediaContent": {
-            "artistName": "The Weeknd",
+            "artistName": "The Weekend",
             "label": "R&B"
           }
         }
