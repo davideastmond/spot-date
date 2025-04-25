@@ -5,7 +5,13 @@ import { UserMusicDataController } from "~/lib/controllers/user-music-data.contr
 import { UserController } from "~/lib/controllers/user.controller";
 import { MusicMatherPotentialsInputData } from "~/lib/types/music-matcher/music-matcher-definitions";
 
-const MATCH_TIME_OUT_HOURS = 3;
+const MATCH_TIME_OUT_HOURS =
+  parseInt(process.env.AI_MATCHER_INTERVAL as string, 10) || 3;
+
+if (isNaN(MATCH_TIME_OUT_HOURS)) {
+  throw new Error("AI_MATCHER_INTERVAL environment variable must be a number");
+}
+
 export default defineEventHandler(async (event) => {
   const authSession = await getServerSession(event, authOptions);
 
@@ -98,6 +104,7 @@ export default defineEventHandler(async (event) => {
     };
   } catch (error) {
     setResponseStatus(event, 500);
+    console.error("Error generating matches", (error as Error).message);
     return {
       error: "There was an error processing LLM model data",
     };
