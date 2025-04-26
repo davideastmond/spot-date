@@ -16,9 +16,8 @@
       <div class="flex" v-if="userMusicData && userMusicData.length > 0">
         <div class="flex flex-wrap gap-4">
           <div v-for="media in userMusicData" :key="media.id">
-            <MediaCard :media="media" :header="true" v-on:close="deleteElement(media.id)"
+            <MediaCard :media="media" :header="!media.fromSpotify" v-on:close="deleteElement(media.id)"
               class="hover:bg-spotty-green-500/3 p-2" />
-
           </div>
         </div>
       </div>

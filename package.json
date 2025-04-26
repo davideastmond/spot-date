@@ -17,6 +17,7 @@
   "dependencies": {
     "@auth/core": "^0.17.0",
     "@firebase/app-types": "^0.9.3",
+    "@google/genai": "^0.9.0",
     "@hebilicious/authjs-nuxt": "^0.3.5",
     "@nuxt/fonts": "^0.10.3",
     "@nuxt/icon": "^1.10.3",

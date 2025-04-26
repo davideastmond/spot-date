@@ -130,7 +130,7 @@ export function useUser() {
   }
 
   async function getNotifications() {
-    return await $fetch<{
+    return $fetch<{
       status: number;
       notifications: Partial<SystemNotification>[];
     }>(`/api/notifications`);
@@ -142,6 +142,14 @@ export function useUser() {
       body: { notificationId },
     });
   }
+
+  async function getMusicMatches(): Promise<Partial<User> | null[]> {
+    const res = await $fetch<{ data: Partial<User> }>(
+      `/api/music-matcher-service`
+    );
+    return res.data;
+  }
+
   return {
     deleteMyMusicFaveById,
     followUser,
@@ -157,5 +165,6 @@ export function useUser() {
     postMusicFavorite,
     unfollowUser,
     updateUserDetails,
+    getMusicMatches,
   };
 }

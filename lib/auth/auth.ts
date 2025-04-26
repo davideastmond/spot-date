@@ -6,6 +6,7 @@ import { JwtController } from "../controllers/jwt.controller";
 import { SearchController } from "../controllers/search.controller";
 import { UserController } from "../controllers/user.controller";
 import type { SecureThirdPartyUser } from "../models/user";
+import UserFollowingArtistsReconciler from "../utils/user-following-artists-reconciler/user-following-artists-reconciler";
 const runtimeConfig = useRuntimeConfig();
 
 const scopes =
@@ -93,6 +94,17 @@ export const authOptions: AuthConfig = {
         }
       } catch (error) {
         console.error("Error indexing user: ", (error as Error).message);
+      }
+
+      // Reconcile the user's spotify artist data
+      try {
+        await UserFollowingArtistsReconciler.reconcile({
+          email: profile!.email!,
+          token: access_token!,
+          userId: existingUser.id as string,
+        });
+      } catch (error) {
+        console.error((error as Error).message);
       }
       return true;
     },

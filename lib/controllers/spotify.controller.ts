@@ -1,4 +1,5 @@
 import type { SpotifyLatestAlbumAPIResponse } from "~/lib/types/spotify/album/spotify-album-types";
+import type { SpotifyFollowingArtistsAPIResponse } from "~/lib/types/spotify/artists-following-api-response/spotify-artists-following-api-response";
 import type {
   SpotifyPlaylistApiResponse,
   SpotifyUserAPIResponse,
@@ -156,6 +157,22 @@ export const SpotifyController = {
       );
     }
     return results.json();
+  },
+  getFollowedArtists: async (
+    email: string,
+    token: string
+  ): Promise<SpotifyFollowingArtistsAPIResponse | null> => {
+    const res = await fetch(
+      "https://api.spotify.com/v1/me/following?type=artist",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!res.ok)
+      throw new Error("Failed to fetch followed artists from spotify API");
+    return res.json();
   },
 };
 
