@@ -41,7 +41,7 @@ const inputMessage = ref<string>("");
 const dmSessions = ref<DirectMessageSession[]>([]);
 
 const router = useRoute();
-const { createDm, fetchSessions, sendMessageBySessionId } = useDm();
+const { createDm, fetchDmSessions, sendMessageBySessionId } = useDm();
 const isNewMessageSession = computed(() => Boolean(router.query.new === "true" && router.query.target && !Boolean(selectedMessageSessionId.value)))
 const noContextSelected = computed(() => !selectedMessageSessionId.value && !isNewMessageSession.value);
 
@@ -68,7 +68,7 @@ async function handleDm() {
 async function getAllSessions() {
   // Fetch the dm Sessions
   try {
-    dmSessions.value = await fetchSessions();
+    dmSessions.value = await fetchDmSessions();
   } catch (error) {
     console.error("Error fetching DM sessions:", error);
   }
