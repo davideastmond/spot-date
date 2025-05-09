@@ -21,9 +21,12 @@ export function useDm() {
   /**
    * Fetches the current user's DM sessions and any conversations they are in
    */
-  async function fetchSessions() {
+  async function fetchDmSessions() {
     const res = await $fetch<{ sessions: DirectMessageSession[] }>("/api/dms");
-    return res.sessions;
+    if (!res.sessions) {
+      return [];
+    }
+    return res.sessions?.map((session) => sortMessages(session));
   }
 
   async function sendMessageBySessionId({
@@ -45,7 +48,18 @@ export function useDm() {
 
   return {
     createDm,
-    fetchSessions,
+    fetchDmSessions,
     sendMessageBySessionId,
   };
+}
+
+function sortMessages(dmSession: DirectMessageSession): DirectMessageSession {
+  // Sort the messages in the session by createdAt date
+  dmSession.messages.sort((a, b) => {
+    return (
+      new Date(a.createdAt as number).getTime() -
+      new Date(b.createdAt as number).getTime()
+    );
+  });
+  return dmSession;
 }
