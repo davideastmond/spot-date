@@ -79,7 +79,6 @@ async function handleKeyboardInitiatedDm(event: KeyboardEvent) {
   if (inputMessage.value.length === 0) return;
 
   if (isNewMessageSession.value) {
-    console.log("Creating new DM session on enter key"), isNewMessageSession.value;
     await createNewDm();
     await getAllSessions();
     return;
