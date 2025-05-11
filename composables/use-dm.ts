@@ -26,7 +26,8 @@ export function useDm() {
     if (!res.sessions) {
       return [];
     }
-    return res.sessions?.map((session) => sortMessages(session));
+
+    return res.sessions;
   }
 
   async function sendMessageBySessionId({
@@ -51,15 +52,4 @@ export function useDm() {
     fetchDmSessions,
     sendMessageBySessionId,
   };
-}
-
-function sortMessages(dmSession: DirectMessageSession): DirectMessageSession {
-  // Sort the messages in the session by createdAt date
-  dmSession.messages.sort((a, b) => {
-    return (
-      new Date(a.createdAt as number).getTime() -
-      new Date(b.createdAt as number).getTime()
-    );
-  });
-  return dmSession;
 }
