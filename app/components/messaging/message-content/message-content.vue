@@ -1,25 +1,33 @@
 <template>
-  <div :class="getAnchorStyles()">
+  <div :class="getAnchorStyles()" ref="messageContentRef">
     <div>
       <Avatar :avatar-url="avatarDict[message.message.sender].image" size="md" />
     </div>
     <div>
       <p>{{ avatarDict[message.message.sender].nickname }}</p>
       <p class="font-thin"> {{ message.message.text }}</p>
+      <p class="font-thin">{{ unixToDateString(message.createdAt) }}</p>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import type { DirectMessage } from '~/lib/models/direct-message/direct-message';
-
+const messageContentRef = useTemplateRef<HTMLDivElement>("messageContentRef");
 type MessageContentProps = {
   message: DirectMessage;
   avatarDict: Record<string, { image: string; name: string; nickname: string }>;
   normalAnchor?: boolean;
 }
 
-const { message, avatarDict, normalAnchor } = defineProps<MessageContentProps>();
+onMounted(() => {
+  if (messageContentRef.value) {
+    // GOTCHA: Scrolling the message into view means putting this on the actual child element
+    messageContentRef.value.scrollIntoView({ behavior: "smooth" });
+  }
+});
 
+const { message, avatarDict, normalAnchor } = defineProps<MessageContentProps>();
+const { unixToDateString } = useDate();
 function getAnchorStyles() {
   const baseStyle = "rounded-sm flex gap-2 p-2 ";
   if (normalAnchor) {
