@@ -5,9 +5,9 @@
   <div>
     <slot name="addUserWidget"></slot>
   </div>
-  <div id="chat-content" class="bg-black min-h-[30vh] max-h-[80vh] overflow-y-auto rounded-sm flex-col flex">
-    <div class="flex gap-2 flex-col">
-      <div v-for="(message, index) in dmSession?.messages" :key="index" class="p-2">
+  <div class="bg-black max-h-[80vh] rounded-sm flex-col flex">
+    <div class="max-h-[50vh] overflow-y-scroll">
+      <div v-for="(message, index) in sortedMessages" :key="index" class="p-2">
         <MessageContent :message="message" :avatarDict="avatarDict" :normalAnchor="getMessageAnchor(index)" />
       </div>
     </div>
@@ -25,8 +25,12 @@ type MessageContentPanelProps = {
 }
 
 const { dmSession, avatarDict } = defineProps<MessageContentPanelProps>();
+const sortedMessages = computed(() => {
+  return dmSession?.messages?.sort((a, b) => (a.createdAt as number) - (b.createdAt as number)) || [];
+})
 
 function getMessageAnchor(index: number): boolean {
   return index % 2 !== 0
 }
+
 </script>
