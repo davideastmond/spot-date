@@ -18,6 +18,8 @@ export default defineEventHandler(async (event) => {
     };
   }
 
+  // TODO: I am going to use this as a search route for only users.  There should be option in the query URL to search only for requested data
+
   const userSearchResults = await SearchController.searchUsers(q);
   const postSearchResults = await SearchController.searchUserPosts(q);
 
