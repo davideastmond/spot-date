@@ -17,11 +17,12 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { DirectMessageSession } from '~/lib/models/direct-message/direct-message';
 
 type MessageContentPanelProps = {
   dmSession?: Partial<DirectMessageSession> | null;
-  avatarDict: Record<string, { image: string; name: string; nickname: string }>;
+  avatarDict: AvatarDict;
 }
 
 const { dmSession, avatarDict } = defineProps<MessageContentPanelProps>();

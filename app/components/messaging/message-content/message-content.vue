@@ -11,11 +11,12 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { DirectMessage } from '~/lib/models/direct-message/direct-message';
 const messageContentRef = useTemplateRef<HTMLDivElement>("messageContentRef");
 type MessageContentProps = {
   message: DirectMessage;
-  avatarDict: Record<string, { image: string; name: string; nickname: string }>;
+  avatarDict: AvatarDict;
   normalAnchor?: boolean;
 }
 

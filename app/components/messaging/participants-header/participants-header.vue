@@ -6,8 +6,10 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
+
 type ParticipantsHeaderProps = {
-  avatarDict: Record<string, { image: string; name: string; nickname: string }>;
+  avatarDict: AvatarDict;
   participants: string[];
 }
 

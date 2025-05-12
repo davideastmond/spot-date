@@ -1,5 +1,5 @@
 <template>
-  <button @click="handleCardClick" class="flex flex-col items-cente">
+  <button @click="handleCardClick" class="flex flex-col items-center">
     <div :class="getStylingByState()">
       <div>
         <Avatar :avatar-url="avatarDict[dmSession.initiatorId].image" size="md" />
@@ -20,11 +20,12 @@
   </button>
 </template>
 <script lang="ts" setup>
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { DirectMessageSession } from '~/lib/models/direct-message/direct-message';
 
 type CardProps = {
   dmSession: DirectMessageSession;
-  avatarDict: Record<string, { image: string; name: string; nickname: string }>;
+  avatarDict: AvatarDict;
   onCardClick?: (sessionId: string) => void;
   active?: boolean
 }
@@ -36,8 +37,11 @@ function getDisplayName(userId: string) {
 }
 
 function getRecentMessageText() {
-  const sortedMessage = dmSession.messages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
-  return sortedMessage[0]?.message.text || "No messages yet";
+  const clonedMessages = [...dmSession.messages];
+  const sortedMessages = clonedMessages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
+  // const sortedMessage = dmSession.messages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
+  return sortedMessages[0]?.message.text || "No messages yet";
+  return "Road Rage"
 }
 
 function handleCardClick() {

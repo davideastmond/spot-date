@@ -1,3 +1,4 @@
+import type { AvatarDict } from "~/lib/definitions/avatar-dict/avatar-dict";
 import type { SystemNotification } from "~/lib/models/system-notification/system-notification";
 import type { User } from "~/lib/models/user";
 import type { UserMusicData } from "~/lib/models/user-music-data";
@@ -93,10 +94,7 @@ export function useUser() {
     }>("/api/user", {
       method: "GET",
     });
-    const avatarDict: Record<
-      string,
-      { image: string; name: string; nickname: string }
-    > = {};
+    const avatarDict: AvatarDict = {};
 
     res.data.forEach((result) => {
       avatarDict[result.id] = {

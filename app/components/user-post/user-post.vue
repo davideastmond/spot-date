@@ -45,8 +45,8 @@
         </div>
         <!-- Render comments here -->
         <div v-if="commentsEntitiesOpen" class="flex flex-col gap-2 animate-fade-in">
-          <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment" :avatarDict="avatarDict"
-            v-on:reaction-clicked="handleCommentReaction" />
+          <PostCommentCard v-for="comment in comments" :key="comment.id" :post="comment"
+            :avatarDict="avatarDict as AvatarDict" v-on:reaction-clicked="handleCommentReaction" />
         </div>
       </div>
       <div v-if="post.reactions && post.reactions.length > 0">
@@ -77,6 +77,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { SecureThirdPartyUser } from '~/lib/models/user';
 import type { UserPost } from '~/lib/models/user-post';
 import type { UserCommentData } from '~/lib/types/user-posts/comments/user-comment-data';
@@ -93,7 +94,7 @@ const isScrollDisabled = ref(false);
 const comments = ref<Partial<UserPost>[]>([]);
 
 type UserPostProps = {
-  avatarDict: Record<string, { image: string | null | undefined, name: string, nickname: string }>;
+  avatarDict: AvatarDict
   post: Partial<UserPost>;
   onReactionClicked?: (postId: string, reaction: Reaction) => void;
   onCommentCreated?: (data: UserCommentData) => void;

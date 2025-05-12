@@ -40,13 +40,14 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { SystemNotification } from '~/lib/models/system-notification/system-notification';
 const menuOpen = ref(false);
 
 type NotificationIconProps = {
   notifications?: Partial<SystemNotification>[];
   onNotificationElementClicked?: (notificationId: string) => void;
-  avatarDict: Record<string, { image: string, name: string, nickname: string }>;
+  avatarDict: AvatarDict;
 }
 
 const { notifications = [], onNotificationElementClicked, avatarDict } = defineProps<NotificationIconProps>()
