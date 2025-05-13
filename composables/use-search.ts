@@ -20,9 +20,15 @@ export function useSearch() {
     postResults.value = res.data.posts;
   }
 
+  async function clearSearch() {
+    userResults.value = [];
+    postResults.value = [];
+  }
+
   return {
     performSearch,
     userSearchResults,
     postSearchResults,
+    clearSearch,
   };
 }
