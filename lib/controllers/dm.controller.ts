@@ -22,6 +22,7 @@ export const dmController = {
       messages: [
         {
           id: crypto.randomUUID(),
+          createdAt: Date.now(),
           message: {
             text: dmData.text,
             imageUrl: dmData.imageUrl || null,

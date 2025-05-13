@@ -12,7 +12,7 @@ export type DirectMessageSession = {
 export type DirectMessage = {
   id?: string; // We need to generate this via our code
   message: DirectMessageData;
-  createdAt?: number;
+  createdAt: number;
   seenBy?: Array<{
     userId: string;
     createdAt: number;
