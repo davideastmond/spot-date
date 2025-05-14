@@ -2,7 +2,7 @@
   <button @click="handleCardClick" class="flex flex-col items-center">
     <div :class="getStylingByState()">
       <div>
-        <Avatar :avatar-url="avatarDict[dmSession.initiatorId].image" size="md" />
+        <Avatar :avatar-url="avatarDict[dmSession.receiverIds[0]].image" size="md" />
         <!-- We have to account for multiple receivers -->
       </div>
       <div>
@@ -41,7 +41,6 @@ function getRecentMessageText() {
   const sortedMessages = clonedMessages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
   // const sortedMessage = dmSession.messages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
   return sortedMessages[0]?.message.text || "No messages yet";
-  return "Road Rage"
 }
 
 function handleCardClick() {

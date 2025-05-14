@@ -1,6 +1,9 @@
 <template>
   <div id="message-side-bar" class="flex flex-col h-full p-2 bg-smoke-grey-light  ">
-    <h2 class="text-lg">Chats</h2>
+    <div class="flex justify-between p-y-4 items-center">
+      <h2 class="text-lg">Chats</h2>
+      <button @click="handleCreateNewChat" class=" text-white p-2 font-thin text-3xl hover:font-bold">+</button>
+    </div>
     <div>
       <SideBarMessageCard v-for="dmSession in dmSessions" :key="dmSession.id" :avatarDict="avatarDict"
         :on-card-click="handleCardClick" :dmSession="dmSession"
@@ -10,21 +13,24 @@
   </div>
 </template>
 <script lang="ts" setup>
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { DirectMessageSession } from '~/lib/models/direct-message/direct-message';
 
 type MessageSideBarProps = {
-  avatarDict: Record<string, { image: string; name: string; nickname: string }>;
+  avatarDict: AvatarDict;
   dmSessions: DirectMessageSession[];
   onCardClicked?: (sessionId: string) => void;
   currentSession?: string | null;
+  onCreateNewChat?: () => void;
 }
 
-const { avatarDict, dmSessions, onCardClicked } = defineProps<MessageSideBarProps>();
+const { avatarDict, dmSessions, onCardClicked, onCreateNewChat } = defineProps<MessageSideBarProps>();
 
 function handleCardClick(sessionId: string) {
-  // const { push } = useRouter();
-  // push({ name: 'messaging', query: { sessionId } });
-  console.info("Card clicked with sessionId:", sessionId);
   onCardClicked?.(sessionId);
+}
+
+function handleCreateNewChat() {
+  onCreateNewChat?.();
 }
 </script>
