@@ -5,7 +5,7 @@
         {{ notifications.length }}
       </div>
       <button>
-        <Icon name="material-symbols:notifications-sharp" width="24" height="24" />
+        <Icon name="material-symbols:notifications-sharp" class="h-[30px]! w-[30px]!" />
       </button>
     </div>
     <div v-if="menuOpen" class="rounded-sm absolute top-[40px] right-0 bg-spotty-white shadow-xl animate-fade-in z-[1]">
