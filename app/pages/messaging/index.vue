@@ -2,7 +2,7 @@
   <!-- This is the messaging page -->
   <div class="p-4 flex w-full justify-evenly">
     <MessageSideBar :avatar-dict="avatarDict" :dm-sessions="dmSessions" :on-card-clicked="handleSessionContextChange"
-      :current-session="selectedMessageSessionId" />
+      :current-session="selectedMessageSessionId" :on-create-new-chat="showNewChatPrompt" />
     <div class="w-full max-w-[40vw]">
       <div v-if="noContextSelected">
         <p>Select a message</p>
@@ -27,6 +27,11 @@
       </MessageContentPanel>
     </div>
   </div>
+  <Modal v-if="useSearchOpen" @close="closeUserSearch">
+    <!-- User search goes here -->
+    <UserSearch :avatar-dict="avatarDict" v-on:user-selected="handleCreateNewChatContext" />
+  </Modal>
+
 </template>
 <script setup lang="ts">
 import type { DirectMessageSession } from '~/lib/models/direct-message/direct-message';
@@ -39,6 +44,7 @@ const { getAvatarDict } = useUser();
 const inputMessage = ref<string>("");
 
 const dmSessions = ref<DirectMessageSession[]>([]);
+const useSearchOpen = ref(false);
 
 const router = useRoute();
 const { createDm, fetchDmSessions, sendMessageBySessionId } = useDm();
@@ -53,7 +59,16 @@ onMounted(async () => {
   }
 
   await getAllSessions();
+  await pollForDms();
 })
+
+async function pollForDms() {
+  await getAllSessions();
+  await new Promise((resolve) =>
+    setTimeout(resolve, 8000)
+  );
+  await pollForDms();
+}
 
 async function handleDm() {
   if (isNewMessageSession.value) {
@@ -67,11 +82,8 @@ async function handleDm() {
 
 async function getAllSessions() {
   // Fetch the dm Sessions
-  try {
-    dmSessions.value = await fetchDmSessions();
-  } catch (error) {
-    console.error("Error fetching DM sessions:", error);
-  }
+  const { sessions } = await fetchDmSessions();
+  dmSessions.value = sessions;
 }
 
 async function handleKeyboardInitiatedDm(event: KeyboardEvent) {
@@ -117,19 +129,44 @@ async function handleSessionContextChange(sessionId: string) {
   const session = dmSessions.value.find((session) => session.id === sessionId);
   if (session) {
     setMessageSessionId(sessionId);
-    participants.value = [...session.receiverIds];
+    participants.value = [...session.receiverIds, session.initiatorId];
   }
   if (router.query.new) {
     await navigateTo({
       path: '/messaging',
       query: { new: "false", target: sessionId },
     })
-
   }
 }
 
-function setMessageSessionId(sessionId: string) {
+async function handleCreateNewChatContext(userId: string) {
+  if (userId) {
+    participants.value = [userId];
+    setMessageSessionId(null);
+    toggleUserSearchOpen();
+    await navigateTo({
+      path: '/messaging',
+      query: { new: "true", target: userId },
+    })
+  }
+}
+
+function setMessageSessionId(sessionId: string | null) {
   selectedMessageSessionId.value = sessionId;
+}
+
+function showNewChatPrompt() {
+  toggleUserSearchOpen()
+}
+
+function toggleUserSearchOpen() {
+  useSearchOpen.value = !useSearchOpen.value;
+}
+
+function closeUserSearch() {
+  const { clearSearch } = useSearch();
+  clearSearch();
+  toggleUserSearchOpen()
 }
 
 </script>
