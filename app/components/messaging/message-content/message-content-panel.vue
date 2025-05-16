@@ -6,6 +6,7 @@
     <slot name="addUserWidget"></slot>
   </div>
   <div class="bg-black max-h-[80vh] rounded-sm flex-col flex">
+    <!-- Chat messages are rendered here -->
     <div class="max-h-[50vh] overflow-y-scroll">
       <div v-for="(message, index) in sortedMessages" :key="index" class="p-2">
         <MessageContent :message="message" :avatarDict="avatarDict" :normalAnchor="getMessageAnchor(index)" />
