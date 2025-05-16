@@ -80,7 +80,7 @@
           <p class="text-spotty-green-500 text-xs text-right pr-2">{{ config.public.appVersion }}</p>
         </div>
       </nav>
-      <div class="flex gap-4">
+      <div class="flex gap-4 items-baseline">
         <NuxtLink v-if="status === 'authenticated'" to="/matcher">
           <button>
             <Icon name="ic:baseline-connect-without-contact" class="w-[30px]! h-[30px]  !" />
