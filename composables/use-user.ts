@@ -148,6 +148,10 @@ export function useUser() {
     return res.data;
   }
 
+  function getUserProfileUrl(userId: string): string {
+    return `/users/feed?user=${userId}`;
+  }
+
   return {
     deleteMyMusicFaveById,
     followUser,
@@ -158,6 +162,7 @@ export function useUser() {
     getMyPosts,
     getNotifications,
     getPostsByUserId,
+    getUserProfileUrl,
     getUserById,
     markNotificationAsRead,
     postMusicFavorite,

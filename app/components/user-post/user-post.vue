@@ -9,7 +9,7 @@
     <div class="p-2">
       <header>
         <div class="flex gap-2">
-          <NuxtLink :to="getPosterProfileUrl()">
+          <NuxtLink :to="getUserProfileUrl(post.posterId as string)">
             <Avatar :avatarUrl="avatarDict[post?.posterId as string]?.image" size="lg">
               <Icon name="mdi:account-circle" style="color: white" size="32px" class="font-bold" />
             </Avatar>
@@ -104,7 +104,7 @@ type UserPostProps = {
 
 const { post, onReactionClicked, onCommentCreated, avatarDict, onDeleted, showControlButtons = true } = defineProps<UserPostProps>();
 const { session } = useAuth();
-
+const { getUserProfileUrl } = useUser();
 onMounted(async () => {
   await fetchComments();
 })
@@ -117,10 +117,6 @@ function togglePanelIfVisible() {
   if (reactionPanelVisible.value) {
     reactionPanelVisible.value = false;
   }
-}
-
-function getPosterProfileUrl() {
-  return `/users/feed?user=${post.posterId}`;
 }
 
 function toggleScroll() {

@@ -1,7 +1,7 @@
 <template>
   <div class=" bg-smoke-grey min-w-[20%] rounded-md">
     <div class="p-4 flex flex-col gap-4">
-      <NuxtLink v-for="post in postSearchResults.posts" :to="getPosterProfileUrl(post.posterId as string)">
+      <NuxtLink v-for="post in postSearchResults.posts" :to="getUserProfileUrl(post.posterId as string)">
         <UserPost :post="post" :key="post.id" :avatar-dict="avatarDict" :show-control-buttons="false" />
       </NuxtLink>
     </div>
@@ -16,9 +16,6 @@ onMounted(async () => {
   avatarDict.value = await getAvatarDict();
 })
 const { postSearchResults } = useSearch()
-const { getAvatarDict } = useUser();
+const { getAvatarDict, getUserProfileUrl } = useUser();
 
-function getPosterProfileUrl(posterId: string) {
-  return `/users/feed?user=${posterId}`;
-}
 </script>
