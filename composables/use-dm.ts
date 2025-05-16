@@ -22,12 +22,15 @@ export function useDm() {
    * Fetches the current user's DM sessions and any conversations they are in
    */
   async function fetchDmSessions() {
-    const res = await $fetch<{ sessions: DirectMessageSession[] }>("/api/dms");
+    const res = await $fetch<{
+      sessions: DirectMessageSession[];
+      status: number;
+    }>("/api/dms");
     if (!res.sessions) {
-      return [];
+      return { sessions: [] };
     }
 
-    return res.sessions;
+    return { sessions: res.sessions };
   }
 
   async function sendMessageBySessionId({
