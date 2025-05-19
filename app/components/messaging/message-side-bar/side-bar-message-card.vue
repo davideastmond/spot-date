@@ -16,6 +16,10 @@
           </p>
         </div>
       </div>
+      <div v-if="hasUnread" class="relative flex justify-end">
+        <div class="dot max-w-[10px]">
+        </div>
+      </div>
     </div>
   </button>
 </template>
@@ -28,15 +32,16 @@ type CardProps = {
   avatarDict: AvatarDict;
   onCardClick?: (sessionId: string) => void;
   active?: boolean
+  hasUnread?: boolean
 }
-const { dmSession, avatarDict, onCardClick, active } = defineProps<CardProps>();
-
+const { dmSession, avatarDict, onCardClick, active, hasUnread } = defineProps<CardProps>();
 function getDisplayName(userId: string) {
   const user = avatarDict[userId];
   return user ? user.nickname || user.name : "Unknown User";
 }
 
-function getRecentMessageText() {
+function getRecentMessageText(): string | null {
+  if (!dmSession.messages) return null;
   const clonedMessages = [...dmSession.messages];
   const sortedMessages = clonedMessages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
   // const sortedMessage = dmSession.messages.sort((a, b) => new Date(b.createdAt as number).getTime() - new Date(a.createdAt as number).getTime());
@@ -48,7 +53,17 @@ function handleCardClick() {
 }
 
 function getStylingByState() {
-  const baseStyle = "flex justify-around p-4 rounded-sm lg:w-[300px] gap-1 "
+  const baseStyle = "flex justify-around p-4 rounded-sm lg:w-[300px] gap-2 "
   return active ? baseStyle + "bg-spotty-blue-500/10" : baseStyle + "bg-spotty-deep-brown opacity-30";
 }
 </script>
+
+<style scoped>
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00FF00;
+  border-radius: 50%;
+  max-height: 10px;
+}
+</style>

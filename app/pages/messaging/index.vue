@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import type { DirectMessageSession } from '~/lib/models/direct-message/direct-message';
 
+const { session } = useAuth();
 const avatarDict = ref<Record<string, { image: string; name: string; nickname: string }>>({});
 const selectedMessageSessionId = ref<string | null>(null);
 const participants = ref<string[]>([]);
@@ -47,7 +48,7 @@ const dmSessions = ref<DirectMessageSession[]>([]);
 const useSearchOpen = ref(false);
 
 const router = useRoute();
-const { createDm, fetchDmSessions, sendMessageBySessionId } = useDm();
+const { createDm, fetchDmSessions, sendMessageBySessionId, getMostRecentMessageInSession, markMessageAsSeen } = useDm();
 const isNewMessageSession = computed(() => Boolean(router.query.new === "true" && router.query.target && !Boolean(selectedMessageSessionId.value)))
 const noContextSelected = computed(() => !selectedMessageSessionId.value && !isNewMessageSession.value);
 
@@ -126,11 +127,23 @@ async function createDmForCurrentSession() {
 }
 
 async function handleSessionContextChange(sessionId: string) {
-  const session = dmSessions.value.find((session) => session.id === sessionId);
-  if (session) {
+  const dmSession = dmSessions.value.find((session) => session.id === sessionId);
+
+
+  if (dmSession) {
     setMessageSessionId(sessionId);
-    participants.value = [...session.receiverIds, session.initiatorId];
+    participants.value = [...dmSession.receiverIds, dmSession.initiatorId];
+    // When switching to a new session, we should find the most recent session in the message and determine if the user saw the message
+    // If not, we have to send the request to mark the message as read by the user
+
+    const mostRecentMessage = getMostRecentMessageInSession(dmSession);
+    const seenBy = mostRecentMessage?.seenBy?.find((user) => user.userId === session.value?.user?.id);
+    if (!seenBy) {
+      await markMessageAsSeen({ sessionId, messageId: mostRecentMessage!.id as string });
+    }
   }
+
+
   if (router.query.new) {
     await navigateTo({
       path: '/messaging',
