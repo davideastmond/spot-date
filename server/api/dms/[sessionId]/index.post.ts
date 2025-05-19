@@ -58,6 +58,12 @@ export default defineEventHandler(async (event) => {
   dmSession.messages.push({
     id: crypto.randomUUID(),
     createdAt: Date.now(),
+    seenBy: [
+      {
+        userId: authSession.user.id,
+        createdAt: Date.now(),
+      },
+    ],
     message: {
       text: requestBody.content.text,
       imageUrl: null,
