@@ -23,6 +23,12 @@ export const dmController = {
         {
           id: crypto.randomUUID(),
           createdAt: Date.now(),
+          seenBy: [
+            {
+              userId: initiatorId,
+              createdAt: Date.now(),
+            },
+          ],
           message: {
             text: dmData.text,
             imageUrl: dmData.imageUrl || null,
