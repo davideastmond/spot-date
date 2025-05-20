@@ -37,6 +37,6 @@ function getAnchorStyles() {
   if (normalAnchor) {
     return baseStyle + "justify-end";
   }
-  return baseStyle;
+  return baseStyle + " ml-[50%]";
 }
 </script>
