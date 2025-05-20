@@ -7,15 +7,16 @@
     <div>
       <SideBarMessageCard v-for="dmSession in dmSessions" :key="dmSession.id" :avatarDict="avatarDict"
         :on-card-click="handleCardClick" :dmSession="dmSession"
-        :active="Boolean(currentSession && currentSession === dmSession.id)" />
-
+        :active="Boolean(currentSession && currentSession === dmSession.id)"
+        :hasUnread="getHasUnread({ ...dmSession })" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { DirectMessageSession } from '~/lib/models/direct-message/direct-message';
-
+const { session } = useAuth();
+const { getMostRecentMessageInSession } = useDm();
 type MessageSideBarProps = {
   avatarDict: AvatarDict;
   dmSessions: DirectMessageSession[];
@@ -25,6 +26,11 @@ type MessageSideBarProps = {
 }
 
 const { avatarDict, dmSessions, onCardClicked, onCreateNewChat } = defineProps<MessageSideBarProps>();
+
+function getHasUnread(dmSession: DirectMessageSession) {
+  const mostRecentMessage = getMostRecentMessageInSession(dmSession);
+  return Boolean(!mostRecentMessage?.seenBy?.find((user) => user.userId === session?.value!.user?.id));
+}
 
 function handleCardClick(sessionId: string) {
   onCardClicked?.(sessionId);
