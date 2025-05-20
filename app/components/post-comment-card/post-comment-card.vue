@@ -35,6 +35,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { UserPost } from '~/lib/models/user-post';
 import type { Reaction } from '~/lib/types/user-posts/reaction';
 const { unixToDateString } = useDate()
@@ -42,7 +43,7 @@ const { session } = useAuth();
 const reactionPanelVisible = ref(false);
 
 type PostCommentCardProps = {
-  avatarDict: Record<string, { image: string | null | undefined, name: string, nickname: string }>;
+  avatarDict: AvatarDict
   post: Partial<UserPost>;
   onReactionClicked?: (postId: string, reaction: Reaction) => void;
   onDelete?: (postId: string) => void;

@@ -19,12 +19,13 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { AvatarDict } from '~/lib/definitions/avatar-dict/avatar-dict';
 import type { User } from '~/lib/models/user';
 
 
 type ConnectionsComponentProps = {
   userContextId: string;
-  avatarDict: Record<string, { image: string; name: string; nickname: string }>
+  avatarDict: AvatarDict;
   isOwnProfile: boolean;
 }
 

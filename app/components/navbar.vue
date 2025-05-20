@@ -23,7 +23,7 @@
             </NuxtLink>
           </li>
           <li v-if="status === 'authenticated'">
-            <button type="button" class="hover:opacity-50 py-2" @click="toggleNavMenu">
+            <button type="button" class="hover:opacity-50 py-2 w-[0px] lg:w-auto" @click="toggleNavMenu">
               <div class="flex items-center gap-2 invisible lg:visible">
                 <Avatar :avatar-url="session?.user?.image" size="md">
                   <Icon name="mdi:account-circle" style="color: white" size="32px" />
@@ -80,13 +80,20 @@
           <p class="text-spotty-green-500 text-xs text-right pr-2">{{ config.public.appVersion }}</p>
         </div>
       </nav>
-      <NuxtLink v-if="status === 'authenticated'" to="/matcher">
-        <button>
-          <Icon name="ic:baseline-connect-without-contact" width="32" height="32" />
-        </button>
-      </NuxtLink>
-      <NotificationIcon :notifications="notificationElements" v-on:notification-element-clicked="handleMarkRead"
-        :avatar-dict="avatarDict" />
+      <div class="flex gap-4 items-baseline">
+        <NuxtLink v-if="status === 'authenticated'" to="/matcher">
+          <button>
+            <Icon name="ic:baseline-connect-without-contact" class="w-[30px]! h-[30px]  !" />
+          </button>
+        </NuxtLink>
+        <NuxtLink v-if="status === 'authenticated'" to="/messaging">
+          <button>
+            <Icon name="material-symbols:chat" class="w-[30px]! h-[30px]!" />
+          </button>
+        </NuxtLink>
+        <NotificationIcon :notifications="notificationElements" v-on:notification-element-clicked="handleMarkRead"
+          :avatar-dict="avatarDict" />
+      </div>
     </div>
   </div>
 </template>
@@ -164,7 +171,6 @@ async function handleMarkRead(notificationId: string) {
   } catch (error) {
     console.error("There was a problem marking the notification as read", error);
   }
-
 }
 </script>
 

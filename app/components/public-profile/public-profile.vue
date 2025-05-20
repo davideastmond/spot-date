@@ -20,9 +20,13 @@
           class="hover:bg-spotty-green-500/3 p-2 w-full max-w-[unset]" />
       </div>
     </div>
-    <div v-if="!isOwnProfile">
-      <!-- Follow and unfollow buttons -->
+    <div v-if="!isOwnProfile" class="flex justify-end gap-2">
       <FollowButton :isFollowing="isFollowing" :handleFollowButtonClicked="handleFollowButtonClicked" />
+      <NuxtLink class="self-end" :to="`/messaging?target=${route.query.user}&new=true`">
+        <button>
+          <Icon name="ic:baseline-mode-comment" width="24" height="24" />
+        </button>
+      </NuxtLink>
     </div>
     <FeedSideMenu>
       <template #connections>

@@ -1,0 +1,89 @@
+import type {
+  DirectMessage,
+  DirectMessageSession,
+} from "~/lib/models/direct-message/direct-message";
+import type { ChosenMedia } from "~/lib/types/user-posts/media";
+
+export function useDm() {
+  async function createDm({
+    text,
+    multimedia = [],
+    receiverIds,
+  }: {
+    text: string;
+    multimedia?: ChosenMedia[];
+    receiverIds: string[];
+  }) {
+    const res = await $fetch<{ status: string; id: string }>(`/api/dms`, {
+      method: "POST",
+      body: { content: { text, multimedia }, receiverIds },
+    });
+    return res.id;
+  }
+
+  /**
+   * Fetches the current user's DM sessions and any conversations they are in
+   */
+  async function fetchDmSessions() {
+    const res = await $fetch<{
+      sessions: DirectMessageSession[];
+      status: number;
+    }>("/api/dms");
+    if (!res.sessions) {
+      return { sessions: [] };
+    }
+
+    return { sessions: res.sessions };
+  }
+
+  async function sendMessageBySessionId({
+    sessionId,
+    text,
+    multimedia = [],
+    receiverIds,
+  }: {
+    sessionId: string;
+    text: string;
+    multimedia?: ChosenMedia[];
+    receiverIds: string[];
+  }) {
+    await $fetch<{ status: string; id: string }>(`/api/dms/${sessionId}`, {
+      method: "POST",
+      body: { content: { text, multimedia }, receiverIds },
+    });
+  }
+
+  async function markMessageAsSeen({
+    sessionId,
+    messageId,
+  }: {
+    sessionId: string;
+    messageId: string;
+  }) {
+    await $fetch<{ status: string; id: string }>(`/api/dms/${sessionId}`, {
+      method: "PATCH",
+      body: { messageId },
+    });
+  }
+
+  function getMostRecentMessageInSession(
+    session: DirectMessageSession
+  ): DirectMessage | null {
+    if (!session.messages || session.messages.length === 0) {
+      return null;
+    }
+    const sortedMessage = [...session.messages].sort(
+      (a, b) => b.createdAt + a.createdAt
+    );
+
+    return sortedMessage[sortedMessage.length - 1];
+  }
+
+  return {
+    createDm,
+    fetchDmSessions,
+    sendMessageBySessionId,
+    markMessageAsSeen,
+    getMostRecentMessageInSession,
+  };
+}
